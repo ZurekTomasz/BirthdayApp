@@ -1,0 +1,65 @@
+﻿<link href="~/Style/style.css" rel="stylesheet" />
+
+@{
+    ViewBag.Title = "UsersList";
+}
+
+<h2>UsersList</h2>
+<!--
+    <table id="mytable">
+        @foreach (var item in ViewBag.allUsersContext)
+        {
+            <tr>
+                <td>
+                    <span> @item.FirstName </span>
+                </td>
+                <td>
+                    <span> @item.Surname </span>
+                </td>
+                <td>
+                    <span> @item.Email </span>
+                </td>
+            </tr>
+        }
+    </table>
+-->
+
+<table class="table">
+    <tr>
+        <th>
+            Name
+        </th>
+        <th>
+            Surname
+        </th>
+        <th>
+            Email
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in ViewBag.allUsersContext)
+    {
+        <tr>
+            <td>
+                @item.FirstName
+            </td>
+            <td>
+                @item.Surname
+            </td>
+            <td>
+                @item.Email
+            </td>
+            <td>
+                @Html.ActionLink("Index", "Index")
+
+                @*
+                @Html.ActionLink("Edit Me", "Edit", new { id = item.ID }) |
+                @Html.ActionLink("Details", "Details", new { id = item.ID }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+                *@
+            </td>
+        </tr>
+    }
+
+</table>
