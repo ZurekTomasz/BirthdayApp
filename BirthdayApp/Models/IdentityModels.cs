@@ -28,9 +28,13 @@ namespace BirthdayApp.Models
         {
         }
 
+        public DbSet<Collection> Collections { get; set; }
+
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
         }
+
+        
     }
 }
