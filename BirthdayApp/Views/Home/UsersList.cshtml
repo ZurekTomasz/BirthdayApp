@@ -5,24 +5,6 @@
 }
 
 <h2>UsersList</h2>
-<!--
-    <table id="mytable">
-        @foreach (var item in ViewBag.allUsersContext)
-        {
-            <tr>
-                <td>
-                    <span> @item.FirstName </span>
-                </td>
-                <td>
-                    <span> @item.Surname </span>
-                </td>
-                <td>
-                    <span> @item.Email </span>
-                </td>
-            </tr>
-        }
-    </table>
--->
 
 <table class="table">
     <tr>
@@ -51,13 +33,9 @@
                 @item.Email
             </td>
             <td>
-                @Html.ActionLink("Test", "Index")
-
-                @*
-                @Html.ActionLink("Edit Me", "Edit", new { id = item.ID }) |
-                @Html.ActionLink("Details", "Details", new { id = item.ID }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.ID })
-                *@
+                @Html.ActionLink("Edit Me", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
             </td>
         </tr>
     }
