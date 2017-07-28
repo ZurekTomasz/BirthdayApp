@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BirthdayApp.Models;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -18,8 +19,8 @@ namespace BirthdayApp
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            //Database.SetInitializer(new DropCreateDatabaseIfModelChanges<SchoolContext>());
-            //using (SchoolContext context = new SchoolContext()) { context.Database.Delete(); }
+            //Database.SetInitializer(new DropCreateDatabaseAlways<ApplicationDbContext>());
+            //using (ApplicationDbContext context = new ApplicationDbContext()) { context.Database.Delete(); }
         }
     }
 }
