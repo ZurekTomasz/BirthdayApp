@@ -168,7 +168,7 @@ namespace BirthdayApp.Controllers
                 UserManager.AddToRole(user.Id, "User");
 
                 var newModelUser = new ModelUser();
-                newModelUser.UserId = user.Id;
+                newModelUser.Id = user.Id;
 
                 using (var context = new ApplicationDbContext())
                 {

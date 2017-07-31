@@ -9,7 +9,7 @@ using System.Web;
 
 namespace BirthdayApp.Models
 {
-    public class Collect
+    public class xCollect
     {
         public int Id { get; set; }
         public string UserId { get; set; }
