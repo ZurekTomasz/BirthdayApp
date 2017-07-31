@@ -98,7 +98,7 @@ namespace BirthdayApp.Controllers
                     ViewBag.userid = userId;
                 }
 
-                var newCollection = new Collection();
+                var newCollection = new Collect();
                 newCollection.UserId = userId;
                 newCollection.Name = "Ziórka 2";
 
