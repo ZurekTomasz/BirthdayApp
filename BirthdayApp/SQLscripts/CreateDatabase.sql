@@ -1,0 +1,4 @@
+﻿USE master
+GO
+CREATE DATABASE BirthdayAppDb
+GO

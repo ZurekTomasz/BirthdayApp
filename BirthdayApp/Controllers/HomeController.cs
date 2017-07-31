@@ -88,6 +88,34 @@ namespace BirthdayApp.Controllers
         {
             ViewBag.Message = "Your application description page.";
 
+            if (User.Identity.IsAuthenticated)
+            {
+                string userId = String.Empty;
+                var userId_array = User.Identity.GetUserId();
+                if (userId_array != null)
+                {
+                    userId = string.Join(String.Empty, userId_array.ToArray());
+                    ViewBag.userid = userId;
+                }
+
+                var newCollection = new Collection();
+                newCollection.UserId = userId;
+                newCollection.Name = "Ziórka 2";
+
+                using (var context = new ApplicationDbContext())
+                {
+                    context.Collections.Add(newCollection);
+                    context.SaveChanges();
+
+                    int id = newCollection.Id;
+                    ViewBag.xid = id.ToString();
+                }
+            }
+            else
+            {
+                ViewBag.Message = "Użytkownik jest niezalogowany";
+            }
+
             return View();
         }
 

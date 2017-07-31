@@ -11,10 +11,11 @@ namespace BirthdayApp.Models
 {
     public class Collection
     {
-        [Key, ForeignKey("ApplicationUser")]
-        public string Id { get; set; }
-        public string Name { get; set; }
+        [Key]
+        public int Id { get; set; }
+        [ForeignKey("ApplicationUser")]
         public string UserId { get; set; }
+        public string Name { get; set; }
         public virtual ApplicationUser ApplicationUser { get; set; }
     }
 
