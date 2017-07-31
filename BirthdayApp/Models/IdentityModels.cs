@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Model;
 
 namespace BirthdayApp.Models
 {
@@ -28,6 +29,7 @@ namespace BirthdayApp.Models
         {
         }
 
+        public DbSet<ModelUser> ModelUsers { get; set; }
         public DbSet<Collect> Collections { get; set; }
 
         public static ApplicationDbContext Create()

@@ -10,6 +10,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using BirthdayApp.Models;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Model;
 
 namespace BirthdayApp.Controllers
 {
@@ -67,7 +68,17 @@ namespace BirthdayApp.Controllers
                 }
 
                 UserManager.AddToRole(user.Id, Role);
-        }
+
+                var newModelUser = new ModelUser();
+                newModelUser.UserId = user.Id;
+
+                using (var context = new ApplicationDbContext())
+                {
+                    context.ModelUsers.Add(newModelUser);
+                    context.SaveChanges();
+                }
+
+            }
             catch (Exception Ex)
             {
                 ViewBag.Ex = Ex;
@@ -126,7 +137,7 @@ namespace BirthdayApp.Controllers
 
                 var newCollection = new Collect();
                 newCollection.UserId = userId;
-                newCollection.Name = "Ziórka 1";
+                newCollection.Name = "Zbiórka 1";
 
                 using (var context = new ApplicationDbContext())
                 {
