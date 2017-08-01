@@ -8,6 +8,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using BirthdayApp.Models;
 using Microsoft.AspNet.Identity.EntityFramework;
+using BirthdayApp.SimpleClasses;
 
 namespace BirthdayApp.Controllers
 {

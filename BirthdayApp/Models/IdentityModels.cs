@@ -3,7 +3,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using Model;
+using AppModels;
 
 namespace BirthdayApp.Models
 {
@@ -18,8 +18,8 @@ namespace BirthdayApp.Models
             return userIdentity;
         }
 
-        public string FirstName { get; set; }
-        public string Surname { get; set; }
+        //public string FirstName { get; set; }
+        //public string Surname { get; set; }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -30,7 +30,7 @@ namespace BirthdayApp.Models
         }
 
         public DbSet<ModelUser> ModelUsers { get; set; }
-        public DbSet<Collect> Collections { get; set; }
+        //public DbSet<Collect> Collections { get; set; }
 
         public static ApplicationDbContext Create()
         {

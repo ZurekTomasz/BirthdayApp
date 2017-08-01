@@ -10,7 +10,8 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using BirthdayApp.Models;
 using Microsoft.AspNet.Identity.EntityFramework;
-using Model;
+using AppModels;
+using BirthdayApp.SimpleClasses;
 
 namespace BirthdayApp.Controllers
 {
@@ -53,51 +54,49 @@ namespace BirthdayApp.Controllers
             }
         }
 
-        public void AddUser(string fName, string sName, string fEmail, string Password, string Role)
+        public void AddUser(string fName, string sName, string fEmail, string Password, string Role, string bDate)
         {
             try
             {
-                var user = new ApplicationUser { FirstName = fName, Surname = sName, UserName = fEmail, Email = fEmail };
+                var user = new ApplicationUser { UserName = fEmail, Email = fEmail };
                 var result = UserManager.Create(user, Password);
-                var roleManager = new RoleManager<Microsoft.AspNet.Identity.EntityFramework.IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext()));
-                if (!roleManager.RoleExists(Role))
+
+                if (result.Succeeded)
                 {
-                    var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
-                    role.Name = Role;
-                    roleManager.Create(role);
+                    var roleManager = new RoleManager<Microsoft.AspNet.Identity.EntityFramework.IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext()));
+                    if (!roleManager.RoleExists(Role))
+                    {
+                        var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
+                        role.Name = Role;
+                        roleManager.Create(role);
+                    }
+
+
+                    UserManager.AddToRole(user.Id, Role);
+
+                    var au = new AddUser();
+                    au.AddModelUser(fName, sName, fEmail, Role, "1997-05-20", user.Id);
                 }
-
-                UserManager.AddToRole(user.Id, Role);
-
-                var newModelUser = new ModelUser();
-                newModelUser.Id = user.Id;
-
-                using (var context = new ApplicationDbContext())
-                {
-                    context.ModelUsers.Add(newModelUser);
-                    context.SaveChanges();
-                }
-
             }
             catch (Exception Ex)
             {
                 ViewBag.Ex = Ex;
             }
-
         }
 
         public ActionResult Index()
         {
-            AddUser("Tomasz", "Żurek", "mail@tomass.net", "123456", "Admin");
-            AddUser("Aleksander", "Tabor", "aleksander@gmail.com", "123456", "User");
-            AddUser("Jan", "Kowalski", "jan@gmail.com", "123456", "User");
-            
+            AddUser("Tomasz", "Żurek", "mail@tomass.net", "123456", "Admin", "1997-05-20");
+            AddUser("Aleksander", "Tabor", "aleksander@gmail.com", "123456", "User", "1996-02-10");
+            AddUser("Jan", "Kowalski", "jan@gmail.com", "123456", "User", "1960-01-14"); 
+
             return View();
         }
 
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
+            AddUser("Eryk", "Nowakowski", "eryk@gmail.com", "123456", "User", "1997-05-20");
 
             return View();
         }
@@ -135,18 +134,19 @@ namespace BirthdayApp.Controllers
                     ViewBag.userid = userId;
                 }
 
-                var newCollection = new Collect();
-                newCollection.UserId = userId;
-                newCollection.Name = "Zbiórka 1";
 
-                using (var context = new ApplicationDbContext())
-                {
-                    context.Collections.Add(newCollection);
-                    context.SaveChanges();
+                //var newCollection = new Collect();
+                //newCollection.UserId = userId;
+                //newCollection.Name = "Zbiórka 1";
 
-                    int id = newCollection.Id;
-                    ViewBag.xid = id.ToString();
-                }
+                //using (var context = new ApplicationDbContext())
+                //{
+                //    context.Collections.Add(newCollection);
+                //    context.SaveChanges();
+
+                //    int id = newCollection.Id;
+                //    ViewBag.xid = id.ToString();
+                //}
             }
             else
             {

@@ -10,7 +10,8 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using BirthdayApp.Models;
 using Microsoft.AspNet.Identity.EntityFramework;
-using Model;
+using AppModels;
+using BirthdayApp.SimpleClasses;
 
 namespace BirthdayApp.Controllers
 {
@@ -153,27 +154,24 @@ namespace BirthdayApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { FirstName = model.FirstName, Surname = model.Surname, UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
 
-                //NetTomassPL
-                var roleManager = new RoleManager<Microsoft.AspNet.Identity.EntityFramework.IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext()));
-                if (!roleManager.RoleExists("User"))
+                if (result.Succeeded)
                 {
-                    var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
-                    role.Name = "User";
-                    roleManager.Create(role);
+                    string Role = "User";
+                    var roleManager = new RoleManager<Microsoft.AspNet.Identity.EntityFramework.IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext()));
+                    if (!roleManager.RoleExists(Role))
+                    {
+                        var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
+                        role.Name = Role;
+                        roleManager.Create(role);
+                    }
+                    UserManager.AddToRole(user.Id, Role);
+                    string sRole = string.Join(String.Empty, UserManager.GetRoles(user.Id).ToArray());
 
-                }
-                UserManager.AddToRole(user.Id, "User");
-
-                var newModelUser = new ModelUser();
-                newModelUser.Id = user.Id;
-
-                using (var context = new ApplicationDbContext())
-                {
-                    context.ModelUsers.Add(newModelUser);
-                    context.SaveChanges();
+                    var au = new AddUser();
+                    au.AddModelUser("X", "Y", user.Email, sRole, "1990-01-01", user.Id);
                 }
 
                 if (result.Succeeded)
