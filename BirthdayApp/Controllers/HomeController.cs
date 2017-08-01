@@ -104,6 +104,7 @@ namespace BirthdayApp.Controllers
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
+            
 
             return View();
         }
@@ -155,5 +156,6 @@ namespace BirthdayApp.Controllers
 
             return View();
         }
+        
     }
 }

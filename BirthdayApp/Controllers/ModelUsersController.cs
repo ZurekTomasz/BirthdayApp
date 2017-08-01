@@ -11,7 +11,7 @@ using BirthdayApp.Models;
 using Microsoft.AspNet.Identity;
 
 namespace BirthdayApp.Controllers
-{
+{   
     public class ModelUsersController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -53,6 +53,8 @@ namespace BirthdayApp.Controllers
             var thisUser = (from i in db.ModelUsers
                             where i.EntityId == userId
                             select i).ToList();
+
+
 
             return View(thisUser);
         }
@@ -114,6 +116,18 @@ namespace BirthdayApp.Controllers
             return View(modelUser);
         }
 
+        [Authorize]
+        public ActionResult EditMe()
+        {
+            ModelUser modelUser = db.ModelUsers.Find(GetModelUserId());
+
+            if (modelUser == null)
+            {
+                return HttpNotFound();
+            }
+            return View(modelUser);
+        }
+
         // GET: ModelUsers/Edit/5
         public ActionResult Edit(int? id)
         {
@@ -121,9 +135,16 @@ namespace BirthdayApp.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
+            ModelUser modelThisUser = db.ModelUsers.Find(GetModelUserId());
             ModelUser modelUser = db.ModelUsers.Find(id);
             
             if (modelUser == null)
+            {
+                return HttpNotFound();
+            }
+
+            if (modelThisUser.Role != "Admin")
             {
                 return HttpNotFound();
             }
