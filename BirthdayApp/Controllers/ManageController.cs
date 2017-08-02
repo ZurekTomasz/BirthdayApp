@@ -53,6 +53,17 @@ namespace BirthdayApp.Controllers
             }
         }
 
+        public int GetModelUserId()
+        {
+            var userId = User.Identity.GetUserId();
+
+            var modelUserId = (from i in db.ModelUsers
+                                   where i.EntityId == userId
+                                   select i.Id).Single();
+
+            return modelUserId;
+        }
+
         //
         // GET: /Manage/Index
         public async Task<ActionResult> Index(ManageMessageId? message)
@@ -86,11 +97,10 @@ namespace BirthdayApp.Controllers
                              select i).ToList();
             ViewBag.oneUserContext = oneUser;
 
-            //using (var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext())))
-            //{
-            //    var userRoleName = await userManager.GetRolesAsync(userId);
-            //    ViewBag.userRoleName = string.Join(String.Empty, userRoleName.ToArray());
-            //}
+            var thisUser = (from i in db.ModelUsers
+                            where i.EntityId == userId
+                            select i).ToList();
+            ViewBag.thisUserContext = thisUser;
 
             return View(model);
         }

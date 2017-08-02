@@ -27,11 +27,9 @@ namespace BirthdayApp.Controllers
         {
             var userId = User.Identity.GetUserId();
 
-            var modelUserIdList = (from i in db.ModelUsers
+            var modelUserId = (from i in db.ModelUsers
                                    where i.EntityId == userId
-                                   select i.Id).ToList();
-
-            int modelUserId = Int32.Parse(string.Join(String.Empty, modelUserIdList.ToArray()));
+                                   select i.Id).Single();
 
             return modelUserId;
         }
