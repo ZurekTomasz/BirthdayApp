@@ -11,13 +11,14 @@ using Microsoft.Owin.Security;
 using BirthdayApp.Models;
 using Microsoft.AspNet.Identity.EntityFramework;
 using AppModels;
-using BirthdayApp.SimpleClasses;
 
 namespace BirthdayApp.Controllers
 {
     [Authorize]
     public class AccountController : Controller
     {
+        private ApplicationDbContext db = new ApplicationDbContext();
+
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
@@ -159,19 +160,9 @@ namespace BirthdayApp.Controllers
 
                 if (result.Succeeded)
                 {
-                    string Role = "User";
-                    var roleManager = new RoleManager<Microsoft.AspNet.Identity.EntityFramework.IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext()));
-                    if (!roleManager.RoleExists(Role))
-                    {
-                        var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
-                        role.Name = Role;
-                        roleManager.Create(role);
-                    }
-                    UserManager.AddToRole(user.Id, Role);
-                    string sRole = string.Join(String.Empty, UserManager.GetRoles(user.Id).ToArray());
-
-                    var au = new AddUser();
-                    au.AddModelUser("X", "Y", user.Email, sRole, "1990-01-01", user.Id);
+                    var mUser = new ModelUser("Imie", "Nazwisko", user.Email, "Rola", "1997-05-20", user.Id);
+                    db.ModelUsers.Add(mUser);
+                    db.SaveChanges();
                 }
 
                 if (result.Succeeded)

@@ -9,31 +9,31 @@ namespace BirthdayApp.SimpleClasses
     public class AddUser
     {
 
-        public void AddModelUser(string fName, string sName, string fEmail, string Role, string bDate, string EntityId)
-        {
-            try
-            {
-                var newModelUser = new ModelUser();
+       // public void AddModelUser(string fName, string sName, string fEmail, string sRole, string bDate, string sEntityId)
+       // {
+       //     try
+       //     {
+       //         var newModelUser = new ModelUser();
 
-                newModelUser.Firstname = fName;
-                newModelUser.Surname = sName;
-                newModelUser.EntityId = EntityId;
-                newModelUser.Email = fEmail;
-                newModelUser.Role = Role;
-                newModelUser.DateOfBirth = DateTime.ParseExact(bDate, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
-                newModelUser.DateOfAdd = DateTime.Now;
+       //         newModelUser.Firstname = fName;
+       //         newModelUser.Surname = sName;
+       //         newModelUser.EntityId = sEntityId;
+       //         newModelUser.Email = fEmail;
+       //         newModelUser.Role = sRole;
+       //         newModelUser.DateOfBirth = DateTime.ParseExact(bDate, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
+       //         newModelUser.DateOfAdd = DateTime.Now;
 
-                using (var context = new ApplicationDbContext())
-                {
-                    context.ModelUsers.Add(newModelUser);
-                    context.SaveChanges();
-                }
-            }
-            catch (Exception Ex)
-            {
-                string sEx = Ex.ToString();
-            }
-        }
+       //         using (var context = new ApplicationDbContext())
+       //         {
+       //             context.ModelUsers.Add(newModelUser);
+       //             context.SaveChanges();
+       //         }
+       //     }
+       //     catch (Exception Ex)
+       //     {
+       //         string sEx = Ex.ToString();
+       //     }
+       //}
 
     }
 }

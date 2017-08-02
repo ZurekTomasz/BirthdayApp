@@ -40,7 +40,7 @@ namespace BirthdayApp.Controllers
         public ActionResult Index()
         {
             //ModelUser modelUser = db.ModelUsers.Find(GetModelUserId());
-            //modelUser.Surname = "Nazwisko"; 
+            //modelUser.Surname = "Nazwisko";
 
             return View(db.ModelUsers.ToList());
         }
