@@ -19,26 +19,32 @@ namespace BirthdayApp.Controllers
         public string GetUserId()
         {
             string userId = User.Identity.GetUserId();
-
             return userId;
         }
 
         public int GetModelUserId()
         {
-            var userId = User.Identity.GetUserId();
-
-            var modelUserId = (from i in db.ModelUsers
-                                   where i.EntityId == userId
-                                   select i.Id).Single();
+            string userId = User.Identity.GetUserId();
+            int modelUserId = db.ModelUsers.Single(i => i.EntityId == userId).Id;
 
             return modelUserId;
         }
 
         // GET: ModelUsers
+        [Authorize]
         public ActionResult Index()
         {
             //ModelUser modelUser = db.ModelUsers.Find(GetModelUserId());
             //modelUser.Surname = "Nazwisko";
+
+            ModelUser modelUser = db.ModelUsers.Find(GetModelUserId());
+            var collect = modelUser.Collects.First();
+            //var collect = modelUser.Collects.Single(c => c.Id == 999);
+            collect.Name = collect.Name + "_suffix";
+
+            db.SaveChanges();
+
+
 
             return View(db.ModelUsers.ToList());
         }

@@ -114,33 +114,38 @@ namespace BirthdayApp.Controllers
             return View();
         }
 
+        public string GetUserId()
+        {
+            string userId = User.Identity.GetUserId();
+            return userId;
+        }
+
+        public int GetModelUserId()
+        {
+            string userId = User.Identity.GetUserId();
+            int modelUserId = db.ModelUsers.Single(i => i.EntityId == userId).Id;
+
+            return modelUserId;
+        }
+
         public ActionResult AddCollectStatic()
         {
             ViewBag.Message = "AddCollectStatic";
 
             if (User.Identity.IsAuthenticated)
             {
-                string userId = String.Empty;
-                var userId_array = User.Identity.GetUserId();
-                if (userId_array != null)
-                {
-                    userId = string.Join(String.Empty, userId_array.ToArray());
-                    ViewBag.userid = userId;
-                }
+                ViewBag.com1 = "Użytkownik ID = " + GetUserId() + " dodał nową zbiórkę";
 
+                var newCollection = new Collect();
+                newCollection.ModelUserId = GetModelUserId();
+                newCollection.OwnerId = GetUserId();
+                newCollection.Name = "Zbiórka 1";
 
-                //var newCollection = new Collect();
-                //newCollection.UserId = userId;
-                //newCollection.Name = "Zbiórka 1";
+                db.Collections.Add(newCollection);
+                db.SaveChanges();
 
-                //using (var context = new ApplicationDbContext())
-                //{
-                //    context.Collections.Add(newCollection);
-                //    context.SaveChanges();
-
-                //    int id = newCollection.Id;
-                //    ViewBag.xid = id.ToString();
-                //}
+                ViewBag.com2 = "Dodano zbiórkę nr: " + newCollection.Id;
+                
             }
             else
             {

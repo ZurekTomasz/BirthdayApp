@@ -66,6 +66,32 @@
             @Html.DisplayFor(model => model.DateOfAdd)
         </dd>
 
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Collects)
+        </dt>
+        <dd>
+            <table class="table">
+                <tr>
+                    <th>Name</th>
+                    <th>OwnerID</th>
+                </tr>
+                @foreach (var item in Model.Collects)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OwnerId)
+                        </td>
+                    </tr>
+                }
+            </table>
+        </dd>
+
+
+
     </dl>
 </div>
 <p>

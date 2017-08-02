@@ -33,5 +33,7 @@ namespace AppModels
         [DataType(DataType.Date), DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime? DateOfBirth { get; set; }
         public DateTime? DateOfAdd { get; set; }
+
+        public virtual ICollection<Collect> Collects { get; set; }
     }
 }
