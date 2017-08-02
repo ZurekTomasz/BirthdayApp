@@ -55,7 +55,7 @@ namespace BirthdayApp.Controllers
             }
         }
 
-        public void AddUser(string fName, string sName, string fEmail, string Password, string Role, string bDate)
+        public void AddUser(string fName, string sName, string fEmail, string Password, string Role, DateTime? bDate)
         {
             try
             {
@@ -64,7 +64,7 @@ namespace BirthdayApp.Controllers
 
                 if (result.Succeeded)
                 {
-                    var mUser = new ModelUser(fName, sName, fEmail, Role, "1997-05-20", user.Id);
+                    var mUser = new ModelUser(fName, sName, fEmail, Role, bDate, user.Id);
                     db.ModelUsers.Add(mUser);
                     db.SaveChanges();
                 }
@@ -77,9 +77,10 @@ namespace BirthdayApp.Controllers
 
         public ActionResult Index()
         {
-            AddUser("Tomasz", "Żurek", "mail@tomass.net", "123456", "Admin", "1997-05-20");
-            AddUser("Aleksander", "Tabor", "aleksander@gmail.com", "123456", "User", "1996-02-10");
-            AddUser("Jan", "Kowalski", "jan@gmail.com", "123456", "User", "1960-01-14"); 
+            var date1 = DateTime.ParseExact("1997-05-20", "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
+            AddUser("Tomasz", "Żurek", "mail@tomass.net", "123456", "Admin", date1);
+            AddUser("Aleksander", "Tabor", "aleksander@gmail.com", "123456", "User", date1);
+            AddUser("Jan", "Kowalski", "jan@gmail.com", "123456", "User", date1); 
 
             return View();
         }
@@ -87,7 +88,8 @@ namespace BirthdayApp.Controllers
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
-            AddUser("Eryk", "Nowakowski", "eryk@gmail.com", "123456", "User", "1997-05-20");
+            var date2 = DateTime.ParseExact("1990-08-24", "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
+            AddUser("Eryk", "Nowakowski", "eryk@gmail.com", "123456", "User", date2);
 
             return View();
         }

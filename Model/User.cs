@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,14 +13,14 @@ namespace AppModels
         public ModelUser()
         { }
 
-        public ModelUser(string fName, string sName, string fEmail, string sRole, string bDate, string sEntityId)
+        public ModelUser(string fName, string sName, string fEmail, string sRole, DateTime? bDate, string sEntityId)
         {
             this.EntityId = sEntityId;
             this.Firstname = fName;
             this.Surname = sName;
             this.Email = fEmail;
             this.Role = sRole;
-            this.DateOfBirth = DateTime.ParseExact(bDate, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
+            this.DateOfBirth = bDate;
             this.DateOfAdd = DateTime.Now;
         }
 
@@ -28,6 +30,7 @@ namespace AppModels
         public string Surname { get; set; }
         public string Email { get; set; }
         public string Role { get; set; }
+        [DataType(DataType.Date), DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime? DateOfBirth { get; set; }
         public DateTime? DateOfAdd { get; set; }
     }

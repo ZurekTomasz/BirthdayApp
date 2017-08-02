@@ -46,5 +46,23 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+
+    <script src="~/Scripts/globalize/globalize.js"></script>
+    <script src="~/Scripts/globalize/cultures/globalize.culture.pl-PL.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $.culture = Globalize.culture("pl-PL");
+            $.validator.methods.date = function (value, element) {
+
+                return this.optional(element)
+                    || Globalize.parseDate(value, "yyyy-MM-dd", "pl-PL");
+            }
+        });
+    </script>
 </body>
 </html>
