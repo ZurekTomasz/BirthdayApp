@@ -41,6 +41,7 @@ namespace AppModels
         public string Role { get; set; }
         [DataType(DataType.Date), DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime? DateOfBirth { get; set; }
+        [DataType(DataType.Date), DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime? DateOfAdd { get; set; }
 
         [InverseProperty("Owner")]
