@@ -40,8 +40,8 @@ namespace BirthdayApp.Controllers
         // GET: Collects/Create
         public ActionResult Create()
         {
-            ViewBag.OwnerId = new SelectList(db.ModelUsers, "Id", "Firstname");
-            ViewBag.RecipientId = new SelectList(db.ModelUsers, "Id", "Firstname");
+            ViewBag.OwnerId = new SelectList(db.ModelUsers, "Id", "Name");
+            ViewBag.RecipientId = new SelectList(db.ModelUsers, "Id", "Name");
             return View();
         }
 
@@ -59,8 +59,8 @@ namespace BirthdayApp.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.OwnerId = new SelectList(db.ModelUsers, "Id", "Firstname", collect.OwnerId);
-            ViewBag.RecipientId = new SelectList(db.ModelUsers, "Id", "Firstname", collect.RecipientId);
+            ViewBag.OwnerId = new SelectList(db.ModelUsers, "Id", "Name", collect.OwnerId);
+            ViewBag.RecipientId = new SelectList(db.ModelUsers, "Id", "Name", collect.RecipientId);
             return View(collect);
         }
 
@@ -76,8 +76,8 @@ namespace BirthdayApp.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.OwnerId = new SelectList(db.ModelUsers, "Id", "Firstname", collect.OwnerId);
-            ViewBag.RecipientId = new SelectList(db.ModelUsers, "Id", "Firstname", collect.RecipientId);
+            ViewBag.OwnerId = new SelectList(db.ModelUsers, "Id", "Name", collect.OwnerId);
+            ViewBag.RecipientId = new SelectList(db.ModelUsers, "Id", "Name", collect.RecipientId);
             return View(collect);
         }
 
@@ -94,8 +94,8 @@ namespace BirthdayApp.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.OwnerId = new SelectList(db.ModelUsers, "Id", "Firstname", collect.OwnerId);
-            ViewBag.RecipientId = new SelectList(db.ModelUsers, "Id", "Firstname", collect.RecipientId);
+            ViewBag.OwnerId = new SelectList(db.ModelUsers, "Id", "Name", collect.OwnerId);
+            ViewBag.RecipientId = new SelectList(db.ModelUsers, "Id", "Name", collect.RecipientId);
             return View(collect);
         }
 

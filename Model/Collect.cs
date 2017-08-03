@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AppModels;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace AppModels
 {
@@ -17,7 +18,9 @@ namespace AppModels
         public int? RecipientId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public decimal Amount { get; set; }
+        [DataType(DataType.Currency)]
+        [RegularExpression("^[0-9]{0,99999}$", ErrorMessage = "Value must be a natural number")]
+        public int Amount { get; set; }
         public virtual ModelUser Owner { get; set; }
         public virtual ModelUser Recipient { get; set; }
     }

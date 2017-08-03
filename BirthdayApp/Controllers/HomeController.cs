@@ -140,6 +140,7 @@ namespace BirthdayApp.Controllers
                 newCollection.OwnerId = GetModelUserId();
                 newCollection.RecipientId = 3;
                 newCollection.Name = "Zbiórka 1";
+                //newCollection.Amount = 1.50m;
 
                 db.Collections.Add(newCollection);
                 db.SaveChanges();

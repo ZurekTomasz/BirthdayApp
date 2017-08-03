@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,6 +19,10 @@ namespace AppModels
 
         public ModelUser(string fName, string sName, string fEmail, string sRole, DateTime? bDate, string sEntityId)
         {
+            DateTime zDate = bDate ?? default(DateTime);
+            string sDate = zDate.ToString("yyyy-MM-dd");
+
+            this.Name = fName + " " + sName + " " + sDate;
             this.EntityId = sEntityId;
             this.Firstname = fName;
             this.Surname = sName;
@@ -28,6 +33,7 @@ namespace AppModels
         }
 
         public int Id { get; set; }
+        public string Name { get; set; }
         public string Firstname { get; set; }
         public string Surname { get; set; }
         public string EntityId { get; set; }
