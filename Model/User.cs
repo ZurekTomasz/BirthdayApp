@@ -11,7 +11,10 @@ namespace AppModels
     public class ModelUser
     {
         public ModelUser()
-        { }
+        {
+            this.Collects = new HashSet<Collect>();
+            this.Collects2 = new HashSet<Collect>();
+        }
 
         public ModelUser(string fName, string sName, string fEmail, string sRole, DateTime? bDate, string sEntityId)
         {
@@ -34,6 +37,9 @@ namespace AppModels
         public DateTime? DateOfBirth { get; set; }
         public DateTime? DateOfAdd { get; set; }
 
+        [InverseProperty("Owner")]
         public virtual ICollection<Collect> Collects { get; set; }
+        [InverseProperty("Recipient")]
+        public virtual ICollection<Collect> Collects2 { get; set; }
     }
 }

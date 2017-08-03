@@ -32,11 +32,28 @@ namespace BirthdayApp.Models
         public DbSet<ModelUser> ModelUsers { get; set; }
         public DbSet<Collect> Collections { get; set; }
 
+
+
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
         }
 
-        
+        //protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        //{
+        //    modelBuilder.Entity<Collect>()
+        //                .HasRequired(m => m.Owner)
+        //                .WithMany(t => t.Collects)
+        //                .HasForeignKey(m => m.OwnerId)
+        //                .WillCascadeOnDelete(false);
+
+        //    modelBuilder.Entity<Collect>()
+        //                .HasRequired(m => m.Recipient)
+        //                .WithMany(t => t.Collects2)
+        //                .HasForeignKey(m => m.RecipientId)
+        //                .WillCascadeOnDelete(false);
+        //}
+
+
     }
 }
