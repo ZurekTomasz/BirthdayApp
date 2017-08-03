@@ -137,8 +137,8 @@ namespace BirthdayApp.Controllers
                 ViewBag.com1 = "Użytkownik ID = " + GetUserId() + " dodał nową zbiórkę";
 
                 var newCollection = new Collect();
-                newCollection.ModelUserId = GetModelUserId();
-                newCollection.OwnerId = GetUserId();
+                newCollection.OwnerId = GetModelUserId();
+                newCollection.RecipientId = 3;
                 newCollection.Name = "Zbiórka 1";
 
                 db.Collections.Add(newCollection);

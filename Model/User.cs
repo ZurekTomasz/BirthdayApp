@@ -25,9 +25,9 @@ namespace AppModels
         }
 
         public int Id { get; set; }
-        public string EntityId { get; set; }
         public string Firstname { get; set; }
         public string Surname { get; set; }
+        public string EntityId { get; set; }
         public string Email { get; set; }
         public string Role { get; set; }
         [DataType(DataType.Date), DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
