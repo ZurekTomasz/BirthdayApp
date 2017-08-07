@@ -50,9 +50,30 @@
             @Html.DisplayFor(model => model.Amount)
         </dd>
 
+        <dt>
+            Users who are in the collection
+        </dt>
+        <dd>
+            <table class="table">
+                <tr>
+                    <th>Users</th>
+                    <th>Have they given money?</th>
+                </tr>
+                @foreach (var item in Model.CollectUsers2)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.User.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.GaveMoney)
+                        </td>
+                    </tr>
+                }
+            </table>
+        </dd>
+
     </dl>
-    
-    
 
 </div>
 <p>
