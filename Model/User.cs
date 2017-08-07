@@ -15,6 +15,9 @@ namespace AppModels
         {
             this.Collects = new HashSet<Collect>();
             this.Collects2 = new HashSet<Collect>();
+
+            this.CollectUsers = new HashSet<CollectUser>();
+            
         }
 
         public ModelUser(string fName, string sName, string fEmail, string sRole, DateTime? bDate, string sEntityId)
@@ -22,7 +25,7 @@ namespace AppModels
             DateTime zDate = bDate ?? default(DateTime);
             string sDate = zDate.ToString("yyyy-MM-dd");
 
-            this.Name = fName + " " + sName + " " + sDate;
+            this.Name = fName + " " + sName;
             this.EntityId = sEntityId;
             this.Firstname = fName;
             this.Surname = sName;
@@ -48,5 +51,9 @@ namespace AppModels
         public virtual ICollection<Collect> Collects { get; set; }
         [InverseProperty("Recipient")]
         public virtual ICollection<Collect> Collects2 { get; set; }
+
+        [InverseProperty("User")]
+        public virtual ICollection<CollectUser> CollectUsers { get; set; }
+        
     }
 }

@@ -26,7 +26,7 @@
     <div class="form-group">
         @Html.LabelFor(m => m.DateOfBirth, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.TextBoxFor(m => m.DateOfBirth, new { @class = "form-control", @readonly = "true" })
+            @Html.TextBoxFor(m => m.DateOfBirth, new { @class = "form-control" })
             @Html.ValidationMessageFor(m => m.DateOfBirth, "", new { @class = "text-danger" })
         </div>
     </div>

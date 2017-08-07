@@ -31,6 +31,7 @@ namespace BirthdayApp.Models
 
         public DbSet<ModelUser> ModelUsers { get; set; }
         public DbSet<Collect> Collections { get; set; }
+        public DbSet<CollectUser> CollectionsUsers { get; set; }
 
 
 

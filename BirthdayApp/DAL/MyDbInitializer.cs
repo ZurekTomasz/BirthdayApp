@@ -76,6 +76,14 @@ namespace BirthdayApp.DAL
             //context.SaveChanges();
             //**//
 
+            //CollectUser #1
+            var newCollectionUsers = new CollectUser();
+            newCollectionUsers.UserId = 1;
+            newCollectionUsers.CollectId = 1;
+            context.CollectionsUsers.Add(newCollectionUsers);
+            context.SaveChanges();
+            //**//
+
             //Seed
             base.Seed(context);
         }

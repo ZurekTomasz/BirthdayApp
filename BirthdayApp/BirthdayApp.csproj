@@ -197,6 +197,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CollectsController.cs" />
+    <Compile Include="Controllers\CollectUsersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ModelUsersController.cs" />
@@ -646,6 +647,11 @@
     <Content Include="Views\Collects\Details.cshtml" />
     <Content Include="Views\Collects\Edit.cshtml" />
     <Content Include="Views\Collects\Index.cshtml" />
+    <Content Include="Views\CollectUsers\Create.cshtml" />
+    <Content Include="Views\CollectUsers\Delete.cshtml" />
+    <Content Include="Views\CollectUsers\Details.cshtml" />
+    <Content Include="Views\CollectUsers\Edit.cshtml" />
+    <Content Include="Views\CollectUsers\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
