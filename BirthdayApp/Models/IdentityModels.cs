@@ -33,6 +33,7 @@ namespace BirthdayApp.Models
         public DbSet<Collect> Collections { get; set; }
         public DbSet<CollectUser> CollectionsUsers { get; set; }
         public DbSet<CollectGift> CollectionsGifts { get; set; }
+        public DbSet<CollectGiftRating> CollectionsGiftRatings { get; set; }
 
 
 

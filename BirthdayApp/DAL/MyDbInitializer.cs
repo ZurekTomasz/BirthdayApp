@@ -93,6 +93,15 @@ namespace BirthdayApp.DAL
             context.SaveChanges();
             //**//
 
+            //CollectGiftRatings #1
+            var newCollectionGiftRatings = new CollectGiftRating();
+            newCollectionGiftRatings.UserId = 1;
+            newCollectionGiftRatings.GiftId = 1;
+            newCollectionGiftRatings.ThisRating = 1;
+            context.CollectionsGiftRatings.Add(newCollectionGiftRatings);
+            context.SaveChanges();
+            //**//
+
             //Seed
             base.Seed(context);
         }
