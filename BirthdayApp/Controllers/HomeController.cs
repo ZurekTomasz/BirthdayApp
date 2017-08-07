@@ -16,80 +16,16 @@ namespace BirthdayApp.Controllers
 {
     public class HomeController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
-
-        private ApplicationSignInManager _signInManager;
-        private ApplicationUserManager _userManager;
-
-        public HomeController()
-        {
-        }
-
-        public HomeController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
-        {
-            UserManager = userManager;
-            SignInManager = signInManager;
-        }
-
-        public ApplicationSignInManager SignInManager
-        {
-            get
-            {
-                return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
-            }
-            private set
-            {
-                _signInManager = value;
-            }
-        }
-
-        public ApplicationUserManager UserManager
-        {
-            get
-            {
-                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            }
-            private set
-            {
-                _userManager = value;
-            }
-        }
-
-        public void AddUser(string fName, string sName, string fEmail, string Password, string Role, DateTime? bDate)
-        {
-            try
-            {
-                var user = new ApplicationUser { UserName = fEmail, Email = fEmail };
-                var result = UserManager.Create(user, Password);
-
-                if (result.Succeeded)
-                {
-                    var mUser = new ModelUser(fName, sName, fEmail, Role, bDate, user.Id);
-                    db.ModelUsers.Add(mUser);
-                    db.SaveChanges();
-                }
-            }
-            catch (Exception Ex)
-            {
-                ViewBag.Ex = Ex;
-            }
-        }
+        private ApplicationDbContext db = new ApplicationDbContext(); 
 
         public ActionResult Index()
         {
-            var date1 = DateTime.ParseExact("1997-05-20", "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
-            AddUser("Tomasz", "Żurek", "mail@tomass.net", "123456", "Admin", date1);
-            AddUser("Aleksander", "Tabor", "aleksander@gmail.com", "123456", "User", date1);
-            AddUser("Jan", "Kowalski", "jan@gmail.com", "123456", "User", date1); 
-
             return View();
         }
-
+        
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
-            var date2 = DateTime.ParseExact("1990-08-24", "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
-            AddUser("Eryk", "Nowakowski", "eryk@gmail.com", "123456", "User", date2);
 
             return View();
         }
@@ -100,7 +36,7 @@ namespace BirthdayApp.Controllers
             
 
             return View();
-        }
+        } 
 
         public ActionResult UsersList()
         {
@@ -138,7 +74,7 @@ namespace BirthdayApp.Controllers
 
                 var newCollection = new Collect();
                 newCollection.OwnerId = GetModelUserId();
-                newCollection.RecipientId = 3;
+                newCollection.RecipientId = 2;
                 newCollection.Name = "Zbiórka 1";
                 //newCollection.Amount = 1.50m;
 
@@ -146,7 +82,7 @@ namespace BirthdayApp.Controllers
                 db.SaveChanges();
 
                 ViewBag.com2 = "Dodano zbiórkę nr: " + newCollection.Id;
-                
+
             }
             else
             {

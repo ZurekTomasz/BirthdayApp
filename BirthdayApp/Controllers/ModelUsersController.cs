@@ -31,21 +31,8 @@ namespace BirthdayApp.Controllers
         }
 
         // GET: ModelUsers
-        [Authorize]
         public ActionResult Index()
         {
-            //ModelUser modelUser = db.ModelUsers.Find(GetModelUserId());
-            //modelUser.Surname = "Nazwisko";
-
-            ModelUser modelUser = db.ModelUsers.Find(GetModelUserId());
-            var collect = modelUser.Collects.First();
-            //var collect = modelUser.Collects.Single(c => c.Id == 999);
-            collect.Name = collect.Name + "_suffix";
-
-            db.SaveChanges();
-
-
-
             return View(db.ModelUsers.ToList());
         }
 

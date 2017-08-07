@@ -1,4 +1,5 @@
-﻿using BirthdayApp.Models;
+﻿using BirthdayApp.DAL;
+using BirthdayApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -18,6 +19,8 @@ namespace BirthdayApp
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            Database.SetInitializer(new MyDbInitializer());
 
             //Database.SetInitializer(new DropCreateDatabaseAlways<ApplicationDbContext>());
             //using (ApplicationDbContext context = new ApplicationDbContext()) { context.Database.Delete(); }
