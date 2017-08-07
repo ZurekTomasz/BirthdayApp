@@ -14,6 +14,8 @@ namespace AppModels
         public Collect()
         {
             this.CollectUsers2 = new HashSet<CollectUser>();
+
+            this.CollectGifts2 = new HashSet<CollectGift>();
         }
 
         public int Id { get; set; }
@@ -31,5 +33,8 @@ namespace AppModels
 
         [InverseProperty("Collect")]
         public virtual ICollection<CollectUser> CollectUsers2 { get; set; }
+
+        [InverseProperty("Collect")]
+        public virtual ICollection<CollectGift> CollectGifts2 { get; set; }
     }
 }

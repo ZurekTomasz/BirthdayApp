@@ -84,6 +84,15 @@ namespace BirthdayApp.DAL
             context.SaveChanges();
             //**//
 
+            //CollectGift #1
+            var newCollectionGifts = new CollectGift();
+            newCollectionGifts.UserId = 1;
+            newCollectionGifts.CollectId = 1;
+            newCollectionGifts.Name = "Kurtka dla Oli";
+            context.CollectionsGifts.Add(newCollectionGifts);
+            context.SaveChanges();
+            //**//
+
             //Seed
             base.Seed(context);
         }

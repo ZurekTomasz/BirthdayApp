@@ -196,6 +196,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CollectGiftsController.cs" />
     <Compile Include="Controllers\CollectsController.cs" />
     <Compile Include="Controllers\CollectUsersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -652,6 +653,11 @@
     <Content Include="Views\CollectUsers\Details.cshtml" />
     <Content Include="Views\CollectUsers\Edit.cshtml" />
     <Content Include="Views\CollectUsers\Index.cshtml" />
+    <Content Include="Views\CollectGifts\Create.cshtml" />
+    <Content Include="Views\CollectGifts\Delete.cshtml" />
+    <Content Include="Views\CollectGifts\Details.cshtml" />
+    <Content Include="Views\CollectGifts\Edit.cshtml" />
+    <Content Include="Views\CollectGifts\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
