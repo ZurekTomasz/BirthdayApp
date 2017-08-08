@@ -111,10 +111,24 @@ namespace BirthdayApp.Controllers
 
             }
             
+            try
+            {
+                CollectGiftRating cgr = db.CollectionsGiftRatings.Find(db.CollectionsGiftRatings.SingleOrDefault(i => i.GiftId == wybranyid & i.UserId == ModelUserId).Id);
+                cgr.TheBestRating = true;
+                db.SaveChanges();
+            }
+            catch(Exception)
+            {
+                var cgr = new CollectGiftRating();
+                cgr.UserId = ModelUserId;
+                cgr.GiftId = wybranyid;
+                cgr.TheBestRating = true;
+                db.CollectionsGiftRatings.Add(cgr);
+                db.SaveChanges();
+            }
 
-            CollectGiftRating cgr = db.CollectionsGiftRatings.Find(db.CollectionsGiftRatings.SingleOrDefault(i => i.GiftId == wybranyid & i.UserId == ModelUserId).Id);
-            cgr.TheBestRating = true;
-            db.SaveChanges();
+
+            
 
             var YourRadioButtonx = Request.Form["uniqueRadio"];
             ViewBag.wybor = wybranyid;
