@@ -102,7 +102,7 @@ namespace BirthdayApp.Controllers
             var ModelUserId = GetModelUserId();
             try
             {
-                CollectGiftRating cgrx = db.CollectionsGiftRatings.Find(db.CollectionsGiftRatings.SingleOrDefault(i => i.TheBestRating == true & i.UserId == ModelUserId).GiftId);
+                CollectGiftRating cgrx = db.CollectionsGiftRatings.Find(db.CollectionsGiftRatings.SingleOrDefault(i => i.TheBestRating == true & i.UserId == ModelUserId).Id);
                 cgrx.TheBestRating = false;
                 db.SaveChanges();
             }
@@ -112,7 +112,7 @@ namespace BirthdayApp.Controllers
             }
             
 
-            CollectGiftRating cgr = db.CollectionsGiftRatings.Find(wybranyid);
+            CollectGiftRating cgr = db.CollectionsGiftRatings.Find(db.CollectionsGiftRatings.SingleOrDefault(i => i.GiftId == wybranyid & i.UserId == ModelUserId).Id);
             cgr.TheBestRating = true;
             db.SaveChanges();
 
