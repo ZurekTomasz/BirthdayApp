@@ -16,6 +16,20 @@ namespace BirthdayApp.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
+        public string GetUserId()
+        {
+            string userId = User.Identity.GetUserId();
+            return userId;
+        }
+
+        public int GetModelUserId()
+        {
+            string userId = User.Identity.GetUserId();
+            int modelUserId = db.ModelUsers.Single(i => i.EntityId == userId).Id;
+
+            return modelUserId;
+        }
+
         // GET: Collects
         public ActionResult Index()
         {
@@ -50,22 +64,14 @@ namespace BirthdayApp.Controllers
             {
                 return HttpNotFound();
             }
+
+            var ModelUserId = GetModelUserId();
+            ViewData["uniqueRadio"] = db.CollectionsGiftRatings.SingleOrDefault(i => i.TheBestRating == true & i.UserId == ModelUserId).GiftId;
+
             return View(collect);
         }
 
-        public string GetUserId()
-        {
-            string userId = User.Identity.GetUserId();
-            return userId;
-        }
-
-        public int GetModelUserId()
-        {
-            string userId = User.Identity.GetUserId();
-            int modelUserId = db.ModelUsers.Single(i => i.EntityId == userId).Id;
-
-            return modelUserId;
-        }
+        
 
         [HttpPost]
         public ActionResult Details2(int? id, string uniqueRadio)
@@ -80,10 +86,26 @@ namespace BirthdayApp.Controllers
                 return HttpNotFound();
             }
 
-            ViewData["uniqueRadio"] = "Null";
+            
+
+
+            int wybranyid = Int32.Parse(Request.Form["uniqueRadio"]);
+            //int ggrid = db.CollectionsGiftRatings.SingleOrDefault(i => i.Id == wybranyid).Id;
+            var ModelUserId = GetModelUserId();
+            CollectGiftRating cgrx = db.CollectionsGiftRatings.Find(db.CollectionsGiftRatings.SingleOrDefault(i => i.TheBestRating == true & i.UserId == ModelUserId).GiftId);
+            cgrx.TheBestRating = false;
+            db.SaveChanges();
+
+            CollectGiftRating cgr = db.CollectionsGiftRatings.Find(wybranyid);
+            cgr.TheBestRating = true;
+            db.SaveChanges();
+
             var YourRadioButtonx = Request.Form["uniqueRadio"];
+            ViewBag.wybor = wybranyid;
             ViewBag.userid = GetModelUserId();
-            ViewBag.wybor = YourRadioButtonx;
+
+            
+            ViewData["uniqueRadio"] = db.CollectionsGiftRatings.Single(i => i.TheBestRating == true & i.UserId == ModelUserId).GiftId;
 
             return View(collect);
         }
