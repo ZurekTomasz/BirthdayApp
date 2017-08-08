@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using AppModels;
 using BirthdayApp.Models;
+using Microsoft.AspNet.Identity;
 
 namespace BirthdayApp.Controllers
 {
@@ -52,6 +53,20 @@ namespace BirthdayApp.Controllers
             return View(collect);
         }
 
+        public string GetUserId()
+        {
+            string userId = User.Identity.GetUserId();
+            return userId;
+        }
+
+        public int GetModelUserId()
+        {
+            string userId = User.Identity.GetUserId();
+            int modelUserId = db.ModelUsers.Single(i => i.EntityId == userId).Id;
+
+            return modelUserId;
+        }
+
         [HttpPost]
         public ActionResult Details2(int? id, string uniqueRadio)
         {
@@ -65,7 +80,9 @@ namespace BirthdayApp.Controllers
                 return HttpNotFound();
             }
 
+            ViewData["uniqueRadio"] = "Null";
             var YourRadioButtonx = Request.Form["uniqueRadio"];
+            ViewBag.userid = GetModelUserId();
             ViewBag.wybor = YourRadioButtonx;
 
             return View(collect);

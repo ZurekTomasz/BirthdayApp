@@ -73,14 +73,18 @@
         @foreach (var item in Model.CollectGifts2)
         {
             <li class="Opt">
-                @Html.RadioButton("uniqueRadio", item.Name, new { @checked = true })
+                @Html.RadioButton("uniqueRadio", item.Id)
                 @Html.Label(item.Name)
             </li>
         }
         </ol>
+
         <input type="submit" value="Save" />
-        <p>Wybrałeś: </p> @ViewBag.wybor
+        
 }
+    <p>Wybrałeś: </p> @ViewBag.wybor
+    @ViewBag.userid
+
         <br />
         Dodaj propozycję prezentu (link)/Zarządzaj prezentami(link)
         <hr />
