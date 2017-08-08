@@ -1,0 +1,110 @@
+﻿@model AppModels.Collect
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Collect</h4>
+    <hr />
+    <table border="2">
+        <tr>
+            <td>
+                <b>Nazwa zbiórki:</b>
+            </td>
+            <td>
+                <b>Opis zbiórki:</b>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(model => model.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.Description)
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <b>Zbiórkę założył:</b>
+            </td>
+            <td>
+                <b>Zbieramy na prezent dla:</b>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(model => model.Owner.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.Recipient.Name)
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <b>Szacowana kwota prezentu to:</b>
+        </td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(model => model.Amount)
+            </td>
+            <td>
+                
+            </td>
+        </tr>
+    </table>
+    
+    <hr />
+    Propozycje prezentów:
+    <br />
+    <ol class="Opt">
+        <li class="Opt">
+            @Html.RadioButton("uniqueRadio", "Null")
+            @Html.Label("Null")
+        </li>
+        @foreach (var item in Model.CollectGifts2)
+        {
+            <li class="Opt">
+                @Html.RadioButton("uniqueRadio", item.Name)
+                @Html.Label(item.Name)
+            </li>
+        }
+        </ol>
+        <br />
+        Dodaj propozycję prezentu (link)/Zarządzaj prezentami(link)
+        <hr />
+        Użytkownicy którzy są aktualnie w zbiórce:
+        <br />
+    <table border="2">
+        <tr>
+            <th>Users</th>
+            <th>Have they given money?</th>
+        </tr>
+        @foreach (var item in Model.CollectUsers2)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.GaveMoney)
+                </td>
+            </tr>
+        }
+    </table>
+        <br />
+        Opuść zbiórkę(link)/Zarządzaj użytkownikami (link)
+        <hr />
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -37,6 +37,21 @@ namespace BirthdayApp.Controllers
             return View(collect);
         }
 
+        // GET: Collects/Details/5
+        public ActionResult Details2(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Collect collect = db.Collections.Find(id);
+            if (collect == null)
+            {
+                return HttpNotFound();
+            }
+            return View(collect);
+        }
+
         // GET: Collects/Create
         public ActionResult Create()
         {

@@ -664,6 +664,7 @@
     <Content Include="Views\CollectGiftRatings\Details.cshtml" />
     <Content Include="Views\CollectGiftRatings\Edit.cshtml" />
     <Content Include="Views\CollectGiftRatings\Index.cshtml" />
+    <Content Include="Views\Collects\Details2.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
