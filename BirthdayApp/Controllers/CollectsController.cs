@@ -52,6 +52,25 @@ namespace BirthdayApp.Controllers
             return View(collect);
         }
 
+        [HttpPost]
+        public ActionResult Details2(int? id, string uniqueRadio)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Collect collect = db.Collections.Find(id);
+            if (collect == null)
+            {
+                return HttpNotFound();
+            }
+
+            var YourRadioButtonx = Request.Form["uniqueRadio"];
+            ViewBag.wybor = YourRadioButtonx;
+
+            return View(collect);
+        }
+
         // GET: Collects/Create
         public ActionResult Create()
         {

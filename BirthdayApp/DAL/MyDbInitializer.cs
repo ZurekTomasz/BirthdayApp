@@ -97,7 +97,7 @@ namespace BirthdayApp.DAL
             var newCollectionGiftRatings = new CollectGiftRating();
             newCollectionGiftRatings.UserId = 1;
             newCollectionGiftRatings.GiftId = 1;
-            newCollectionGiftRatings.ThisRating = 1;
+            newCollectionGiftRatings.TheBestRating = true;
             context.CollectionsGiftRatings.Add(newCollectionGiftRatings);
             context.SaveChanges();
             //**//

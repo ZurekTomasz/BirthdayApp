@@ -3,13 +3,14 @@
 @{
     ViewBag.Title = "Details";
 }
+<link href="~/CSSstyle/mystyle.css" rel="stylesheet" />
 
 <h2>Details</h2>
 
 <div>
     <h4>Collect</h4>
     <hr />
-    <table border="2">
+    <table class="mytable">
         <tr>
             <td>
                 <b>Nazwa zbiórki:</b>
@@ -47,25 +48,24 @@
         <tr>
             <td>
                 <b>Szacowana kwota prezentu to:</b>
-        </td>
-            <td>
-                
             </td>
+            <td></td>
         </tr>
         <tr>
             <td>
                 @Html.DisplayFor(model => model.Amount)
             </td>
-            <td>
-                
-            </td>
+            <td></td>
         </tr>
     </table>
     
     <hr />
     Propozycje prezentów:
     <br />
+@using (Html.BeginForm())
+{
     <ol class="Opt">
+
         <li class="Opt">
             @Html.RadioButton("uniqueRadio", "Null")
             @Html.Label("Null")
@@ -73,17 +73,20 @@
         @foreach (var item in Model.CollectGifts2)
         {
             <li class="Opt">
-                @Html.RadioButton("uniqueRadio", item.Name)
+                @Html.RadioButton("uniqueRadio", item.Name, new { @checked = true })
                 @Html.Label(item.Name)
             </li>
         }
         </ol>
+        <input type="submit" value="Save" />
+        <p>Wybrałeś: </p> @ViewBag.wybor
+}
         <br />
         Dodaj propozycję prezentu (link)/Zarządzaj prezentami(link)
         <hr />
         Użytkownicy którzy są aktualnie w zbiórce:
         <br />
-    <table border="2">
+    <table class="mytable">
         <tr>
             <th>Users</th>
             <th>Have they given money?</th>
@@ -103,6 +106,7 @@
         <br />
         Opuść zbiórkę(link)/Zarządzaj użytkownikami (link)
         <hr />
+
 </div>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
