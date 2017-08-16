@@ -38,6 +38,7 @@ namespace BirthdayApp.Controllers
         }
 
         // GET: Collects/Details/5
+        [Authorize]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -53,6 +54,7 @@ namespace BirthdayApp.Controllers
         }
 
         // GET: Collects/Details/5
+        [Authorize]
         public ActionResult Details2(int? id)
         {
             if (id == null)

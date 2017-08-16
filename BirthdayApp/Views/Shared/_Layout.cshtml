@@ -20,14 +20,12 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("Users list", "UsersList", "Home")</li>
+                    <li>@Html.ActionLink("Strona główna", "Index", "Home")</li>
+                    <li>@Html.ActionLink("Zbiórki", "Index", "Collects")</li>
                     <li>@Html.ActionLink("AddCollectStatic", "AddCollectStatic", "Home")</li>
-                    <li>@Html.ActionLink("ModelUsers", "Index", "ModelUsers")</li>
-                    <li>@Html.ActionLink("MyProfile", "MyProfile", "ModelUsers")</li>
-                    <li>@Html.ActionLink("ThisProfile", "ThisProfile", "ModelUsers", new { id = 2 }, null)</li>
-                    <li>@Html.ActionLink("EditMe", "EditMe", "ModelUsers")</li>
-                    <li>@Html.ActionLink("Collects", "Index", "Collects")</li>
+                    <li>@Html.ActionLink("Lista użytkowników", "Index", "ModelUsers")</li>
+                    <li>@Html.ActionLink("Mój profil", "MyProfile", "ModelUsers")</li>
+                    <!-- <li>@Html.ActionLink("Profil Aleksandra", "ThisProfile", "ModelUsers", new { id = 2 }, null)</li> -->
                     <li>@Html.ActionLink("CollectUsers", "Index", "CollectUsers")</li>
                     <li>@Html.ActionLink("CollectGifts", "Index", "CollectGifts")</li>
                     <li>@Html.ActionLink("CollectGiftRatings", "Index", "CollectGiftRatings")</li>
