@@ -1,4 +1,5 @@
-﻿using BirthdayApp.Models;
+﻿using AppModels;
+using BirthdayApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,54 +10,113 @@ namespace BirthdayApp.Controllers
 {
     public class UsersListController : Controller
     {
+        private ApplicationDbContext db = new ApplicationDbContext();
+
         // GET: Home
         public ActionResult Index()
         {
-            UsersListBox fruit = new UsersListBox();
-            fruit.UsersList = PopulateFruits();
-            return View(fruit);
+            UsersListBox person = new UsersListBox();
+            person.UsersList = AllPersonsList();
+            
+            foreach(var item in person.UsersList)
+            {
+                item.Selected = db.CollectionsUsers.Any(collect => collect.CollectId == 1 && collect.UserId.ToString() == item.Value);
+            }
+
+            return View(person);
         }
 
         [HttpPost]
-        public ActionResult Index(UsersListBox fruit)
+        public ActionResult Index(UsersListBox person)
         {
-            fruit.UsersList = PopulateFruits();
-            if (fruit.UsersListIds != null)
+            person.UsersList = AllPersonsList();
+            if (person.UsersListIds != null)
             {
-                List<SelectListItem> selectedItems = fruit.UsersList.Where(p => fruit.UsersListIds.Contains(int.Parse(p.Value))).ToList();
-
-                ViewBag.Message = "Selected Fruits:";
+                List<SelectListItem> selectedItems = person.UsersList.Where(p => person.UsersListIds.Contains(int.Parse(p.Value))).ToList();
+                
                 foreach (var selectedItem in selectedItems)
                 {
                     selectedItem.Selected = true;
                     ViewBag.Message += "\\n" + selectedItem.Text;
                 }
+
+                foreach (var item in person.UsersList)
+                {
+                    if (!item.Selected)
+                    {
+                        db.CollectionsUsers.Remove(db.CollectionsUsers.Find(db.CollectionsUsers.SingleOrDefault(c => c.UserId.ToString() == item.Value).Id));
+                    }
+                    else
+                    {
+                        var newCollectionUsers = new CollectUser();
+                        newCollectionUsers.UserId = Int32.Parse(item.Value);
+                        newCollectionUsers.CollectId = 1;
+                        db.CollectionsUsers.Add(newCollectionUsers);
+                    }
+                    db.SaveChanges();
+                }
+
+                //foreach (var nw in person.UsersList)
+                //{
+                //    if (!nw.Selected)
+                //        ViewBag.a1 = "1";
+
+                //    //if (nw.pol.Selected)
+                //    //    ViewBag.a2 = "2";
+                //}
+
+                //foreach (var item in person.UsersList)
+                //{
+                //    if (item.Selected == false && !selectedItems.Any(c => c.Selected == item.Selected))
+                //    {
+                //        //var newCollectionUsers = new CollectUser();
+                //        //newCollectionUsers.UserId = Int32.Parse(item.Value);
+                //        //newCollectionUsers.CollectId = 1;
+                //        //db.CollectionsUsers.Add(newCollectionUsers);
+                //    }
+                //    else
+                //    {
+                //        //ViewBag.rmv = db.CollectionsUsers.SingleOrDefault(c => c.CollectId == 1 && c.UserId.ToString() == item.Value).Id;
+                //        //db.CollectionsUsers.Remove(db.CollectionsUsers.Find(db.CollectionsUsers.SingleOrDefault(c => c.CollectId == 1 && c.UserId.ToString() == item.Value && item.Selected == true).Id));
+
+
+                //    }
+
+                //    db.SaveChanges();
+                //}
+
+
+                //ViewBag.Message = "Wybrani użytkownicy:";
+
+
+
+
+
+                //var newCollectionUsers = new CollectUser();
+                //newCollectionUsers.UserId = 1;
+                //newCollectionUsers.CollectId = 1;
+                //context.CollectionsUsers.Add(newCollectionUsers);
+                //context.SaveChanges();
+
+
             }
 
-            return View(fruit);
+            return View(person);
         }
 
-        private static List<SelectListItem> PopulateFruits()
+        private List<SelectListItem> AllPersonsList()
         {
             List<SelectListItem> items = new List<SelectListItem>();
-            items.Add(new SelectListItem
+            
+            foreach (var item in db.ModelUsers.ToList())
             {
-                Text = "Pies",
-                Value = "1"
-            });
-
-            items.Add(new SelectListItem
-            {
-                Text = "Kot",
-                Value = "2"
-            });
-
-            items.Add(new SelectListItem
-            {
-                Text = "Małpa",
-                Value = "3"
-            });
-
+                items.Add(new SelectListItem
+                {
+                    Text = item.Name,
+                    Value = item.Id.ToString()
+                    //Selected = item.CollectUsers.Any(collect => collect.CollectId == 1)
+                });
+            }
             return items;
         }
     }

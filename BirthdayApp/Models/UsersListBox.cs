@@ -10,5 +10,6 @@ namespace BirthdayApp.Models
     {
         public List<SelectListItem> UsersList { get; set; }
         public int[] UsersListIds { get; set; }
+        public int Selected { get; set; }
     }
 }

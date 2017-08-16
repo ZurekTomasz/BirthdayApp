@@ -35,8 +35,6 @@ namespace BirthdayApp.Models
         public DbSet<CollectGift> CollectionsGifts { get; set; }
         public DbSet<CollectGiftRating> CollectionsGiftRatings { get; set; }
 
-
-
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
