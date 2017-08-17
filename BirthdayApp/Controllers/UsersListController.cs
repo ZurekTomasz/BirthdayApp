@@ -33,72 +33,50 @@ namespace BirthdayApp.Controllers
             if (person.UsersListIds != null)
             {
                 List<SelectListItem> selectedItems = person.UsersList.Where(p => person.UsersListIds.Contains(int.Parse(p.Value))).ToList();
+
                 
+
+                ViewBag.Message = "Wybrani użytkownicy:";
                 foreach (var selectedItem in selectedItems)
                 {
                     selectedItem.Selected = true;
                     ViewBag.Message += "\\n" + selectedItem.Text;
+
+                    if(!db.CollectionsUsers.Any(c => c.UserId.ToString() == selectedItem.Value))
+                    {
+                        var newCollectionUsers = new CollectUser();
+                        newCollectionUsers.UserId = Int32.Parse(selectedItem.Value);
+                        newCollectionUsers.CollectId = 1;
+                        db.CollectionsUsers.Add(newCollectionUsers);
+                        db.SaveChanges();
+                    }
                 }
 
                 foreach (var item in person.UsersList)
                 {
-                    if (!item.Selected)
+                    if(!item.Selected)
                     {
-                        db.CollectionsUsers.Remove(db.CollectionsUsers.Find(db.CollectionsUsers.SingleOrDefault(c => c.UserId.ToString() == item.Value).Id));
+                        if(db.CollectionsUsers.Any(c => c.UserId.ToString() == item.Value))
+                        {
+                            db.CollectionsUsers.Remove(db.CollectionsUsers.Find(db.CollectionsUsers.SingleOrDefault(c => c.UserId.ToString() == item.Value).Id));
+                            db.SaveChanges();
+                        }
                     }
-                    else
-                    {
-                        var newCollectionUsers = new CollectUser();
-                        newCollectionUsers.UserId = Int32.Parse(item.Value);
-                        newCollectionUsers.CollectId = 1;
-                        db.CollectionsUsers.Add(newCollectionUsers);
-                    }
-                    db.SaveChanges();
                 }
-
-                //foreach (var nw in person.UsersList)
-                //{
-                //    if (!nw.Selected)
-                //        ViewBag.a1 = "1";
-
-                //    //if (nw.pol.Selected)
-                //    //    ViewBag.a2 = "2";
-                //}
-
-                //foreach (var item in person.UsersList)
-                //{
-                //    if (item.Selected == false && !selectedItems.Any(c => c.Selected == item.Selected))
-                //    {
-                //        //var newCollectionUsers = new CollectUser();
-                //        //newCollectionUsers.UserId = Int32.Parse(item.Value);
-                //        //newCollectionUsers.CollectId = 1;
-                //        //db.CollectionsUsers.Add(newCollectionUsers);
-                //    }
-                //    else
-                //    {
-                //        //ViewBag.rmv = db.CollectionsUsers.SingleOrDefault(c => c.CollectId == 1 && c.UserId.ToString() == item.Value).Id;
-                //        //db.CollectionsUsers.Remove(db.CollectionsUsers.Find(db.CollectionsUsers.SingleOrDefault(c => c.CollectId == 1 && c.UserId.ToString() == item.Value && item.Selected == true).Id));
-
-
-                //    }
-
-                //    db.SaveChanges();
-                //}
-
-
-                //ViewBag.Message = "Wybrani użytkownicy:";
-
-
-
-
-
-                //var newCollectionUsers = new CollectUser();
-                //newCollectionUsers.UserId = 1;
-                //newCollectionUsers.CollectId = 1;
-                //context.CollectionsUsers.Add(newCollectionUsers);
-                //context.SaveChanges();
-
-
+            }
+            else
+            {
+                foreach (var item in person.UsersList)
+                {
+                    if (!item.Selected )
+                    {
+                        if (db.CollectionsUsers.Any(c => c.UserId.ToString() == item.Value))
+                        {
+                            db.CollectionsUsers.Remove(db.CollectionsUsers.Find(db.CollectionsUsers.SingleOrDefault(c => c.UserId.ToString() == item.Value).Id));
+                            db.SaveChanges();
+                        }
+                    }
+                }
             }
 
             return View(person);
