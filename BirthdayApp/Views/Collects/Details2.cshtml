@@ -10,6 +10,9 @@
 <div>
     <h4>Collect</h4>
     <hr />
+    <p>Zrobić jakiś dostęp do zrzutek, czy jesteś w tej zrzutek</p>
+    <p>Zrobić że nie widzisz zrzutki na siebie</p>
+    <br />
     <table class="mytable">
         <tr>
             <td>
@@ -107,7 +110,7 @@
         }
     </table>
         <br />
-    @Html.ActionLink("Opuść zbiórkę", "Index", "UsersList", new { id = Model.Id }, null)
+    @Html.ActionLink("Opuść zbiórkę", "Delete2", "CollectUsers", new { id = Model.Id }, null)
     <br />
     @Html.ActionLink("Zarządzaj użytkownikami zbiórki [as Admin] [Design]", "Index", "UsersList", new { id = Model.Id }, null)
     <br />
@@ -115,7 +118,7 @@
     <p>Zatwierdzone</p>
     @Html.ActionLink("Zatwierdź prezent [as Admin] [Tego jeszcze nie zrobilem]", "Index", "UsersList", new { id = Model.Id }, null)
     <br />
-    @Html.ActionLink("Zarządzaj tym kto zapłacił [as Admin] [by Search]", "Index", "UsersList", new { id = Model.Id }, null)
+    @Html.ActionLink("Zarządzaj tym kto zapłacił [as Admin] [by Search] [lub zrobić rozwijaną liczbę jak w zarządzaniu użytkownikami zbiórki???]", "Index", "UsersList", new { id = Model.Id }, null)
         <hr />
 
 </div>

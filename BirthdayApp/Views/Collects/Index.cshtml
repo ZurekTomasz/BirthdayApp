@@ -30,6 +30,7 @@
     </tr>
 
 @foreach (var item in Model) {
+   if (item.RecipientId != ViewBag.id) {
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.Owner.Name)
@@ -44,12 +45,13 @@
             @Html.DisplayFor(modelItem => item.Amount)
         </td>
         <td>
-            @Html.ActionLink("Edytuj", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Szczegóły", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Usuń", "Delete", new { id=item.Id }) |
+            @Html.ActionLink("Edytuj", "Edit", new { id = item.Id }) |
+            @Html.ActionLink("Szczegóły", "Details", new { id = item.Id }) |
+            @Html.ActionLink("Usuń", "Delete", new { id = item.Id }) |
             @Html.ActionLink("Szczegóły2", "Details2", new { id = item.Id }) 
         </td>
     </tr>
-}
+        }
+    }
 
 </table>

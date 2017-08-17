@@ -33,6 +33,7 @@ namespace BirthdayApp.Controllers
         // GET: Collects
         public ActionResult Index()
         {
+            ViewBag.id = GetModelUserId();
             var collections = db.Collections.Include(c => c.Owner).Include(c => c.Recipient);
             return View(collections.ToList());
         }

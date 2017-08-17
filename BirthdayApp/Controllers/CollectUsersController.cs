@@ -8,12 +8,27 @@ using System.Web;
 using System.Web.Mvc;
 using AppModels;
 using BirthdayApp.Models;
+using Microsoft.AspNet.Identity;
 
 namespace BirthdayApp.Controllers
 {
     public class CollectUsersController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+
+        public string GetUserId()
+        {
+            string userId = User.Identity.GetUserId();
+            return userId;
+        }
+
+        public int GetModelUserId()
+        {
+            string userId = User.Identity.GetUserId();
+            int modelUserId = db.ModelUsers.Single(i => i.EntityId == userId).Id;
+
+            return modelUserId;
+        }
 
         // GET: CollectUsers
         public ActionResult Index()
@@ -118,6 +133,36 @@ namespace BirthdayApp.Controllers
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
+        {
+            CollectUser collectUser = db.CollectionsUsers.Find(id);
+            db.CollectionsUsers.Remove(collectUser);
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        // GET: CollectUsers/Delete/5
+        public ActionResult Delete2(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Collect collect = db.Collections.Find(id);
+
+            if (collect == null)
+            {
+                return HttpNotFound();
+            }
+
+            int userID = GetModelUserId();
+            int CollectUsersID = db.CollectionsUsers.SingleOrDefault(i => i.CollectId == id && i.UserId == userID).Id;
+
+            return RedirectToAction("DeleteFID", "CollectUsers", new { id = CollectUsersID });
+        }
+
+
+        // POST: CollectUsers/Delete/5
+        public ActionResult DeleteFID(int id)
         {
             CollectUser collectUser = db.CollectionsUsers.Find(id);
             db.CollectionsUsers.Remove(collectUser);
