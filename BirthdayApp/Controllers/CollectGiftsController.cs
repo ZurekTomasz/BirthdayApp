@@ -8,12 +8,27 @@ using System.Web;
 using System.Web.Mvc;
 using AppModels;
 using BirthdayApp.Models;
+using Microsoft.AspNet.Identity;
 
 namespace BirthdayApp.Controllers
 {
     public class CollectGiftsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
+
+        public string GetUserId()
+        {
+            string userId = User.Identity.GetUserId();
+            return userId;
+        }
+
+        public int GetModelUserId()
+        {
+            string userId = User.Identity.GetUserId();
+            int modelUserId = db.ModelUsers.Single(i => i.EntityId == userId).Id;
+
+            return modelUserId;
+        }
 
         // GET: CollectGifts
         public ActionResult Index()
@@ -61,6 +76,32 @@ namespace BirthdayApp.Controllers
 
             ViewBag.CollectId = new SelectList(db.Collections, "Id", "Name", collectGift.CollectId);
             ViewBag.UserId = new SelectList(db.ModelUsers, "Id", "Name", collectGift.UserId);
+            return View(collectGift);
+        }
+
+        // GET: CollectGifts/Create
+        public ActionResult Create2(int? id)
+        {
+            return View();
+        }
+
+        // POST: CollectGifts/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create2(int? id, [Bind(Include = "Id,Name,Description")] CollectGift collectGift)
+        {
+            if (ModelState.IsValid)
+            {
+                collectGift.UserId = GetModelUserId();
+                collectGift.CollectId = id;
+                collectGift.Rating = 0;
+                db.CollectionsGifts.Add(collectGift);
+                db.SaveChanges();
+                return RedirectToAction("Details2", "Collects", new { id = id });
+            }
+
             return View(collectGift);
         }
 

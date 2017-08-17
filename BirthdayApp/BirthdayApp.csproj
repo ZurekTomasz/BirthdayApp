@@ -670,6 +670,7 @@
     <Content Include="Views\CollectGiftRatings\Index.cshtml" />
     <Content Include="Views\UsersList\Index.cshtml" />
     <Content Include="Views\Collects\Create2.cshtml" />
+    <Content Include="Views\CollectGifts\Create2.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
