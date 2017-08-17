@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
@@ -26,6 +27,8 @@ namespace BirthdayApp.Controllers
             {
                 return HttpNotFound();
             }
+
+            ViewBag.info1 = "Collect ID = " + id;
 
             UsersListBox person = new UsersListBox();
             person.UsersList = AllPersonsList();
@@ -51,6 +54,8 @@ namespace BirthdayApp.Controllers
             {
                 return HttpNotFound();
             }
+
+            ViewBag.info1 = "Collect ID = " + id;
 
             person.UsersList = AllPersonsList();
             if (person.UsersListIds != null)
