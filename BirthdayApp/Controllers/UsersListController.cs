@@ -3,6 +3,7 @@ using BirthdayApp.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
@@ -13,28 +14,48 @@ namespace BirthdayApp.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Home
-        public ActionResult Index()
+        public ActionResult Index(int? id)
         {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            Collect collect = db.Collections.Find(id);
+            if (collect == null)
+            {
+                return HttpNotFound();
+            }
+
             UsersListBox person = new UsersListBox();
             person.UsersList = AllPersonsList();
-            
+
             foreach(var item in person.UsersList)
             {
-                item.Selected = db.CollectionsUsers.Any(collect => collect.CollectId == 1 && collect.UserId.ToString() == item.Value);
+                item.Selected = db.CollectionsUsers.Any(c => c.CollectId == id && c.UserId.ToString() == item.Value);
             }
 
             return View(person);
         }
 
         [HttpPost]
-        public ActionResult Index(UsersListBox person)
+        public ActionResult Index(int? id, UsersListBox person)
         {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            Collect collect = db.Collections.Find(id);
+            if (collect == null)
+            {
+                return HttpNotFound();
+            }
+
             person.UsersList = AllPersonsList();
             if (person.UsersListIds != null)
             {
                 List<SelectListItem> selectedItems = person.UsersList.Where(p => person.UsersListIds.Contains(int.Parse(p.Value))).ToList();
-
-                
 
                 ViewBag.Message = "Wybrani użytkownicy:";
                 foreach (var selectedItem in selectedItems)
@@ -42,11 +63,11 @@ namespace BirthdayApp.Controllers
                     selectedItem.Selected = true;
                     ViewBag.Message += "\\n" + selectedItem.Text;
 
-                    if(!db.CollectionsUsers.Any(c => c.UserId.ToString() == selectedItem.Value))
+                    if (!db.CollectionsUsers.Any(c => c.UserId.ToString() == selectedItem.Value && c.CollectId == id))
                     {
                         var newCollectionUsers = new CollectUser();
                         newCollectionUsers.UserId = Int32.Parse(selectedItem.Value);
-                        newCollectionUsers.CollectId = 1;
+                        newCollectionUsers.CollectId = id;
                         db.CollectionsUsers.Add(newCollectionUsers);
                         db.SaveChanges();
                     }
@@ -56,9 +77,9 @@ namespace BirthdayApp.Controllers
                 {
                     if(!item.Selected)
                     {
-                        if(db.CollectionsUsers.Any(c => c.UserId.ToString() == item.Value))
+                        if(db.CollectionsUsers.Any(c => c.UserId.ToString() == item.Value && c.CollectId == id))
                         {
-                            db.CollectionsUsers.Remove(db.CollectionsUsers.Find(db.CollectionsUsers.SingleOrDefault(c => c.UserId.ToString() == item.Value).Id));
+                            db.CollectionsUsers.Remove(db.CollectionsUsers.Find(db.CollectionsUsers.SingleOrDefault(c => c.UserId.ToString() == item.Value && c.CollectId == id).Id));
                             db.SaveChanges();
                         }
                     }
@@ -70,9 +91,9 @@ namespace BirthdayApp.Controllers
                 {
                     if (!item.Selected )
                     {
-                        if (db.CollectionsUsers.Any(c => c.UserId.ToString() == item.Value))
+                        if (db.CollectionsUsers.Any(c => c.UserId.ToString() == item.Value && c.CollectId == id))
                         {
-                            db.CollectionsUsers.Remove(db.CollectionsUsers.Find(db.CollectionsUsers.SingleOrDefault(c => c.UserId.ToString() == item.Value).Id));
+                            db.CollectionsUsers.Remove(db.CollectionsUsers.Find(db.CollectionsUsers.SingleOrDefault(c => c.UserId.ToString() == item.Value && c.CollectId == id).Id));
                             db.SaveChanges();
                         }
                     }
@@ -85,7 +106,7 @@ namespace BirthdayApp.Controllers
         private List<SelectListItem> AllPersonsList()
         {
             List<SelectListItem> items = new List<SelectListItem>();
-            
+
             foreach (var item in db.ModelUsers.ToList())
             {
                 items.Add(new SelectListItem

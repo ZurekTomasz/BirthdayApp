@@ -45,8 +45,6 @@ namespace BirthdayApp.Controllers
                             where i.EntityId == userId
                             select i).ToList();
 
-
-
             return View(thisUser);
         }
 
