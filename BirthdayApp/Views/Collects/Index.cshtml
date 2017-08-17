@@ -5,26 +5,26 @@
 }
 
 <h2>Index</h2>
-
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Utwórz nową zrzutkę", "Create2")
 </p>
+<p>
+    @Html.ActionLink("Utwórz nową zrzutkę jako admin", "Create")
+</p>
+
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Owner.Name)
+            Założyciel zrzutki
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Recipient.Name)
+            Zbieramy dla
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Name)
+            Nazwa zrzutki
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Description)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Amount)
+            Kwota
         </th>
         <th></th>
     </tr>
@@ -41,15 +41,13 @@
             @Html.DisplayFor(modelItem => item.Name)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
             @Html.DisplayFor(modelItem => item.Amount)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details2", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+            @Html.ActionLink("Edytuj", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Szczegóły", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Usuń", "Delete", new { id=item.Id }) |
+            @Html.ActionLink("Szczegóły2", "Details2", new { id = item.Id }) 
         </td>
     </tr>
 }

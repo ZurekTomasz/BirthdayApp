@@ -67,7 +67,7 @@
     <ol class="Opt">
 
         <li class="Opt">
-            @Html.RadioButton("uniqueRadio", "Null")
+            @Html.RadioButton("uniqueRadio", "0")
             @Html.Label("Null")
         </li>
         @foreach (var item in Model.CollectGifts2)
@@ -108,7 +108,8 @@
         }
     </table>
         <br />
-        Opuść zbiórkę(link)/Zarządzaj użytkownikami (link)
+        Opuść zbiórkę(link)
+    @Html.ActionLink("Zarządzaj użytkownikami zbiórki", "Index", "UsersList", new { id = Model.Id }, null)
         <hr />
 
 </div>

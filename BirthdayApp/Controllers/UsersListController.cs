@@ -28,6 +28,7 @@ namespace BirthdayApp.Controllers
                 return HttpNotFound();
             }
 
+            ViewBag.id = id;
             ViewBag.info1 = "Collect ID = " + id;
 
             UsersListBox person = new UsersListBox();
@@ -55,6 +56,7 @@ namespace BirthdayApp.Controllers
                 return HttpNotFound();
             }
 
+            ViewBag.id = id;
             ViewBag.info1 = "Collect ID = " + id;
 
             person.UsersList = AllPersonsList();

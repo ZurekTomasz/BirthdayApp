@@ -68,13 +68,13 @@ namespace BirthdayApp.Controllers
             }
 
             var ModelUserId = GetModelUserId();
-            try
-            {
+            if(db.CollectionsGiftRatings.Any(i => i.TheBestRating == true & i.UserId == ModelUserId))
+            { 
                 ViewData["uniqueRadio"] = db.CollectionsGiftRatings.SingleOrDefault(i => i.TheBestRating == true & i.UserId == ModelUserId).GiftId;
             }
-            catch(Exception)
+            else
             {
-                ViewData["uniqueRadio"] = "Null";
+                ViewData["uniqueRadio"] = "0";
             }
 
 
@@ -101,32 +101,39 @@ namespace BirthdayApp.Controllers
 
             int wybranyid = Int32.Parse(Request.Form["uniqueRadio"]);
             //int ggrid = db.CollectionsGiftRatings.SingleOrDefault(i => i.Id == wybranyid).Id;
+
+            if (Request.Form["uniqueRadio"] == "0")
+            {
+                wybranyid = 0;
+            }
+
             var ModelUserId = GetModelUserId();
-            try
+            if(db.CollectionsGiftRatings.Any(i => i.TheBestRating == true & i.UserId == ModelUserId))
             {
                 CollectGiftRating cgrx = db.CollectionsGiftRatings.Find(db.CollectionsGiftRatings.SingleOrDefault(i => i.TheBestRating == true & i.UserId == ModelUserId).Id);
                 cgrx.TheBestRating = false;
                 db.SaveChanges();
             }
-            catch(Exception)
-            {
+                
 
-            }
-            
-            try
+            //////////////**//
+            if(db.CollectionsGiftRatings.Any(i => i.GiftId == wybranyid & i.UserId == ModelUserId))
             {
                 CollectGiftRating cgr = db.CollectionsGiftRatings.Find(db.CollectionsGiftRatings.SingleOrDefault(i => i.GiftId == wybranyid & i.UserId == ModelUserId).Id);
                 cgr.TheBestRating = true;
                 db.SaveChanges();
             }
-            catch(Exception)
+            else
             {
-                var cgr = new CollectGiftRating();
-                cgr.UserId = ModelUserId;
-                cgr.GiftId = wybranyid;
-                cgr.TheBestRating = true;
-                db.CollectionsGiftRatings.Add(cgr);
-                db.SaveChanges();
+                if(wybranyid!=0)
+                {
+                    var cgr = new CollectGiftRating();
+                    cgr.UserId = ModelUserId;
+                    cgr.GiftId = wybranyid;
+                    cgr.TheBestRating = true;
+                    db.CollectionsGiftRatings.Add(cgr);
+                    db.SaveChanges();
+                }
             }
 
 
@@ -142,7 +149,7 @@ namespace BirthdayApp.Controllers
             }
             catch (Exception)
             {
-                ViewData["uniqueRadio"] = "Null";
+                ViewData["uniqueRadio"] = "0";
             }
    
             return View(collect);
@@ -165,6 +172,33 @@ namespace BirthdayApp.Controllers
         {
             if (ModelState.IsValid)
             {
+                db.Collections.Add(collect);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.OwnerId = new SelectList(db.ModelUsers, "Id", "Name", collect.OwnerId);
+            ViewBag.RecipientId = new SelectList(db.ModelUsers, "Id", "Name", collect.RecipientId);
+            return View(collect);
+        }
+
+        // GET: Collects/Create
+        public ActionResult Create2()
+        {
+            ViewBag.RecipientId = new SelectList(db.ModelUsers, "Id", "Name");
+            return View();
+        }
+
+        // POST: Collects/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create2([Bind(Include = "Id,RecipientId,Name,Description,Amount")] Collect collect)
+        {
+            if (ModelState.IsValid)
+            {
+                collect.OwnerId = GetModelUserId();
                 db.Collections.Add(collect);
                 db.SaveChanges();
                 return RedirectToAction("Index");
