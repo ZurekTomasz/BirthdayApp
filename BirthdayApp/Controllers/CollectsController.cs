@@ -178,6 +178,121 @@ namespace BirthdayApp.Controllers
             return View(collect);
         }
 
+        // GET: Collects/Details/5
+        [Authorize]
+        public ActionResult Confirm(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Collect collect = db.Collections.Find(id);
+            if (collect == null)
+            {
+                return HttpNotFound();
+            }
+            int userID = GetModelUserId();
+
+
+            if (!IsAdmin())
+            {
+                if (!db.CollectionsUsers.Any(i => i.UserId == userID && i.CollectId == id))
+                {
+                    return HttpNotFound();
+                }
+            }
+
+            var ModelUserId = GetModelUserId();
+            if (db.CollectionsGiftRatings.Any(i => i.TheBestRating == true & i.UserId == ModelUserId))
+            {
+                ViewData["uniqueRadio"] = db.CollectionsGiftRatings.SingleOrDefault(i => i.TheBestRating == true & i.UserId == ModelUserId).GiftId;
+            }
+            else
+            {
+                ViewData["uniqueRadio"] = "0";
+            }
+
+
+            return View(collect);
+        }
+
+
+
+        [HttpPost]
+        public ActionResult Confirm(int? id, string uniqueRadio, string fname)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Collect collect = db.Collections.Find(id);
+            if (collect == null)
+            {
+                return HttpNotFound();
+            }
+
+
+
+
+            int wybranyid = Int32.Parse(Request.Form["uniqueRadio"]);
+            //int ggrid = db.CollectionsGiftRatings.SingleOrDefault(i => i.Id == wybranyid).Id;
+
+            if (Request.Form["uniqueRadio"] == "0")
+            {
+                wybranyid = 0;
+            }
+
+            var ModelUserId = GetModelUserId();
+            if (db.CollectionsGiftRatings.Any(i => i.TheBestRating == true & i.UserId == ModelUserId))
+            {
+                CollectGiftRating cgrx = db.CollectionsGiftRatings.Find(db.CollectionsGiftRatings.SingleOrDefault(i => i.TheBestRating == true & i.UserId == ModelUserId).Id);
+                cgrx.TheBestRating = false;
+                db.SaveChanges();
+            }
+
+
+            //////////////**//
+            if (db.CollectionsGiftRatings.Any(i => i.GiftId == wybranyid & i.UserId == ModelUserId))
+            {
+                CollectGiftRating cgr = db.CollectionsGiftRatings.Find(db.CollectionsGiftRatings.SingleOrDefault(i => i.GiftId == wybranyid & i.UserId == ModelUserId).Id);
+                cgr.TheBestRating = true;
+                db.SaveChanges();
+            }
+            else
+            {
+                if (wybranyid != 0)
+                {
+                    var cgr = new CollectGiftRating();
+                    cgr.UserId = ModelUserId;
+                    cgr.GiftId = wybranyid;
+                    cgr.TheBestRating = true;
+                    db.CollectionsGiftRatings.Add(cgr);
+                    db.SaveChanges();
+                }
+            }
+
+
+
+
+            var YourRadioButtonx = Request.Form["uniqueRadio"];
+            ViewBag.wybor = wybranyid;
+            ViewBag.userid = GetModelUserId();
+
+            try
+            {
+                ViewData["uniqueRadio"] = db.CollectionsGiftRatings.Single(i => i.TheBestRating == true & i.UserId == ModelUserId).GiftId;
+            }
+            catch (Exception)
+            {
+                ViewData["uniqueRadio"] = "0";
+            }
+
+            string mojakwota = Request.Form["fname"];
+            ViewBag.mojakwota = mojakwota;
+
+            return View(collect);
+        }
+
         // GET: Collects/Create
         public ActionResult Create()
         {

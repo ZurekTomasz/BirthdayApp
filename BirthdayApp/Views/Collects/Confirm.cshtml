@@ -10,8 +10,8 @@
 <div>
     <h4>Collect</h4>
     <hr />
-    <p>Zrobić paginację do 10 w liście zrzutek</p>
-    <p>Zrobić że nie widzisz zrzutki na siebie</p>
+    <h3>Zatwierdzenie zbiórki</h3>
+    <p>W tabeli Collect utworzyć kolumnę o nazwie SelectedGift</p>
     <br />
     <table class="mytable">
         <tr>
@@ -62,21 +62,12 @@
         </tr>
     </table>
     
-    <hr />
-    @Html.ActionLink("Dodaj propozycję prezentu", "Create2", "CollectGifts", new { id = Model.Id }, null)
-    <br />
-    @Html.ActionLink("Zarządzaj prezentami [as Admin] [by Search]************", "Index", "CollectGifts")
     <br />
     Propozycje prezentów:
     <br />
     @using (Html.BeginForm())
     {
         <ol class="Opt">
-
-            <li class="Opt">
-                @Html.RadioButton("uniqueRadio", "0")
-                @Html.Label("Null")
-            </li>
             @foreach (var item in Model.CollectGifts2.OrderByDescending(i=>i.Rating))
             {
                 <li class="Opt">
@@ -86,40 +77,21 @@
             }
             </ol>
 
-            <input type="submit" value="Save" />
+            
         
+    
+    <br />
+    @Html.Raw("Szacowana kwota: ") @Html.DisplayFor(model => model.Amount)
+    <br />
+    @Html.Raw("Nowa kwota: ") <input type="text" name="fname">
+    <br />
+    @Html.Raw(ViewBag.mojakwota + "$")
+    <br />
+    <input type="submit" value="Zatwierdź prezent" />
+    <br />
+    @Html.ActionLink("Details2", "Details2", "Collects", new { id = Model.Id }, null)
+
     }
-        <hr />
-        Użytkownicy którzy są aktualnie w zbiórce:
-        <br />
-    <table class="mytable">
-        <tr>
-            <th>Użytkownik</th>
-            <th>Czy zapłacił?</th>
-        </tr>
-        @foreach (var item in Model.CollectUsers2)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.User.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.GaveMoney)
-                </td>
-            </tr>
-        }
-    </table>
-        <br />
-    @Html.ActionLink("Opuść zbiórkę", "Delete2", "CollectUsers", new { id = Model.Id }, null)
-    <br />
-    @Html.ActionLink("Zarządzaj użytkownikami zbiórki [as Admin]", "Index", "UsersList", new { id = Model.Id }, null)
-    <br />
-    <br />
-    <p>Zatwierdzone</p>
-    @Html.ActionLink("Zatwierdź prezent [as Owner]*********", "Confirm", "Collects", new { id = Model.Id }, null)
-    <br />
-    @Html.ActionLink("Zarządzaj tym kto zapłacił [as Admin] [by Search] [lub zrobić rozwijaną liczbę jak w zarządzaniu użytkownikami zbiórki???]**********", "Index", "CollectUsers")
-        <hr />
 
 </div>
 <p>
