@@ -30,6 +30,17 @@ namespace BirthdayApp.Controllers
             return modelUserId;
         }
 
+        public bool IsAdmin()
+        {
+            int userID = GetModelUserId();
+            if ("Admin" == db.ModelUsers.SingleOrDefault(i => i.Id == userID).Role)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         // GET: Collects
         [Authorize]
         public ActionResult Index()
@@ -70,9 +81,13 @@ namespace BirthdayApp.Controllers
             }
             int userID = GetModelUserId();
 
-            if (!db.CollectionsUsers.Any(i => i.UserId == userID && i.CollectId == id))
+
+            if(!IsAdmin())
             {
-                return HttpNotFound();
+                if (!db.CollectionsUsers.Any(i => i.UserId == userID && i.CollectId == id))
+                {
+                    return HttpNotFound();
+                }
             }
 
             var ModelUserId = GetModelUserId();
@@ -180,7 +195,6 @@ namespace BirthdayApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                collect.DateOfInitiative = DateTime.Now;//xdata
                 db.Collections.Add(collect);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -207,7 +221,6 @@ namespace BirthdayApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                collect.DateOfInitiative = DateTime.Now;//xdata
                 collect.OwnerId = GetModelUserId();
                 db.Collections.Add(collect);
                 db.SaveChanges();

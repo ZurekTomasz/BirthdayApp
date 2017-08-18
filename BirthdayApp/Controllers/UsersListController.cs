@@ -28,8 +28,9 @@ namespace BirthdayApp.Controllers
                 return HttpNotFound();
             }
 
-            ViewBag.id = id;
-            ViewBag.info1 = "Collect ID = " + id;
+            ViewBag.id = collect.Id;
+            ViewBag.info1 = "ID zrzutki: " + collect.Id;
+            ViewBag.info2 = "Nazwa zrzutki: " + collect.Name;
 
             UsersListBox person = new UsersListBox();
             person.UsersList = AllPersonsList();
@@ -56,8 +57,9 @@ namespace BirthdayApp.Controllers
                 return HttpNotFound();
             }
 
-            ViewBag.id = id;
-            ViewBag.info1 = "Collect ID = " + id;
+            ViewBag.id = collect.Id;
+            ViewBag.info1 = "ID zrzutki: " + collect.Id;
+            ViewBag.info2 = "Nazwa zrzutki: " + collect.Name;
 
             person.UsersList = AllPersonsList();
             if (person.UsersListIds != null)
