@@ -62,6 +62,7 @@ namespace BirthdayApp.DAL
 
             //Collect #1
             var newCollection = new Collect();
+            newCollection.DateOfInitiative = DateTime.ParseExact("2017-09-12", "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
             newCollection.OwnerId = 1;
             newCollection.RecipientId = 2;
             newCollection.Name = "Zbiórka 1";

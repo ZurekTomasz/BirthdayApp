@@ -16,9 +16,12 @@ namespace AppModels
             this.CollectUsers2 = new HashSet<CollectUser>();
 
             this.CollectGifts2 = new HashSet<CollectGift>();
+
+            this.DateOfAdd = DateTime.Now;
         }
 
         public int Id { get; set; }
+        [Required]
         public string Name { get; set; }
         [ForeignKey("Owner")]
         public int? OwnerId { get; set; }
@@ -28,6 +31,11 @@ namespace AppModels
         [DataType(DataType.Currency)]
         [RegularExpression("^[0-9]{0,99999}$", ErrorMessage = "Value must be a natural number")]
         public int Amount { get; set; }
+        [DataType(DataType.Date), DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime? DateOfInitiative { get; set; }
+        [DataType(DataType.Date), DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime? DateOfAdd { get; set; }
+
         public virtual ModelUser Owner { get; set; }
         public virtual ModelUser Recipient { get; set; }
 

@@ -110,6 +110,12 @@ namespace BirthdayApp.Controllers
             return View(person);
         }
 
+        public ActionResult List()
+        {
+
+            return View();
+        }
+
         private List<SelectListItem> AllPersonsList()
         {
             List<SelectListItem> items = new List<SelectListItem>();

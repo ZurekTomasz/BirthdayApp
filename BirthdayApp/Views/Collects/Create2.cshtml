@@ -50,6 +50,14 @@
         </div>
 
         <div class="form-group">
+            @Html.LabelFor(model => model.DateOfInitiative, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.DateOfInitiative, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.DateOfInitiative, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Create" class="btn btn-default" />
             </div>
@@ -63,4 +71,21 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+
+    <link rel="stylesheet" href="~/Scripts/jquery-ui.css">
+    <script src="~/Scripts/jquery-1.12.4.js"></script>
+    <script src="~/Scripts/jquery-ui.js"></script>
+
+    <script>
+      $( function() {
+          $("#DateOfInitiative").datepicker({
+          dateFormat: "yy-mm-dd",
+          changeMonth: true,
+          changeYear: true,
+          minDate: 0,
+          maxDate: "+2M +1D",
+          yearRange: "-0:+1"
+        });
+      } );
+    </script>
 }

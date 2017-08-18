@@ -31,6 +31,7 @@ namespace BirthdayApp.Controllers
         }
 
         // GET: Collects
+        [Authorize]
         public ActionResult Index()
         {
             ViewBag.id = GetModelUserId();
@@ -64,6 +65,12 @@ namespace BirthdayApp.Controllers
             }
             Collect collect = db.Collections.Find(id);
             if (collect == null)
+            {
+                return HttpNotFound();
+            }
+            int userID = GetModelUserId();
+
+            if (!db.CollectionsUsers.Any(i => i.UserId == userID && i.CollectId == id))
             {
                 return HttpNotFound();
             }
@@ -169,10 +176,11 @@ namespace BirthdayApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,OwnerId,RecipientId,Name,Description,Amount")] Collect collect)
+        public ActionResult Create([Bind(Include = "Id,OwnerId,RecipientId,Name,Description,Amount,DateOfInitiative")] Collect collect)
         {
             if (ModelState.IsValid)
             {
+                collect.DateOfInitiative = DateTime.Now;//xdata
                 db.Collections.Add(collect);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -195,10 +203,11 @@ namespace BirthdayApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create2([Bind(Include = "Id,RecipientId,Name,Description,Amount")] Collect collect)
+        public ActionResult Create2([Bind(Include = "Id,RecipientId,Name,Description,Amount,DateOfInitiative")] Collect collect)
         {
             if (ModelState.IsValid)
             {
+                collect.DateOfInitiative = DateTime.Now;//xdata
                 collect.OwnerId = GetModelUserId();
                 db.Collections.Add(collect);
                 db.SaveChanges();

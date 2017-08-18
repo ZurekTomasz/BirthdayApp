@@ -672,6 +672,7 @@
     <Content Include="Views\Collects\Create2.cshtml" />
     <Content Include="Views\CollectGifts\Create2.cshtml" />
     <Content Include="Views\CollectUsers\Delete2.cshtml" />
+    <Content Include="Views\UsersList\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

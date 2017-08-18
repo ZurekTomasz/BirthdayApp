@@ -58,6 +58,7 @@ namespace BirthdayApp.Controllers
                 ViewBag.com1 = "Użytkownik ID = " + GetUserId() + " dodał nową zbiórkę";
 
                 var newCollection = new Collect();
+                newCollection.DateOfInitiative = DateTime.ParseExact("2017-09-17", "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
                 newCollection.OwnerId = GetModelUserId();
                 newCollection.RecipientId = 2;
                 newCollection.Name = "Zbiórka 1";
