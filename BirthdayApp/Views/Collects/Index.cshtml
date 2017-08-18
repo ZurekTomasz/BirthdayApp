@@ -12,46 +12,75 @@
     @Html.ActionLink("Utwórz nową zrzutkę jako admin", "Create")
 </p>
 
-<table class="table">
-    <tr>
-        <th>
-            Założyciel zrzutki
-        </th>
-        <th>
-            Zbieramy dla
-        </th>
-        <th>
-            Nazwa zrzutki
-        </th>
-        <th>
-            Kwota
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-   if (item.RecipientId != ViewBag.id) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Owner.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Recipient.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Amount)
-        </td>
-        <td>
-            @Html.ActionLink("Edytuj", "Edit", new { id = item.Id }) |
-            @Html.ActionLink("Szczegóły", "Details", new { id = item.Id }) |
-            @Html.ActionLink("Usuń", "Delete", new { id = item.Id }) |
-            @Html.ActionLink("Szczegóły2", "Details2", new { id = item.Id }) 
-        </td>
-    </tr>
-        }
+<style>
+    .outer {
+        color: black;
+        background-color: lightgreen;
     }
+</style>
 
-</table>
+
+
+    <table class="table">
+        <tr>
+            <th>
+                Założyciel zrzutki
+            </th>
+            <th>
+                Zbieramy dla
+            </th>
+            <th>
+                Nazwa zrzutki
+            </th>
+            <th>
+                Kwota
+            </th>
+            <th></th>
+        </tr>
+
+
+
+        @foreach (var item in Model.OrderByDescending(i => i.Amount))
+        {
+            /*if (item.RecipientId != ViewBag.id) {*/
+
+            <tr>
+                <td>
+                    
+                        @Html.DisplayFor(modelItem => item.Owner.Name)
+                    
+            </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Recipient.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Amount)
+                </td>
+                <td>
+                    @if (item.CollectUsers2.Any(i => i.UserId == ViewBag.id))
+                    {
+                        <div class="outer">
+                            @Html.ActionLink("Edytuj", "Edit", new { id = item.Id }) |
+                            @Html.ActionLink("Usuń", "Delete", new { id = item.Id }) |
+                            @Html.ActionLink("Szczegóły2", "Details2", new { id = item.Id })
+                        </div>
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Szczegóły", "Details", new { id = item.Id }) 
+                        @Html.Raw(" | ")
+                        @Html.ActionLink("Dołącz do zbiórki", "Create2", "CollectUsers", new { id = item.Id }, null)
+                    }
+            </td>
+            </tr>
+
+            /*}*/
+        }
+
+    </table>
+
+
+

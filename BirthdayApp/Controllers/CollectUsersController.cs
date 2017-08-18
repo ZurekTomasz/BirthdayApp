@@ -79,6 +79,39 @@ namespace BirthdayApp.Controllers
             return View(collectUser);
         }
 
+        // GET: CollectUsers/Create
+        public ActionResult Create2(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Collect collect = db.Collections.Find(id);
+
+            if (collect == null)
+            {
+                return HttpNotFound();
+            }
+
+            return RedirectToAction("CreateFID", "CollectUsers", new { id = id });
+        }
+
+        public ActionResult CreateFID(int? id)
+        {
+            if (ModelState.IsValid)
+            {
+                CollectUser collectUser = new CollectUser();
+                collectUser.UserId = GetModelUserId();
+                collectUser.CollectId = id;
+                collectUser.GaveMoney = false;
+                db.CollectionsUsers.Add(collectUser);
+                db.SaveChanges();
+                return RedirectToAction("Index", "Collects");
+            }
+
+            return HttpNotFound();
+        }
+
         // GET: CollectUsers/Edit/5
         public ActionResult Edit(int? id)
         {
@@ -167,7 +200,7 @@ namespace BirthdayApp.Controllers
             CollectUser collectUser = db.CollectionsUsers.Find(id);
             db.CollectionsUsers.Remove(collectUser);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Collects");
         }
 
         protected override void Dispose(bool disposing)
