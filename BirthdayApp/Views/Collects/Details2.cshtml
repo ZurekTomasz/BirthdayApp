@@ -65,7 +65,7 @@
     <hr />
     @Html.ActionLink("Dodaj propozycję prezentu", "Create2", "CollectGifts", new { id = Model.Id }, null)
     <br />
-    @Html.ActionLink("Zarządzaj prezentami [as Admin] [by Search]************", "Index", "CollectGifts")
+    @Html.ActionLink("Zarządzaj prezentami [as Admin]", "IndexById", "CollectGifts", new { id = Model.Id }, null)
     <br />
     Propozycje prezentów:
     <br />

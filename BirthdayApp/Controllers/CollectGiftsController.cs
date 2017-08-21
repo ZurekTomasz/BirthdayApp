@@ -37,6 +37,24 @@ namespace BirthdayApp.Controllers
             return View(collectionsGifts.ToList());
         }
 
+        // GET: CollectGifts
+        public ActionResult IndexById(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var collectionsGifts = db.CollectionsGifts.Include(c => c.Collect).Include(c => c.User);
+            var collectionsGifts2 = collectionsGifts.Where(c => c.CollectId == id);
+            if (collectionsGifts2 == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(collectionsGifts2.ToList());
+        }
+
         // GET: CollectGifts/Details/5
         public ActionResult Details(int? id)
         {
