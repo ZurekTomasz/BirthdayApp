@@ -37,6 +37,51 @@ namespace BirthdayApp.Controllers
             return View(collectionsUsers.ToList());
         }
 
+        public ActionResult IndexById(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var collectionsUsers = db.CollectionsUsers.Include(c => c.Collect).Include(c => c.User);
+            var collectionsUsers2 = collectionsUsers.Where(c => c.CollectId == id);
+            if (collectionsUsers2 == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(collectionsUsers2.ToList());
+        }
+
+        public ActionResult GaveMoneyAR(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            CollectUser collectUser = db.CollectionsUsers.Find(id);
+            if (collectUser == null)
+            {
+                return HttpNotFound();
+            }
+
+            if(collectUser.GaveMoney)
+            {
+                collectUser.GaveMoney = false;
+            }
+            else
+            {
+                collectUser.GaveMoney = true;
+            }
+
+            db.CollectionsUsers.Attach(collectUser);
+            db.Entry(collectUser).State = EntityState.Modified;
+            db.SaveChanges();
+
+            return RedirectToAction("IndexById", "CollectUsers", new { id = id });
+        }
+
         // GET: CollectUsers/Details/5
         public ActionResult Details(int? id)
         {

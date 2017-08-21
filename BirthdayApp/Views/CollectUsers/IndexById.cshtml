@@ -1,0 +1,52 @@
+﻿@model IEnumerable<AppModels.CollectUser>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Collect.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.User.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GaveMoney)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Collect.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.User.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GaveMoney)
+        </td>
+        <td>
+
+
+        @if (item.GaveMoney)
+        {
+            @Html.ActionLink("Potwierdź", "GaveMoneyAR", new { id = item.Id })
+        }
+        else
+        {
+            @Html.ActionLink("Anuluj", "GaveMoneyAR", new { id = item.Id })
+        }
+        </td>
+    </tr>
+}
+
+</table>

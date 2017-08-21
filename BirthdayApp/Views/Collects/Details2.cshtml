@@ -65,7 +65,7 @@
     <hr />
     @Html.ActionLink("Dodaj propozycję prezentu", "Create2", "CollectGifts", new { id = Model.Id }, null)
     <br />
-    @Html.ActionLink("Zarządzaj prezentami [as Admin]", "IndexById", "CollectGifts", new { id = Model.Id }, null)
+    @Html.ActionLink("Zarządzaj prezentami [as Owner]", "IndexById", "CollectGifts", new { id = Model.Id }, null)
     <br />
     Propozycje prezentów:
     <br />
@@ -118,7 +118,7 @@
     <p>Zatwierdzone</p>
     @Html.ActionLink("Zatwierdź prezent [as Owner]*********", "Confirm", "Collects", new { id = Model.Id }, null)
     <br />
-    @Html.ActionLink("Zarządzaj tym kto zapłacił [as Admin] [by Search] [lub zrobić rozwijaną liczbę jak w zarządzaniu użytkownikami zbiórki???]**********", "Index", "CollectUsers")
+    @Html.ActionLink("Zarządzaj tym kto zapłacił [as Owner]", "IndexById", "CollectUsers", new { id = Model.Id }, null)
         <hr />
 
 </div>
