@@ -39,11 +39,11 @@
 
         @if (item.GaveMoney)
         {
-            @Html.ActionLink("Potwierdź", "GaveMoneyAR", new { id = item.Id })
+            @Html.ActionLink("Anuluj", "GaveMoneyAR", new { id = item.Id })
         }
         else
         {
-            @Html.ActionLink("Anuluj", "GaveMoneyAR", new { id = item.Id })
+            @Html.ActionLink("Potwierdź", "GaveMoneyAR", new { id = item.Id })
         }
         </td>
     </tr>

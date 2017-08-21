@@ -44,6 +44,12 @@ namespace BirthdayApp.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
+            int userID = GetModelUserId();
+            if (!db.CollectionsUsers.Any(c => c.Collect.OwnerId == userID))
+            {
+                return HttpNotFound();
+            }
+
             var collectionsUsers = db.CollectionsUsers.Include(c => c.Collect).Include(c => c.User);
             var collectionsUsers2 = collectionsUsers.Where(c => c.CollectId == id);
             if (collectionsUsers2 == null)
@@ -66,7 +72,13 @@ namespace BirthdayApp.Controllers
                 return HttpNotFound();
             }
 
-            if(collectUser.GaveMoney)
+            int userID = GetModelUserId();
+            if (!db.CollectionsUsers.Any(c => c.Collect.OwnerId == userID))
+            {
+                return HttpNotFound();
+            }
+
+            if (collectUser.GaveMoney)
             {
                 collectUser.GaveMoney = false;
             }
@@ -79,7 +91,7 @@ namespace BirthdayApp.Controllers
             db.Entry(collectUser).State = EntityState.Modified;
             db.SaveChanges();
 
-            return RedirectToAction("IndexById", "CollectUsers", new { id = id });
+            return RedirectToAction("IndexById", "CollectUsers", new { id = collectUser.Collect.Id });
         }
 
         // GET: CollectUsers/Details/5
