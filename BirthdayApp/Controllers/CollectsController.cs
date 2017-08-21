@@ -403,6 +403,16 @@ namespace BirthdayApp.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Collect collect = db.Collections.Find(id);
+            var collectGift = db.CollectionsGifts.Where(x => x.CollectId == collect.Id);
+            foreach (var item in collectGift.ToList())
+            {
+                var collectGiftRating = db.CollectionsGiftRatings.Where(x => x.GiftId == item.Id);
+                db.CollectionsGiftRatings.RemoveRange(collectGiftRating);
+                db.SaveChanges();
+            }
+            var collectUser = db.CollectionsUsers.Where(x => x.CollectId == collect.Id);
+            db.CollectionsGifts.RemoveRange(collectGift);
+            db.CollectionsUsers.RemoveRange(collectUser);
             db.Collections.Remove(collect);
             db.SaveChanges();
             return RedirectToAction("Index");
