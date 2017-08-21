@@ -87,6 +87,12 @@
     <br />
     @Html.Raw(ViewBag.mojakwota + "$")
     <br />
+    @Html.Raw("Liczba uzytkownikow w zrzutce " + ViewBag.liczba_uzytkownikow_w_zrzutce)
+    <br />
+    @Html.Raw("Hajs na łepka: " + ViewBag.nalepka + "$")
+    <br />
+    @Html.Raw("ID wybranego checkboxa: " + ViewBag.wybor)
+    <br />
     <input type="submit" value="Zatwierdź prezent" />
     <br />
     @Html.ActionLink("Details2", "Details2", "Collects", new { id = Model.Id }, null)

@@ -289,6 +289,10 @@ namespace BirthdayApp.Controllers
 
             string mojakwota = Request.Form["fname"];
             ViewBag.mojakwota = mojakwota;
+            int liczba_uzytkownikow_w_zrzutce = db.CollectionsUsers.Count(c => c.CollectId == id);
+            int nalepka = Int32.Parse(mojakwota) / liczba_uzytkownikow_w_zrzutce;
+            ViewBag.nalepka = nalepka;
+            ViewBag.liczba_uzytkownikow_w_zrzutce = liczba_uzytkownikow_w_zrzutce;
 
             return View(collect);
         }
