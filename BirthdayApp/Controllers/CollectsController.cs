@@ -66,6 +66,26 @@ namespace BirthdayApp.Controllers
             return View(collect);
         }
 
+        public ActionResult UndoConfirm(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Collect collect = db.Collections.Find(id);
+            if (collect == null)
+            {
+                return HttpNotFound();
+            }
+            collect.IsConfirmed = false;
+            db.Collections.Attach(collect);
+            db.Entry(collect).State = EntityState.Modified;
+            db.SaveChanges();
+
+            //return View(collect);
+            return RedirectToAction("Details2", "Collects", new { id = id });
+        }
+
         // GET: Collects/Details/5
         [Authorize]
         public ActionResult Details2(int? id)
@@ -99,6 +119,22 @@ namespace BirthdayApp.Controllers
             {
                 ViewData["uniqueRadio"] = "0";
             }
+
+            var collectrionsUsers = (from i in db.CollectionsUsers
+                                     where i.CollectId == id
+                                     select i).ToList();
+
+            int gmcounter = 0;
+
+            foreach (var item in collectrionsUsers)
+            {
+                if (item.GaveMoney)
+                {
+                    gmcounter++;
+                }
+            }
+
+            ViewBag.gmcounter = gmcounter;
 
 
             return View(collect);
@@ -174,7 +210,7 @@ namespace BirthdayApp.Controllers
             {
                 ViewData["uniqueRadio"] = "0";
             }
-   
+
             return View(collect);
         }
 
@@ -205,7 +241,8 @@ namespace BirthdayApp.Controllers
             var ModelUserId = GetModelUserId();
             if (db.CollectionsGiftRatings.Any(i => i.TheBestRating == true & i.UserId == ModelUserId))
             {
-                ViewData["uniqueRadio"] = db.CollectionsGiftRatings.SingleOrDefault(i => i.TheBestRating == true & i.UserId == ModelUserId).GiftId;
+                //ERRORFIXproblem11111111111111111111xxxxxxxxxxx
+                ViewData["uniqueRadio"] = db.CollectionsGiftRatings.SingleOrDefault(i => i.TheBestRating == true & i.UserId == db.Collections.FirstOrDefault(c => c.Id == id).OwnerId).GiftId;
             }
             else
             {
@@ -277,7 +314,7 @@ namespace BirthdayApp.Controllers
             var YourRadioButtonx = Request.Form["uniqueRadio"];
             ViewBag.wybor = wybranyid;
             ViewBag.userid = GetModelUserId();
-
+            //ERRORFIXproblem222222222222222
             try
             {
                 ViewData["uniqueRadio"] = db.CollectionsGiftRatings.Single(i => i.TheBestRating == true & i.UserId == ModelUserId).GiftId;
@@ -294,7 +331,14 @@ namespace BirthdayApp.Controllers
             ViewBag.nalepka = nalepka;
             ViewBag.liczba_uzytkownikow_w_zrzutce = liczba_uzytkownikow_w_zrzutce;
 
-            return View(collect);
+            collect.IsConfirmed = true;
+            db.Collections.Attach(collect);
+            db.Entry(collect).State = EntityState.Modified;
+            db.SaveChanges();
+
+            //return View(collect);
+            return RedirectToAction("Details2","Collects", new { id = id });
+
         }
 
         // GET: Collects/Create

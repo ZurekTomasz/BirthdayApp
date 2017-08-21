@@ -9,116 +9,140 @@
 
 <div>
     <h4>Collect</h4>
-    <hr />
-    <p>Zrobić paginację do 10 w liście zrzutek</p>
-    <p>Zrobić że nie widzisz zrzutki na siebie</p>
-    <br />
-    <table class="mytable">
-        <tr>
-            <td>
-                <b>Nazwa zbiórki:</b>
-            </td>
-            <td>
-                <b>Opis zbiórki:</b>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                @Html.DisplayFor(model => model.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(model => model.Description)
-            </td>
-        </tr>
+        @if (Model.IsConfirmed)
+        {
+            <font color="red">Zbiórka została zatwierdzona przez założyciela zbiórki!</font>
+        }
+        else
+        {
+            <font color="red">Zbiórka jest otwarta</font>
+        }
+        <hr />
+        <table class="mytable">
+            <tr>
+                <td>
+                    <b>Nazwa zbiórki:</b>
+                </td>
+                <td>
+                    <b>Opis zbiórki:</b>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(model => model.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.Description)
+                </td>
+            </tr>
 
-        <tr>
-            <td>
-                <b>Zbiórkę założył:</b>
-            </td>
-            <td>
-                <b>Zbieramy na prezent dla:</b>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                @Html.DisplayFor(model => model.Owner.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(model => model.Recipient.Name)
-            </td>
-        </tr>
+            <tr>
+                <td>
+                    <b>Zbiórkę założył:</b>
+                </td>
+                <td>
+                    <b>Zbieramy na prezent dla:</b>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(model => model.Owner.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.Recipient.Name)
+                </td>
+            </tr>
 
-        <tr>
-            <td>
-                <b>Szacowana kwota prezentu to:</b>
-            </td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>
-                @Html.DisplayFor(model => model.Amount)
-            </td>
-            <td></td>
-        </tr>
-    </table>
-    
-    <hr />
-    @Html.ActionLink("Dodaj propozycję prezentu", "Create2", "CollectGifts", new { id = Model.Id }, null)
-    <br />
-    @Html.ActionLink("Zarządzaj prezentami [as Owner]", "IndexById", "CollectGifts", new { id = Model.Id }, null)
-    <br />
-    Propozycje prezentów:
-    <br />
-    @using (Html.BeginForm())
-    {
-        <ol class="Opt">
+            <tr>
+                <td>
+                    <b>Szacowana kwota prezentu to:</b>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(model => model.Amount)
+                </td>
+                <td></td>
+            </tr>
+        </table>
 
-            <li class="Opt">
-                @Html.RadioButton("uniqueRadio", "0")
-                @Html.Label("Null")
-            </li>
-            @foreach (var item in Model.CollectGifts2.OrderByDescending(i=>i.Rating))
-            {
-                <li class="Opt">
-                    @Html.RadioButton("uniqueRadio", item.Id)
-                    @Html.Label(item.Name + " (" + item.Rating + ")")
-                </li>
-            }
-            </ol>
 
-            <input type="submit" value="Save" />
-        
-    }
+
+        <hr />
+
+        @using (Html.BeginForm())
+        {
+            <table class="mytable">
+                <tr>
+                    <td>
+                        Wybierz jeden z prezentów:
+                        <ol class="Opt">
+
+                            <li class="Opt">
+                                @Html.RadioButton("uniqueRadio", "0")
+                                @Html.Label("Null")
+                            </li>
+                            @foreach (var item in Model.CollectGifts2.OrderByDescending(i => i.Rating))
+                            {
+                                <li class="Opt">
+                                    @Html.RadioButton("uniqueRadio", item.Id)
+                                    @Html.Label(item.Name + " (" + item.Rating + ")")
+                                </li>
+                            }
+                        </ol>
+                        @if (!Model.IsConfirmed)
+                        {
+                        <input type="submit" value="Zapisz zmiany" />
+                        <br />
+                        <br />
+                        @Html.ActionLink("Dodaj własną propozycję prezentu", "Create2", "CollectGifts", new { id = Model.Id }, null)
+                        }
+                    </td>
+                </tr>
+            </table>
+        }
         <hr />
         Użytkownicy którzy są aktualnie w zbiórce:
         <br />
-    <table class="mytable">
-        <tr>
-            <th>Użytkownik</th>
-            <th>Czy zapłacił?</th>
-        </tr>
-        @foreach (var item in Model.CollectUsers2)
-        {
+        <table class="mytable">
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.User.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.GaveMoney)
-                </td>
+                <th>Użytkownik</th>
+                <th>Czy zapłacił?</th>
             </tr>
-        }
-    </table>
+            @foreach (var item in Model.CollectUsers2)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.User.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.GaveMoney)
+                    </td>
+                </tr>
+            }
+        </table>
         <br />
-    @Html.ActionLink("Opuść zbiórkę", "Delete2", "CollectUsers", new { id = Model.Id }, null)
-    <br />
-    @Html.ActionLink("Zarządzaj użytkownikami zbiórki [as Admin]", "Index", "UsersList", new { id = Model.Id }, null)
-    <br />
-    <br />
-    <p>Zatwierdzone</p>
-    @Html.ActionLink("Zatwierdź prezent [as Owner]*********", "Confirm", "Collects", new { id = Model.Id }, null)
-    <br />
-    @Html.ActionLink("Zarządzaj tym kto zapłacił [as Owner]", "IndexById", "CollectUsers", new { id = Model.Id }, null)
+        @Html.ActionLink("Opuść zbiórkę", "Delete2", "CollectUsers", new { id = Model.Id }, null)
+        <br />
+        <br />
+        Sekcja założyciela zbiórki:
+        <br />
+        @Html.ActionLink("Zarządzaj użytkownikami zbiórki [as Owner]", "Index", "UsersList", new { id = Model.Id }, null)
+        <br />
+        @Html.ActionLink("Zarządzaj prezentami [as Owner]", "IndexById", "CollectGifts", new { id = Model.Id }, null)
+        <br />
+        @Html.ActionLink("Zarządzaj tym kto zapłacił [as Owner]", "IndexById", "CollectUsers", new { id = Model.Id }, null)
+        <br />
+        @if (ViewBag.gmcounter == 0)
+        {
+            @Html.ActionLink("Zatwierdzanie prezentu [as Owner]", "Confirm", "Collects", new { id = Model.Id }, null)
+        }
+        else
+        {
+            @Html.Raw("Fake info gdy przesyłam pierwszy raz do formularza - Nie można wprowadzać zmian dotyczących zrzutki gdy ktokolwiek zapłacił już za prezent!")
+        }
+        <br />
         <hr />
 
 </div>
@@ -126,3 +150,16 @@
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
     @Html.ActionLink("Back to List", "Index")
 </p>
+
+
+@section Scripts {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    @if (Model.IsConfirmed)
+    {
+        <script>
+            $(document).ready(function(){
+                $(':radio:not(:checked)').attr('disabled', true);
+            });
+        </script>
+    }
+}

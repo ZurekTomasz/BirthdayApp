@@ -254,6 +254,14 @@ namespace BirthdayApp.Controllers
         // POST: CollectUsers/Delete/5
         public ActionResult DeleteFID(int id)
         {
+            //int userID = GetModelUserId();
+            //if (db.CollectionsGiftRatings.Any(i => i.UserId == userID && i.))
+            //{
+            //    //CollectGiftRating cgr = db.CollectionsGiftRatings.Find(db.CollectionsGiftRatings.SingleOrDefault(i => i.GiftId == wybranyid & i.UserId == ModelUserId).Id);
+            //    //cgr.TheBestRating = true;
+            //    db.SaveChanges();
+            //}
+
             CollectUser collectUser = db.CollectionsUsers.Find(id);
             db.CollectionsUsers.Remove(collectUser);
             db.SaveChanges();

@@ -8,9 +8,7 @@
 <h2>Details</h2>
 
 <div>
-    <h4>Collect</h4>
-    <hr />
-    <h3>Zatwierdzenie zbiórki</h3>
+    <h4>Panel zarządzania zbiórką</h4>
     <p>W tabeli Collect utworzyć kolumnę o nazwie SelectedGift</p>
     <br />
     <table class="mytable">
@@ -61,29 +59,37 @@
             <td></td>
         </tr>
     </table>
-    
+
     <br />
     Propozycje prezentów:
     <br />
     @using (Html.BeginForm())
     {
-        <ol class="Opt">
-            @foreach (var item in Model.CollectGifts2.OrderByDescending(i=>i.Rating))
-            {
-                <li class="Opt">
-                    @Html.RadioButton("uniqueRadio", item.Id)
-                    @Html.Label(item.Name + " (" + item.Rating + ")")
-                </li>
-            }
-            </ol>
+        <table class="mytable">
+            <tr>
+                <td>
+                    <ol class="Opt">
+                        @foreach (var item in Model.CollectGifts2.OrderByDescending(i => i.Rating))
+                        {
+                            <li class="Opt">
+                                @Html.RadioButton("uniqueRadio", item.Id)
+                                @Html.Label(item.Name + " (" + item.Rating + ")")
+                            </li>
+                        }
+                    </ol>
 
-            
-        
-    
-    <br />
-    @Html.Raw("Szacowana kwota: ") @Html.DisplayFor(model => model.Amount)
-    <br />
-    @Html.Raw("Nowa kwota: ") <input type="text" name="fname">
+                    <br />
+                    @Html.Raw("Szacowana kwota: ") @Html.DisplayFor(model => model.Amount)
+                    <br />
+                    @Html.Raw("Nowa kwota: ") <input type="text" name="fname" value="100">
+                    <br />
+                    <input type="submit" value="Zatwierdź prezent" />
+
+                </td>
+            </tr>
+        </table>
+    }
+
     <br />
     @Html.Raw(ViewBag.mojakwota + "$")
     <br />
@@ -93,11 +99,12 @@
     <br />
     @Html.Raw("ID wybranego checkboxa: " + ViewBag.wybor)
     <br />
-    <input type="submit" value="Zatwierdź prezent" />
     <br />
     @Html.ActionLink("Details2", "Details2", "Collects", new { id = Model.Id }, null)
-
-    }
+    <br />
+    <br />
+    @Html.ActionLink("Cofnij propozycję prezentu", "UndoConfirm", "Collects", new { id = Model.Id }, null)
+    <br />
 
 </div>
 <p>
