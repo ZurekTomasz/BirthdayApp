@@ -57,6 +57,8 @@ namespace BirthdayApp.Controllers
                 return HttpNotFound();
             }
 
+            ViewBag.ThisId = id;
+
             return View(collectionsUsers2.ToList());
         }
 

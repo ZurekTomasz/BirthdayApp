@@ -29,8 +29,8 @@ namespace BirthdayApp.Controllers
             }
 
             ViewBag.id = collect.Id;
-            ViewBag.info1 = "ID zrzutki: " + collect.Id;
-            ViewBag.info2 = "Nazwa zrzutki: " + collect.Name;
+            ViewBag.collectName = collect.Name;
+            ViewBag.recipientName = db.ModelUsers.SingleOrDefault(c => c.Id == collect.RecipientId).Name;
 
             UsersListBox person = new UsersListBox();
             person.UsersList = AllPersonsList();
@@ -58,8 +58,8 @@ namespace BirthdayApp.Controllers
             }
 
             ViewBag.id = collect.Id;
-            ViewBag.info1 = "ID zrzutki: " + collect.Id;
-            ViewBag.info2 = "Nazwa zrzutki: " + collect.Name;
+            ViewBag.collectName = collect.Name;
+            ViewBag.recipientName = db.ModelUsers.SingleOrDefault(c => c.Id == collect.RecipientId).Name;
 
             person.UsersList = AllPersonsList();
             if (person.UsersListIds != null)

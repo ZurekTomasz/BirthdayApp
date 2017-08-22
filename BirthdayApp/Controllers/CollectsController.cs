@@ -497,7 +497,7 @@ namespace BirthdayApp.Controllers
                 db.CollectionsUsers.Add(newCollectionUsers);
                 db.SaveChanges();
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "UsersList", new { id = collect.Id });
             }
 
             ViewBag.OwnerId = new SelectList(db.ModelUsers, "Id", "Name", collect.OwnerId);

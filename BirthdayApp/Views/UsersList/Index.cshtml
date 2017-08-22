@@ -5,27 +5,27 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<hr />
-<hr />
+<h4>Zarządzanie użytkownikami w zbiórce</h4>
 
 @using (Html.BeginForm("Index", "UsersList", FormMethod.Post))
 {
-    <p>#</p>
-    @ViewBag.info1
+
     <br />
-    @ViewBag.info2
-    <p>#</p>
+    @Html.Raw("<b>Nazwa zbiórki: </b>")
+    @ViewBag.collectName
     <br />
-    @Html.Label("Użytkownicy:")
+    @Html.Raw("<b>Zbieramy dla: </b>")
+    @ViewBag.recipientName
     <br />
+    <br />
+    @Html.Raw("Użytkownicy:")
     <br />
     @Html.ListBoxFor(m => m.UsersListIds, Model.UsersList, new { @class = "listbox" })
     <br />
-    <br />
-    <input type="submit" value="Send" />
+    <input type="submit" value="Aktualizuj" />
 }
-
-@Html.ActionLink("Wróć do zbiórki", "Details2", "Collects", new { id = ViewBag.id }, null)
+<br />
+@Html.ActionLink("Przejdź do szczegółów zbiórki", "Details2", "Collects", new { id = ViewBag.id }, null)
 
 
 @section Scripts {
