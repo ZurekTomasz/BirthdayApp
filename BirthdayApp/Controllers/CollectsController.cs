@@ -137,7 +137,21 @@ namespace BirthdayApp.Controllers
             ViewBag.gmcounter = gmcounter;
 
 
-            return View(collect);
+            //
+            foreach (var item in db.CollectionsGifts.OrderBy(i => i.Id).ToList())
+            {
+                item.Rating = 0;
+                foreach (var item2 in db.CollectionsUsers.Where(i => i.CollectId == id).ToList())
+                {
+                    if(db.CollectionsGiftRatings.Any(i => i.GiftId == item.Id && i.UserId == item2.UserId && i.TheBestRating == true))
+                    {
+                        item.Rating++;
+                    }
+                }
+            }
+
+
+                return View(collect);
         }
 
         
@@ -211,6 +225,34 @@ namespace BirthdayApp.Controllers
                 ViewData["uniqueRadio"] = "0";
             }
 
+            var collectrionsUsers = (from i in db.CollectionsUsers
+                                     where i.CollectId == id
+                                     select i).ToList();
+
+            int gmcounter = 0;
+
+            foreach (var item in collectrionsUsers)
+            {
+                if (item.GaveMoney)
+                {
+                    gmcounter++;
+                }
+            }
+
+            ViewBag.gmcounter = gmcounter;
+
+            foreach (var item in db.CollectionsGifts.OrderBy(i => i.Id).ToList())
+            {
+                item.Rating = 0;
+                foreach (var item2 in db.CollectionsUsers.Where(i => i.CollectId == id).ToList())
+                {
+                    if (db.CollectionsGiftRatings.Any(i => i.GiftId == item.Id && i.UserId == item2.UserId && i.TheBestRating == true))
+                    {
+                        item.Rating++;
+                    }
+                }
+            }
+
             return View(collect);
         }
 
@@ -247,6 +289,18 @@ namespace BirthdayApp.Controllers
             else
             {
                 ViewData["uniqueRadio"] = "0";
+            }
+
+            foreach (var item in db.CollectionsGifts.OrderBy(i => i.Id).ToList())
+            {
+                item.Rating = 0;
+                foreach (var item2 in db.CollectionsUsers.Where(i => i.CollectId == id).ToList())
+                {
+                    if (db.CollectionsGiftRatings.Any(i => i.GiftId == item.Id && i.UserId == item2.UserId && i.TheBestRating == true))
+                    {
+                        item.Rating++;
+                    }
+                }
             }
 
 
@@ -335,6 +389,18 @@ namespace BirthdayApp.Controllers
             db.Collections.Attach(collect);
             db.Entry(collect).State = EntityState.Modified;
             db.SaveChanges();
+
+            foreach (var item in db.CollectionsGifts.OrderBy(i => i.Id).ToList())
+            {
+                item.Rating = 0;
+                foreach (var item2 in db.CollectionsUsers.Where(i => i.CollectId == id).ToList())
+                {
+                    if (db.CollectionsGiftRatings.Any(i => i.GiftId == item.Id && i.UserId == item2.UserId && i.TheBestRating == true))
+                    {
+                        item.Rating++;
+                    }
+                }
+            }
 
             //return View(collect);
             return RedirectToAction("Details2","Collects", new { id = id });
