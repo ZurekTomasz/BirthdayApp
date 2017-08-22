@@ -148,8 +148,25 @@ namespace BirthdayApp.Controllers
                 }
             }
 
+            ViewBag.UserId = GetModelUserId();
 
-                return View(collect);
+            int SelectedGiftId = 0;
+            try
+            {
+                int? SelectedGiftIdNull = db.CollectionsGiftRatings.SingleOrDefault(i => i.TheBestRating == true & i.UserId == db.Collections.FirstOrDefault(c => c.Id == id).OwnerId).GiftId;
+                SelectedGiftId = SelectedGiftIdNull ?? 0;
+            }
+            catch { }
+
+            ViewBag.SelectedGiftId = SelectedGiftId;
+
+            int liczba_uzytkownikow_w_zrzutce = db.CollectionsUsers.Count(c => c.CollectId == id);
+            int mojakwota = db.Collections.SingleOrDefault(c => c.Id == id).Amount;
+            int kasanaosobe = mojakwota / liczba_uzytkownikow_w_zrzutce;
+
+            ViewBag.kasanaosobe = kasanaosobe;
+
+            return View(collect);
         }
 
 
@@ -250,6 +267,8 @@ namespace BirthdayApp.Controllers
                 }
             }
 
+            ViewBag.UserId = GetModelUserId();
+
             return View(collect);
         }
 
@@ -317,10 +336,14 @@ namespace BirthdayApp.Controllers
                 return HttpNotFound();
             }
 
+            int wybranyid = 0;
+            try
+            {
+                int? wybranyidNull = Int32.Parse(Request.Form["uniqueRadio"]);
+                wybranyid = wybranyidNull ?? 0;
+            }
+            catch { }
 
-
-
-            int wybranyid = Int32.Parse(Request.Form["uniqueRadio"]);
             //int ggrid = db.CollectionsGiftRatings.SingleOrDefault(i => i.Id == wybranyid).Id;
 
             if (Request.Form["uniqueRadio"] == "0")
@@ -373,13 +396,21 @@ namespace BirthdayApp.Controllers
                 ViewData["uniqueRadio"] = "0";
             }
 
-            string mojakwota = Request.Form["fname"];
-            ViewBag.mojakwota = mojakwota;
-            int liczba_uzytkownikow_w_zrzutce = db.CollectionsUsers.Count(c => c.CollectId == id);
-            int nalepka = Int32.Parse(mojakwota) / liczba_uzytkownikow_w_zrzutce;
-            ViewBag.nalepka = nalepka;
-            ViewBag.liczba_uzytkownikow_w_zrzutce = liczba_uzytkownikow_w_zrzutce;
+            int mojakwota = 0;
+            try
+            {
+                int? mojakwotaNull = Int32.Parse(Request.Form["fname"]);
+                mojakwota = mojakwotaNull ?? 0;
+            }
+            catch { }
 
+            //ViewBag.mojakwota = mojakwota;
+            //int liczba_uzytkownikow_w_zrzutce = db.CollectionsUsers.Count(c => c.CollectId == id);
+            //int nalepka = Int32.Parse(mojakwota) / liczba_uzytkownikow_w_zrzutce;
+            //ViewBag.nalepka = nalepka;
+            //ViewBag.liczba_uzytkownikow_w_zrzutce = liczba_uzytkownikow_w_zrzutce;
+
+            collect.Amount = mojakwota;
             collect.IsConfirmed = true;
             db.Collections.Attach(collect);
             db.Entry(collect).State = EntityState.Modified;

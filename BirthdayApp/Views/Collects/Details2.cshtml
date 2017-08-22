@@ -1,17 +1,28 @@
 ﻿@model AppModels.Collect
 
-@{
-    ViewBag.Title = "Details";
-}
 <link href="~/CSSstyle/mystyle.css" rel="stylesheet" />
 
-<h2>Details</h2>
+@{
+    ViewBag.Title = "Szczegóły zbiórki";
+}
+
+<h2>@ViewBag.Title</h2>
 
 <div>
-    <h4>Collect</h4>
         @if (Model.IsConfirmed)
         {
             <font color="red">Zbiórka została zatwierdzona przez założyciela zbiórki!</font>
+            <br />
+            @Html.Raw("")
+            <br />
+            @Html.Raw("Wybrany prezent: ")
+            @Html.Raw(Model.CollectGifts2.SingleOrDefault(i=>i.Id == ViewBag.SelectedGiftId).Name)
+            <br />
+            @Html.Raw("Kwota prezentu: ")
+            @Html.Raw(Model.Amount)
+            <br />
+            @Html.Raw("Pojedyńcza kwota: ")
+            @Html.Raw(ViewBag.kasanaosobe)
         }
         else
         {
@@ -73,10 +84,10 @@
 
         @using (Html.BeginForm())
         {
+            @Html.Raw("Wybierz jeden z prezentów:")
             <table class="mytable">
                 <tr>
                     <td>
-                        Wybierz jeden z prezentów:
                         <ol class="Opt">
 
                             <li class="Opt">
@@ -107,8 +118,8 @@
         <br />
         <table class="mytable">
             <tr>
-                <th>Użytkownik</th>
-                <th>Czy zapłacił?</th>
+                <td><b>Użytkownik</b></td>
+                <td><b>Czy zapłacił?</b></td>
             </tr>
             @foreach (var item in Model.CollectUsers2)
             {
@@ -124,31 +135,36 @@
         </table>
         <br />
         @Html.ActionLink("Opuść zbiórkę", "Delete2", "CollectUsers", new { id = Model.Id }, null)
-        <br />
-        <br />
-        Sekcja założyciela zbiórki:
-        <br />
-        @Html.ActionLink("Zarządzaj użytkownikami zbiórki [as Owner]", "Index", "UsersList", new { id = Model.Id }, null)
-        <br />
-        @Html.ActionLink("Zarządzaj prezentami [as Owner]", "IndexById", "CollectGifts", new { id = Model.Id }, null)
-        <br />
-        @Html.ActionLink("Zarządzaj tym kto zapłacił [as Owner]", "IndexById", "CollectUsers", new { id = Model.Id }, null)
-        <br />
-        @if (ViewBag.gmcounter == 0)
+        
+        @if (Model.OwnerId == ViewBag.UserId)
         {
-            @Html.ActionLink("Zatwierdzanie prezentu [as Owner]", "Confirm", "Collects", new { id = Model.Id }, null)
+            <hr />
+            @Html.Raw("Sekcja założyciela zbiórki:")
+            <br />
+            @Html.ActionLink("Edytuj zbiórkę", "Edit2", new { id = Model.Id })
+            <br />
+            @Html.ActionLink("Zarządzaj użytkownikami zbiórki", "Index", "UsersList", new { id = Model.Id }, null)
+            <br />
+            @Html.ActionLink("Zarządzaj prezentami", "IndexById", "CollectGifts", new { id = Model.Id }, null)
+            <br />
+            @Html.ActionLink("Zarządzaj tym kto zapłacił", "IndexById", "CollectUsers", new { id = Model.Id }, null)
+            <br />
+            if (ViewBag.gmcounter == 0)
+            {
+                @Html.ActionLink("Zatwierdzanie prezentu", "Confirm", "Collects", new { id = Model.Id }, null)
+            }
+            else
+            {
+                @Html.Raw("Nie można wprowadzać zmian dotyczących zrzutki gdy ktokolwiek zapłacił już za prezent!")
+            }
+            <br />
         }
-        else
-        {
-            @Html.Raw("Fake info gdy przesyłam pierwszy raz do formularza - Nie można wprowadzać zmian dotyczących zrzutki gdy ktokolwiek zapłacił już za prezent!")
-        }
-        <br />
+        
         <hr />
 
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Wróć do listy", "Index")
 </p>
 
 
