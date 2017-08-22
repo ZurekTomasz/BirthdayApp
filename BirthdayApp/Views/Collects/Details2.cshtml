@@ -22,7 +22,7 @@
             @Html.Raw(Model.Amount)
             <br />
             @Html.Raw("Pojedyńcza kwota: ")
-            @Html.Raw(ViewBag.kasanaosobe)
+            @Html.Raw(ViewBag.AmountPerPerson)
         }
         else
         {
@@ -97,16 +97,18 @@
                             @foreach (var item in Model.CollectGifts2.OrderByDescending(i => i.Rating))
                             {
                                 <li class="Opt">
-                                    @Html.RadioButton("uniqueRadio", item.Id)
+                                    @Html.RadioButton("uniqueRadio", item.Id, new { onchange = "this.form.submit();" })
                                     @Html.Label(item.Name + " (" + item.Rating + ")")
                                 </li>
                             }
                         </ol>
+                        @*
                         @if (!Model.IsConfirmed)
                         {
                         <input type="submit" value="Zapisz zmiany" />
                         <br />
                         <br />
+                        *@
                         @Html.ActionLink("Dodaj własną propozycję prezentu", "Create2", "CollectGifts", new { id = Model.Id }, null)
                         }
                     </td>
