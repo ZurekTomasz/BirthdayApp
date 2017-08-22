@@ -102,6 +102,18 @@ namespace BirthdayApp.Controllers
         // GET: CollectGifts/Create
         public ActionResult Create2(int? id)
         {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Collect collect = db.Collections.Find(id);
+            if (collect == null)
+            {
+                return HttpNotFound();
+            }
+
+            ViewBag.CollectId = id;
+
             return View();
         }
 
