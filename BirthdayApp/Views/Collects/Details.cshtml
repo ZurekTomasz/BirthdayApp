@@ -1,17 +1,16 @@
 ﻿@model AppModels.Collect
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Informacje o zbiórce";
 }
 
-<h2>Details</h2>
+<h2>@ViewBag.Title</h2>
 
 <div>
-    <h4>Collect</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Owner.Name)
+            Założyciel zbiórki:
         </dt>
 
         <dd>
@@ -19,7 +18,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Recipient.Name)
+            Zbieramy dla:
         </dt>
 
         <dd>
@@ -27,7 +26,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Name)
+            Nazwa zbiórki:
         </dt>
 
         <dd>
@@ -35,7 +34,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Description)
+            Opis zbiórki:
         </dt>
 
         <dd>
@@ -43,30 +42,28 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Amount)
+            Kwota:
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.Amount)
         </dd>
 
+        <dt>&nbsp;</dt><dd>&nbsp;</dd>
+
         <dt>
-            Users who are in the collection
+            Użytkownicy którzy biorą udział w zbiórce
         </dt>
         <dd>
             <table class="table">
                 <tr>
-                    <th>Users</th>
-                    <th>Have they given money?</th>
+                    <th>Użytkownik</th>
                 </tr>
                 @foreach (var item in Model.CollectUsers2)
                 {
                     <tr>
                         <td>
                             @Html.DisplayFor(modelItem => item.User.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.GaveMoney)
                         </td>
                     </tr>
                 }
@@ -77,6 +74,5 @@
 
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Wróć do listy", "Index")
 </p>

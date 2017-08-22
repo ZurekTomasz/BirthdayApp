@@ -60,13 +60,46 @@ namespace BirthdayApp.DAL
             }
             //**//
 
+            //**//
+
+            //Michał Paszkowiak
+            fName = "Michał";
+            sName = "Paszkowiak";
+            fEmail = "michal@gmail.com";
+            Password = "123456";
+            Role = "User";
+            bDate = DateTime.ParseExact("1997-12-28", "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
+
+            var store3 = new UserStore<ApplicationUser>(context);
+            var manager3 = new UserManager<ApplicationUser>(store);
+            var user3 = new ApplicationUser { UserName = fEmail, Email = fEmail };
+            var result3 = manager.Create(user3, Password);
+
+            if (result3.Succeeded)
+            {
+                var mUser3 = new ModelUser(fName, sName, fEmail, Role, bDate, user3.Id);
+                context.ModelUsers.Add(mUser3);
+                context.SaveChanges();
+            }
+            //**//
+
             //Collect #1
             var newCollection = new Collect();
             newCollection.DateOfInitiative = DateTime.ParseExact("2017-09-12", "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
             newCollection.OwnerId = 1;
             newCollection.RecipientId = 2;
-            newCollection.Name = "Zbiórka 1";
+            newCollection.Name = "Zbiórka dla Aleksandra";
             context.Collections.Add(newCollection);
+            context.SaveChanges();
+            //**//
+
+            //Collect #2
+            var newCollection2 = new Collect();
+            newCollection2.DateOfInitiative = DateTime.ParseExact("2017-09-24", "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
+            newCollection2.OwnerId = 2;
+            newCollection2.RecipientId = 3;
+            newCollection2.Name = "Zbiórka dla Michała";
+            context.Collections.Add(newCollection2);
             context.SaveChanges();
             //**//
 
@@ -82,6 +115,14 @@ namespace BirthdayApp.DAL
             newCollectionUsers.UserId = 1;
             newCollectionUsers.CollectId = 1;
             context.CollectionsUsers.Add(newCollectionUsers);
+            context.SaveChanges();
+            //**//
+
+            //CollectUser #2
+            var newCollectionUsers2 = new CollectUser();
+            newCollectionUsers2.UserId = 2;
+            newCollectionUsers2.CollectId = 2;
+            context.CollectionsUsers.Add(newCollectionUsers2);
             context.SaveChanges();
             //**//
 

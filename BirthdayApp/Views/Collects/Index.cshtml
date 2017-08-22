@@ -1,36 +1,24 @@
 ﻿@model IEnumerable<AppModels.Collect>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Lista zbiórek";
 }
 
-<h2>Index</h2>
+<h2>@ViewBag.Title</h2>
 <p>
-    @Html.ActionLink("Utwórz nową zrzutkę", "Create2")
+    @Html.ActionLink("Utwórz nową zbiórkę", "Create2")
 </p>
-<p>
-    @Html.ActionLink("Utwórz nową zrzutkę jako admin", "Create")
-</p>
-
-<style>
-    .outer {
-        color: black;
-        background-color: lightgreen;
-    }
-</style>
-
-
 
     <table class="table">
         <tr>
             <th>
-                Założyciel zrzutki
+                Założyciel zbiórki
             </th>
             <th>
                 Zbieramy dla
             </th>
             <th>
-                Nazwa zrzutki
+                Nazwa zbiórki
             </th>
             <th>
                 Kwota
@@ -41,18 +29,14 @@
             <th></th>
         </tr>
 
-
-
         @foreach (var item in Model.OrderByDescending(i => i.DateOfAdd))
         {
-            /*if (item.RecipientId != ViewBag.id) {*/
-
+            //The user does not see collections for him
+            if (item.RecipientId != ViewBag.UserId) {
             <tr>
                 <td>
-                    
-                        @Html.DisplayFor(modelItem => item.Owner.Name)
-                    
-            </td>
+                    @Html.DisplayFor(modelItem => item.Owner.Name)
+                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Recipient.Name)
                 </td>
@@ -66,27 +50,44 @@
                     @Html.DisplayFor(modelItem => item.DateOfInitiative)
                 </td>
                 <td>
-                    @if (item.CollectUsers2.Any(i => i.UserId == ViewBag.id))
+                    @if (item.OwnerId == ViewBag.UserId)
                     {
-                        <div class="outer">
-                            @Html.ActionLink("Edytuj", "Edit", new { id = item.Id }) |
-                            @Html.ActionLink("Usuń", "Delete", new { id = item.Id }) |
-                            @Html.ActionLink("Szczegóły2", "Details2", new { id = item.Id })
-                        </div>
-                    }
-                    else
-                    {
-                        @Html.ActionLink("Szczegóły", "Details", new { id = item.Id }) 
+                        @Html.ActionLink("Edytuj", "Edit", new { id = item.Id })
                         @Html.Raw(" | ")
-                        @Html.ActionLink("Dołącz do zbiórki", "Create2", "CollectUsers", new { id = item.Id }, null)
+                        @Html.ActionLink("Usuń", "Delete", new { id = item.Id })
+                        <br />
                     }
+
+                    @if (item.CollectUsers2.Any(i => i.UserId == ViewBag.UserId))
+                    {
+                            <div class="DetailsBackground">
+                                @Html.ActionLink("Szczegóły zbiórki", "Details2", new { id = item.Id })
+                            </div>
+                        }
+                        else
+                        {
+                            @Html.ActionLink("O zbiórce", "Details", new { id = item.Id })
+                            @Html.Raw(" | ")
+                            @Html.ActionLink("Dołącz do zbiórki", "Create2", "CollectUsers", new { id = item.Id }, null)
+                        }
+                    
+                    
             </td>
             </tr>
 
-            /*}*/
+            }
         }
 
     </table>
 
 
 
+@section Scripts
+{
+    <style>
+        .DetailsBackground {
+            color: black;
+            background-color: lightgreen;
+        }
+    </style>
+}

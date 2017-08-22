@@ -12,6 +12,7 @@ using Microsoft.AspNet.Identity;
 
 namespace BirthdayApp.Controllers
 {
+    [Authorize]
     public class CollectsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -32,8 +33,8 @@ namespace BirthdayApp.Controllers
 
         public bool IsAdmin()
         {
-            int userID = GetModelUserId();
-            if ("Admin" == db.ModelUsers.SingleOrDefault(i => i.Id == userID).Role)
+            int UserId = GetModelUserId();
+            if ("Admin" == db.ModelUsers.SingleOrDefault(i => i.Id == UserId).Role)
             {
                 return true;
             }
@@ -42,16 +43,14 @@ namespace BirthdayApp.Controllers
         }
 
         // GET: Collects
-        [Authorize]
         public ActionResult Index()
         {
-            ViewBag.id = GetModelUserId();
+            ViewBag.UserId = GetModelUserId();
             var collections = db.Collections.Include(c => c.Owner).Include(c => c.Recipient);
             return View(collections.ToList());
         }
 
         // GET: Collects/Details/5
-        [Authorize]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -87,7 +86,6 @@ namespace BirthdayApp.Controllers
         }
 
         // GET: Collects/Details/5
-        [Authorize]
         public ActionResult Details2(int? id)
         {
             if (id == null)
@@ -154,7 +152,6 @@ namespace BirthdayApp.Controllers
                 return View(collect);
         }
 
-        
 
         [HttpPost]
         public ActionResult Details2(int? id, string uniqueRadio)
@@ -257,7 +254,6 @@ namespace BirthdayApp.Controllers
         }
 
         // GET: Collects/Details/5
-        [Authorize]
         public ActionResult Confirm(int? id)
         {
             if (id == null)
@@ -306,7 +302,6 @@ namespace BirthdayApp.Controllers
 
             return View(collect);
         }
-
 
 
         [HttpPost]
@@ -437,7 +432,9 @@ namespace BirthdayApp.Controllers
         // GET: Collects/Create
         public ActionResult Create2()
         {
-            ViewBag.RecipientId = new SelectList(db.ModelUsers, "Id", "Name");
+            int UserId = GetModelUserId();
+            var ModelUsersWithoutThisUser = db.ModelUsers.Where(i => i.Id != UserId);
+            ViewBag.RecipientId = new SelectList(ModelUsersWithoutThisUser, "Id", "Name");
             return View();
         }
 
@@ -453,6 +450,14 @@ namespace BirthdayApp.Controllers
                 collect.OwnerId = GetModelUserId();
                 db.Collections.Add(collect);
                 db.SaveChanges();
+
+                //Add user to collect
+                var newCollectionUsers = new CollectUser();
+                newCollectionUsers.UserId = collect.OwnerId;
+                newCollectionUsers.CollectId = collect.Id;
+                db.CollectionsUsers.Add(newCollectionUsers);
+                db.SaveChanges();
+
                 return RedirectToAction("Index");
             }
 

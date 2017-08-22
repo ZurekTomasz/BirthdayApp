@@ -32,6 +32,7 @@ namespace AppModels
         [RegularExpression("^[0-9]{0,99999}$", ErrorMessage = "Value must be a natural number")]
         public int Amount { get; set; }
         public bool IsConfirmed { get; set; }
+        [Required]
         [DataType(DataType.Date), DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime? DateOfInitiative { get; set; }
         [DataType(DataType.Date), DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
