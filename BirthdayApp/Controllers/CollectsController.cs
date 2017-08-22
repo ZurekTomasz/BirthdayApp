@@ -421,6 +421,14 @@ namespace BirthdayApp.Controllers
             {
                 db.Collections.Add(collect);
                 db.SaveChanges();
+
+                //Add user to collect
+                var newCollectionUsers = new CollectUser();
+                newCollectionUsers.UserId = collect.OwnerId;
+                newCollectionUsers.CollectId = collect.Id;
+                db.CollectionsUsers.Add(newCollectionUsers);
+                db.SaveChanges();
+
                 return RedirectToAction("Index");
             }
 
@@ -488,7 +496,7 @@ namespace BirthdayApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,OwnerId,RecipientId,Name,Description,Amount")] Collect collect)
+        public ActionResult Edit([Bind(Include = "Id,OwnerId,RecipientId,Name,Description,Amount,DateOfInitiative")] Collect collect)
         {
             if (ModelState.IsValid)
             {
@@ -498,6 +506,37 @@ namespace BirthdayApp.Controllers
             }
             ViewBag.OwnerId = new SelectList(db.ModelUsers, "Id", "Name", collect.OwnerId);
             ViewBag.RecipientId = new SelectList(db.ModelUsers, "Id", "Name", collect.RecipientId);
+            return View(collect);
+        }
+
+        // GET: Collects/Edit/5
+        public ActionResult Edit2(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Collect collect = db.Collections.Find(id);
+            if (collect == null)
+            {
+                return HttpNotFound();
+            }
+            return View(collect);
+        }
+
+        // POST: Collects/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit2([Bind(Include = "Id,OwnerId,RecipientId,Name,Description,Amount,DateOfInitiative")] Collect collect)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(collect).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
             return View(collect);
         }
 

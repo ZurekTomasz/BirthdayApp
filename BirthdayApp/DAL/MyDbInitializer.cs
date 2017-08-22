@@ -89,6 +89,7 @@ namespace BirthdayApp.DAL
             newCollection.OwnerId = 1;
             newCollection.RecipientId = 2;
             newCollection.Name = "Zbiórka dla Aleksandra";
+            newCollection.Amount = 100;
             context.Collections.Add(newCollection);
             context.SaveChanges();
             //**//
@@ -99,6 +100,7 @@ namespace BirthdayApp.DAL
             newCollection2.OwnerId = 2;
             newCollection2.RecipientId = 3;
             newCollection2.Name = "Zbiórka dla Michała";
+            newCollection2.Amount = 200;
             context.Collections.Add(newCollection2);
             context.SaveChanges();
             //**//

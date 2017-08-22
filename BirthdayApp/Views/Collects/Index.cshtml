@@ -52,7 +52,7 @@
                 <td>
                     @if (item.OwnerId == ViewBag.UserId)
                     {
-                        @Html.ActionLink("Edytuj", "Edit", new { id = item.Id })
+                        @Html.ActionLink("Edytuj", "Edit2", new { id = item.Id })
                         @Html.Raw(" | ")
                         @Html.ActionLink("Usuń", "Delete", new { id = item.Id })
                         <br />

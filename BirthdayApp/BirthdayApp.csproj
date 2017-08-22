@@ -675,6 +675,7 @@
     <Content Include="Views\Collects\Confirm.cshtml" />
     <Content Include="Views\CollectGifts\IndexById.cshtml" />
     <Content Include="Views\CollectUsers\IndexById.cshtml" />
+    <Content Include="Views\Collects\Edit2.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
