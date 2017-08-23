@@ -688,6 +688,10 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BirthdayApp.MyService\BirthdayApp.MyService.csproj">
+      <Project>{7c882838-7f2c-4d6b-819b-931a181bcc45}</Project>
+      <Name>BirthdayApp.MyService</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Model\BirthdayApp.AppModels.csproj">
       <Project>{dbc58ad4-42eb-4329-8aa0-0d01415c91f5}</Project>
       <Name>BirthdayApp.AppModels</Name>
