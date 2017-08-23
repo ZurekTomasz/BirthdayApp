@@ -25,5 +25,11 @@ namespace BirthdayApp
             //Database.SetInitializer(new DropCreateDatabaseAlways<ApplicationDbContext>());
             //using (ApplicationDbContext context = new ApplicationDbContext()) { context.Database.Delete(); }
         }
+
+        protected void Application_Error(object sender, EventArgs e)
+        {
+            
+        }
+
     }
 }
