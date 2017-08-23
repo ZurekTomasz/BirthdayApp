@@ -14,77 +14,32 @@ using Microsoft.AspNet.Identity;
 
 namespace BirthdayApp.Controllers
 {
-    [Authorize]
     public class CollectsController : CommonController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
         CollectsService collectService = new CollectsService();
 
-        //public string GetUserId()
-        //{
-        //    string userId = User.Identity.GetUserId();
-        //    return userId;
-        //}
-
-        //public int GetModelUserId()
-        //{
-        //    string userId = User.Identity.GetUserId();
-        //    int modelUserId = db.ModelUsers.Single(i => i.EntityId == userId).Id;
-
-        //    return modelUserId;
-        //}
-
-        //public bool IsAdmin()
-        //{
-        //    int UserId = GetModelUserId();
-        //    if ("Admin" == db.ModelUsers.SingleOrDefault(i => i.Id == UserId).Role)
-        //    {
-        //        return true;
-        //    }
-
-        //    return false;
-        //}
-
         // GET: Collects
         public ActionResult Index()
         {
             ViewBag.UserId = GetModelUserId();
             var collections = db.Collections.Include(c => c.Owner).Include(c => c.Recipient);
+
             return View(collections.ToList());
         }
 
         // GET: Collects/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Details(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Collect collect = db.Collections.Find(id);
-            if (collect == null)
-            {
-                return HttpNotFound();
-            }
+            var collect = collectService.GetCollect(id);
+
             return View(collect);
         }
 
-        public ActionResult UndoConfirm(int? id)
+        public ActionResult UndoConfirm(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Collect collect = db.Collections.Find(id);
-            if (collect == null)
-            {
-                return HttpNotFound();
-            }
-
-            collect.IsConfirmed = false;
-            db.Collections.Attach(collect);
-            db.Entry(collect).State = EntityState.Modified;
-            db.SaveChanges();
+            collectService.CollectConfirmChange(id, false);
 
             return RedirectToAction("Details2", "Collects", new { id = id });
         }
@@ -92,17 +47,7 @@ namespace BirthdayApp.Controllers
         // GET: Collects/Details/5
         public ActionResult Details2(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Collect collect = db.Collections.Find(id);
-            if (collect == null)
-            {
-                return HttpNotFound();
-            }
-
-
+            var collect = collectService.GetCollect(id.Value);
             int UserId = GetModelUserId();
 
             if(!IsAdmin())

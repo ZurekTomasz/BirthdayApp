@@ -28,7 +28,10 @@ namespace BirthdayApp
 
         protected void Application_Error(object sender, EventArgs e)
         {
-            
+            HttpContext.Current.ClearError();
+            Server.ClearError();
+            Response.Redirect("~/Home/ErrorPage/", false);
+            return;
         }
 
     }

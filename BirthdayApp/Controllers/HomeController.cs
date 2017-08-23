@@ -23,6 +23,11 @@ namespace BirthdayApp.Controllers
             return View();
         }
 
+        public ActionResult ErrorPage()
+        {
+            return View();
+        }
+
         public ActionResult UsersList()
         {
             var context = new ApplicationDbContext();
