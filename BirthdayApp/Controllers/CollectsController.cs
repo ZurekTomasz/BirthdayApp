@@ -8,39 +8,43 @@ using System.Web;
 using System.Web.Mvc;
 using AppModels;
 using BirthdayApp.Models;
+using BirthdayApp.AppService;
 using Microsoft.AspNet.Identity;
+
 
 namespace BirthdayApp.Controllers
 {
     [Authorize]
-    public class CollectsController : Controller
+    public class CollectsController : CommonController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        public string GetUserId()
-        {
-            string userId = User.Identity.GetUserId();
-            return userId;
-        }
+        CollectsService collectService = new CollectsService();
 
-        public int GetModelUserId()
-        {
-            string userId = User.Identity.GetUserId();
-            int modelUserId = db.ModelUsers.Single(i => i.EntityId == userId).Id;
+        //public string GetUserId()
+        //{
+        //    string userId = User.Identity.GetUserId();
+        //    return userId;
+        //}
 
-            return modelUserId;
-        }
+        //public int GetModelUserId()
+        //{
+        //    string userId = User.Identity.GetUserId();
+        //    int modelUserId = db.ModelUsers.Single(i => i.EntityId == userId).Id;
 
-        public bool IsAdmin()
-        {
-            int UserId = GetModelUserId();
-            if ("Admin" == db.ModelUsers.SingleOrDefault(i => i.Id == UserId).Role)
-            {
-                return true;
-            }
+        //    return modelUserId;
+        //}
 
-            return false;
-        }
+        //public bool IsAdmin()
+        //{
+        //    int UserId = GetModelUserId();
+        //    if ("Admin" == db.ModelUsers.SingleOrDefault(i => i.Id == UserId).Role)
+        //    {
+        //        return true;
+        //    }
+
+        //    return false;
+        //}
 
         // GET: Collects
         public ActionResult Index()
