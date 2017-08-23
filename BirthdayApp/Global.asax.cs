@@ -26,13 +26,13 @@ namespace BirthdayApp
             //using (ApplicationDbContext context = new ApplicationDbContext()) { context.Database.Delete(); }
         }
 
-        protected void Application_Error(object sender, EventArgs e)
-        {
-            HttpContext.Current.ClearError();
-            Server.ClearError();
-            Response.Redirect("~/Home/ErrorPage/", false);
-            return;
-        }
+        //protected void Application_Error(object sender, EventArgs e)
+        //{
+        //    HttpContext.Current.ClearError();
+        //    Server.ClearError();
+        //    Response.Redirect("~/Home/ErrorPage/", false);
+        //    return;
+        //}
 
     }
 }

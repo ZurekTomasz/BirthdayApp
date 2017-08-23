@@ -10,6 +10,7 @@ using AppModels;
 using BirthdayApp.Models;
 using BirthdayApp.AppService;
 using Microsoft.AspNet.Identity;
+using BirthdayApp.ViewModels;
 
 
 namespace BirthdayApp.Controllers
@@ -33,8 +34,18 @@ namespace BirthdayApp.Controllers
         public ActionResult Details(int id)
         {
             var collect = collectService.GetCollect(id);
+            CollectVM collectVM = new CollectVM();
+            collectVM.Id = collect.Id;
+            collectVM.Name = collect.Name;
+            collectVM.OwnerId = collect.OwnerId.Value;
+            collectVM.RecipientId = collect.RecipientId.Value;
+            collectVM.Description = collect.Description;
+            collectVM.Amount = collect.Amount;
+            collectVM.IsConfirmed = collect.IsConfirmed;
+            collectVM.DateOfInitiative = collect.DateOfInitiative.Value;
+            collectVM.DateOfAdd = collect.DateOfAdd.Value;
 
-            return View(collect);
+            return View(collectVM);
         }
 
         public ActionResult UndoConfirm(int id)
