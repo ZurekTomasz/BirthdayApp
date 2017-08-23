@@ -63,13 +63,13 @@
                             <div class="DetailsBackground">
                                 @Html.ActionLink("Szczegóły zbiórki", "Details2", new { id = item.Id })
                             </div>
-                        }
-                        else
-                        {
-                            @Html.ActionLink("O zbiórce", "Details", new { id = item.Id })
-                            @Html.Raw(" | ")
-                            @Html.ActionLink("Dołącz do zbiórki", "Create2", "CollectUsers", new { id = item.Id }, null)
-                        }
+                    }
+                    else
+                    {
+                        @Html.ActionLink("O zbiórce", "Details", new { id = item.Id })
+                        @Html.Raw(" | ")
+                        @Html.ActionLink("Dołącz do zbiórki", "Create2", "CollectUsers", new { id = item.Id }, null)
+                    }
                     
                     
             </td>
