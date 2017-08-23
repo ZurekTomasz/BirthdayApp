@@ -9,7 +9,6 @@ using System.Web.Mvc;
 using AppModels;
 using BirthdayApp.Models;
 using Microsoft.AspNet.Identity;
-using BirthdayApp.MyService;
 
 namespace BirthdayApp.Controllers
 {
@@ -17,8 +16,6 @@ namespace BirthdayApp.Controllers
     public class CollectsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-
-        CollectsService collectsService = new CollectsService();
 
         public string GetUserId()
         {
@@ -173,8 +170,6 @@ namespace BirthdayApp.Controllers
             int AmountPerPerson = MyAmount / NumberUsersInCollect;
 
             ViewBag.AmountPerPerson = AmountPerPerson;
-            
-            ViewBag.liczbaf = collectsService.liczba();
 
             return View(collect);
         }
