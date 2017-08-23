@@ -157,7 +157,13 @@ namespace BirthdayApp.Controllers
             }
             catch { }
 
-            ViewBag.SelectedGiftId = SelectedGiftId;
+            string SelectedGiftName = "";
+            if (SelectedGiftId != 0)
+            {
+                SelectedGiftName = db.CollectionsGifts.SingleOrDefault(i => i.Id == SelectedGiftId).Name;
+            }
+            
+            ViewBag.SelectedGiftName = SelectedGiftName;
 
             int NumberUsersInCollect = db.CollectionsUsers.Count(c => c.CollectId == id);
             int MyAmount = db.Collections.SingleOrDefault(c => c.Id == id).Amount;
@@ -313,6 +319,10 @@ namespace BirthdayApp.Controllers
                 }
             }
 
+            if (ViewData["uniqueRadio"].ToString() == "0")
+            {
+                ViewBag.MustChooseItem = "Musisz wybrać któryś z prezentów !";
+            }
 
             return View(collect);
         }
@@ -331,6 +341,8 @@ namespace BirthdayApp.Controllers
                 return HttpNotFound();
             }
 
+            ViewBag.userid = GetModelUserId();
+
             int wybranyid = 0;
             try
             {
@@ -346,7 +358,20 @@ namespace BirthdayApp.Controllers
                 wybranyid = 0;
             }
 
+
+
             var ModelUserId = GetModelUserId();
+
+
+            if (wybranyid != 0)
+            {
+
+            
+
+
+
+
+
             if (db.CollectionsGiftRatings.Any(i => i.TheBestRating == true & i.UserId == ModelUserId))
             {
                 CollectGiftRating cgrx = db.CollectionsGiftRatings.Find(db.CollectionsGiftRatings.SingleOrDefault(i => i.TheBestRating == true & i.UserId == ModelUserId).Id);
@@ -380,7 +405,6 @@ namespace BirthdayApp.Controllers
 
             var YourRadioButtonx = Request.Form["uniqueRadio"];
             ViewBag.wybor = wybranyid;
-            ViewBag.userid = GetModelUserId();
 
             try
             {
@@ -422,8 +446,18 @@ namespace BirthdayApp.Controllers
                     }
                 }
             }
+            }
+            else
+            {
+                ViewBag.MustChooseItem = "Musisz wybrać któryś z prezentów !";
+            }
 
-            //return View(collect);
+
+            if (wybranyid == 0)
+            {
+                return RedirectToAction("Confirm", "Collects", new { id = id });
+            }
+
             return RedirectToAction("Details2","Collects", new { id = id });
 
         }

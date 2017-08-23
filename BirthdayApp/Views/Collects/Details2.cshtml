@@ -16,7 +16,7 @@
             @Html.Raw("")
             <br />
             @Html.Raw("Wybrany prezent: ")
-            @Html.Raw(Model.CollectGifts2.SingleOrDefault(i=>i.Id == ViewBag.SelectedGiftId).Name)
+            @Html.Raw(ViewBag.SelectedGiftName)
             <br />
             @Html.Raw("Kwota prezentu: ")
             @Html.Raw(Model.Amount)
@@ -91,8 +91,8 @@
                         <ol class="Opt">
 
                             <li class="Opt">
-                                @Html.RadioButton("uniqueRadio", "0")
-                                @Html.Label("Null")
+                                @Html.RadioButton("uniqueRadio", "0", new { onchange = "this.form.submit();" })
+                                @Html.Label("Nie wybieram prezentu")
                             </li>
                             @foreach (var item in Model.CollectGifts2.OrderByDescending(i => i.Rating))
                             {
@@ -105,12 +105,14 @@
                         @*
                         @if (!Model.IsConfirmed)
                         {
-                        <input type="submit" value="Zapisz zmiany" />
-                        <br />
-                        <br />
-                        *@
-                        @Html.ActionLink("Dodaj własną propozycję prezentu", "Create2", "CollectGifts", new { id = Model.Id }, null)
+                            <input type="submit" value="Zapisz zmiany" />
+                            <br />
+                            <br />
                         }
+                        *@
+
+                        @Html.ActionLink("Dodaj własną propozycję prezentu", "Create2", "CollectGifts", new { id = Model.Id }, null)
+
                     </td>
                 </tr>
             </table>

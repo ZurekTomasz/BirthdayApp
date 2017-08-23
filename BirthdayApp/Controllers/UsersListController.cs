@@ -31,13 +31,14 @@ namespace BirthdayApp.Controllers
             ViewBag.id = collect.Id;
             ViewBag.collectName = collect.Name;
             ViewBag.recipientName = db.ModelUsers.SingleOrDefault(c => c.Id == collect.RecipientId).Name;
+            int RecipientId = db.ModelUsers.SingleOrDefault(c => c.Id == collect.RecipientId).Id;
 
             UsersListBox person = new UsersListBox();
-            person.UsersList = AllPersonsList();
+            person.UsersList = AllPersonsList(RecipientId);
 
             foreach(var item in person.UsersList)
             {
-                item.Selected = db.CollectionsUsers.Any(c => c.CollectId == id && c.UserId.ToString() == item.Value);
+                    item.Selected = db.CollectionsUsers.Any(c => c.CollectId == id && c.UserId.ToString() == item.Value);
             }
 
             return View(person);
@@ -61,7 +62,8 @@ namespace BirthdayApp.Controllers
             ViewBag.collectName = collect.Name;
             ViewBag.recipientName = db.ModelUsers.SingleOrDefault(c => c.Id == collect.RecipientId).Name;
 
-            person.UsersList = AllPersonsList();
+            int RecipientId = db.ModelUsers.SingleOrDefault(c => c.Id == collect.RecipientId).Id;
+            person.UsersList = AllPersonsList(RecipientId);
             if (person.UsersListIds != null)
             {
                 List<SelectListItem> selectedItems = person.UsersList.Where(p => person.UsersListIds.Contains(int.Parse(p.Value))).ToList();
@@ -118,18 +120,21 @@ namespace BirthdayApp.Controllers
             return View();
         }
 
-        private List<SelectListItem> AllPersonsList()
+        private List<SelectListItem> AllPersonsList(int RecipientId)
         {
             List<SelectListItem> items = new List<SelectListItem>();
 
             foreach (var item in db.ModelUsers.ToList())
             {
-                items.Add(new SelectListItem
+                if(item.Id != RecipientId)
                 {
-                    Text = item.Name,
-                    Value = item.Id.ToString()
-                    //Selected = item.CollectUsers.Any(collect => collect.CollectId == 1)
-                });
+                    items.Add(new SelectListItem
+                    {
+                        Text = item.Name,
+                        Value = item.Id.ToString()
+                        //Selected = item.CollectUsers.Any(collect => collect.CollectId == 1)
+                    });
+                }
             }
             return items;
         }

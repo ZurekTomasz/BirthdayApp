@@ -1,14 +1,12 @@
 ﻿@model AppModels.Collect
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Panel zarządzania zbiórką";
 }
 <link href="~/CSSstyle/mystyle.css" rel="stylesheet" />
 
-<h2>Details</h2>
-
 <div>
-    <h4>Panel zarządzania zbiórką</h4>
+    <h3>@ViewBag.Title</h3>
     <br />
     <table class="mytable">
         <tr>
@@ -67,6 +65,7 @@
         <table class="mytable">
             <tr>
                 <td>
+                    <font color="red">@ViewBag.MustChooseItem</font>
                     <ol class="Opt">
                         @foreach (var item in Model.CollectGifts2.OrderByDescending(i => i.Rating))
                         {
