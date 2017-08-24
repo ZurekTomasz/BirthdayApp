@@ -1,4 +1,4 @@
-﻿@model IEnumerable<AppModels.Collect>
+﻿@model BirthdayApp.ViewModels.CollectionsViewModel
 
 @{
     ViewBag.Title = "Lista zbiórek";
@@ -29,16 +29,14 @@
             <th></th>
         </tr>
 
-        @foreach (var item in Model.OrderByDescending(i => i.DateOfAdd))
+        @foreach (var item in Model.Collects)
         {
-            //The user does not see collections for him
-            if (item.RecipientId != ViewBag.UserId) {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Owner.Name)
+                    @Html.DisplayFor(modelItem => item.OwnerName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Recipient.Name)
+                    @Html.DisplayFor(modelItem => item.RecipientName)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
@@ -50,7 +48,7 @@
                     @Html.DisplayFor(modelItem => item.DateOfInitiative)
                 </td>
                 <td>
-                    @if (item.OwnerId == ViewBag.UserId)
+                    @if (item.OwnerId == item.UserId)
                     {
                         @Html.ActionLink("Edytuj", "Edit2", new { id = item.Id })
                         @Html.Raw(" | ")
@@ -58,7 +56,7 @@
                         <br />
                     }
 
-                    @if (item.CollectUsers2.Any(i => i.UserId == ViewBag.UserId))
+                    @if (item.YoureInCollection)
                     {
                             <div class="DetailsBackground">
                                 @Html.ActionLink("Szczegóły zbiórki", "Details2", new { id = item.Id })
@@ -74,8 +72,6 @@
                     
             </td>
             </tr>
-
-            }
         }
 
     </table>

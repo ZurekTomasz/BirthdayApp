@@ -1,5 +1,6 @@
 ﻿using AppModels;
 using BirthdayApp.Models;
+using BirthdayApp.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
