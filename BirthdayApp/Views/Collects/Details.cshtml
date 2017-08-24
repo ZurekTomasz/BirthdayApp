@@ -1,4 +1,6 @@
-﻿@model BirthdayApp.ViewModels.CollectVM
+﻿@model BirthdayApp.ViewModels.CollectViewModel
+
+<link href="~/CSSstyle/mystyle.css" rel="stylesheet" />
 
 @{
     ViewBag.Title = "Informacje o zbiórce";
@@ -8,71 +10,58 @@
 
 <div>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            Założyciel zbiórki:
-        </dt>
+    <table class="mytable">
+        <tr>
+            <td>
+                <b>Nazwa zbiórki:</b>
+            </td>
+            <td>
+                <b>Opis zbiórki:</b>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(model => model.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.Description)
+            </td>
+        </tr>
 
-        <dd>
-            @Html.DisplayFor(model => model.Owner.Name)
-        </dd>
+        <tr>
+            <td>
+                <b>Zbiórkę założył:</b>
+            </td>
+            <td>
+                <b>Zbieramy na prezent dla:</b>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(model => model.OwnerName)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.RecipientName)
+            </td>
+        </tr>
 
-        <dt>
-            Zbieramy dla:
-        </dt>
+        <tr>
+            <td>
+                <b>Szacowana kwota prezentu to:</b>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(model => model.Amount)
+            </td>
+            <td></td>
+        </tr>
+    </table>
 
-        <dd>
-            @Html.DisplayFor(model => model.Recipient.Name)
-        </dd>
+    <hr />
 
-        <dt>
-            Nazwa zbiórki:
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-
-        <dt>
-            Opis zbiórki:
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-
-        <dt>
-            Kwota:
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Amount)
-        </dd>
-
-        <dt>&nbsp;</dt><dd>&nbsp;</dd>
-
-        <dt>
-            Użytkownicy którzy biorą udział w zbiórce
-        </dt>
-        <dd>
-            <table class="table">
-                <tr>
-                    <th>Użytkownik</th>
-                </tr>
-                @foreach (var item in Model.CollectUsers2)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.User.Name)
-                        </td>
-                    </tr>
-                }
-            </table>
-        </dd>
-
-    </dl>
-
-</div>
-<p>
-    @Html.ActionLink("Wróć do listy", "Index")
-</p>
+        </div>
+        <p>
+            @Html.ActionLink("Wróć do listy", "Index")
+        </p>
