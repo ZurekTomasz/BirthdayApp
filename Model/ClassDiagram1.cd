@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="AppModels.ModelUser">
+    <Position X="0.5" Y="0.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAACAEAAACIAAAAAEAABAAQABAAQAAAQAABAIAAAAAA=</HashCode>
+      <FileName>ModelUser.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AppModels.Collect">
+    <Position X="5.25" Y="0.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAACAACYAAAigEIAAAABAASAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Collect.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AppModels.CollectGift">
+    <Position X="9" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAADAAAAAAAgAgAAAAABAAwAAAAAAAEAAAAAEAAAAAA=</HashCode>
+      <FileName>CollectGift.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AppModels.CollectGiftRating">
+    <Position X="9" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAADAAAAAAAAAAAAAAAAAAgAAAAAAAIAACAEAAAAAAA=</HashCode>
+      <FileName>CollectGiftRating.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AppModels.CollectUser">
+    <Position X="3" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAADAAAAAAAAAgAAAAAAAAgAAAAAAAAIAAAAEAAAAAA=</HashCode>
+      <FileName>CollectUser.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

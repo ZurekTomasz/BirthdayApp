@@ -21,39 +21,13 @@ namespace BirthdayApp.Controllers
 
         CollectsService collectService = new CollectsService();
 
-        private List<CollectList> AllCollectList()
-        {
-            List<CollectList> items = new List<CollectList>();
-
-            int UserId = GetModelUserId();
-
-            foreach (var item in db.Collections.Where(i=>i.RecipientId!=UserId).OrderByDescending(i=>i.DateOfAdd).ToList())
-            {
-                    items.Add(new CollectList
-                    {
-                        Id = item.Id,
-                        Name = item.Name,
-                        UserId = UserId,
-                        OwnerId = item.OwnerId.Value,
-                        RecipientId = item.RecipientId.Value,
-                        OwnerName = item.Owner.Name,
-                        RecipientName = item.Recipient.Name,
-                        Description = item.Description,
-                        Amount = item.Amount,
-                        IsConfirmed = item.IsConfirmed,
-                        DateOfInitiative = item.DateOfInitiative.Value,
-                        DateOfAdd = item.DateOfAdd.Value,
-                        YoureInCollection = db.CollectionsUsers.Any(i => i.UserId == UserId && i.CollectId == item.Id)
-                    });
-            }
-            return items;
-        }
+        
 
         // GET: Collects
         public ActionResult Index()
         {
-            CollectionsViewModel collections = new CollectionsViewModel();
-            collections.Collects = AllCollectList();
+            int UsrId = GetModelUserId();
+            var collections = collectService.AllCollectList(UsrId).Where(i => i.RecipientId != i.UserId).OrderByDescending(i => i.DateOfAdd).ToList();
 
             return View(collections);
         }

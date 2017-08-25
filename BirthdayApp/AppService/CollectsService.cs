@@ -5,6 +5,7 @@ using AppModels;
 using System.Data.Entity;
 using Microsoft.AspNet.Identity;
 using BirthdayApp.ViewModels;
+using System.Collections.Generic;
 
 namespace BirthdayApp.AppService
 {
@@ -51,6 +52,67 @@ namespace BirthdayApp.AppService
             collectViewModel.DateOfAdd = collect.DateOfAdd.Value;
 
             return collectViewModel;
+        }
+
+
+        public IEnumerable<CollectListItem> AllCollectList_v2(int userId)
+        {
+            HashSet<int> collectIds = new HashSet<int>();
+            var query = db.CollectionsUsers
+                           .Where(x => x.UserId == userId && x.CollectId.HasValue)
+                           .Select(x => x.CollectId.Value);
+
+            foreach (var id in query)
+            {
+                collectIds.Add(id);
+            }
+
+            foreach (var item in db.Collections)
+            {
+                CollectListItem collectItem = new CollectListItem
+                {
+                    Id = item.Id,
+                    Name = item.Name,
+                    UserId = userId,
+                    OwnerId = item.OwnerId.Value,
+                    RecipientId = item.RecipientId.Value,
+                    OwnerName = item.Owner.Name,
+                    RecipientName = item.Recipient.Name,
+                    Description = item.Description,
+                    Amount = item.Amount,
+                    IsConfirmed = item.IsConfirmed,
+                    DateOfInitiative = item.DateOfInitiative.Value,
+                    DateOfAdd = item.DateOfAdd.Value,
+                    YoureInCollection = collectIds.Contains(item.Id)
+                };
+                yield return collectItem;
+            }
+        }
+
+        public List<CollectListItem> AllCollectList(int userId)
+        {
+            List<CollectListItem> items = new List<CollectListItem>();
+
+            foreach (var item in db.Collections.Include(c => c.CollectUsers2))
+            {
+                items.Add(new CollectListItem
+                {
+                    Id = item.Id,
+                    Name = item.Name,
+                    UserId = userId,
+                    OwnerId = item.OwnerId.Value,
+                    RecipientId = item.RecipientId.Value,
+                    OwnerName = item.Owner.Name,
+                    RecipientName = item.Recipient.Name,
+                    Description = item.Description,
+                    Amount = item.Amount,
+                    IsConfirmed = item.IsConfirmed,
+                    DateOfInitiative = item.DateOfInitiative.Value,
+                    DateOfAdd = item.DateOfAdd.Value,
+                    YoureInCollection = item.CollectUsers2.Any(cu => cu.UserId == userId)
+                });
+            }
+            return items;
         }
     }
 }

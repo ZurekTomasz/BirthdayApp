@@ -2,12 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 
 namespace BirthdayApp.ViewModels
 {
-    public class CollectList
+    [DebuggerDisplay("Name: {Name}")]
+    public class CollectListItem
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -30,6 +32,6 @@ namespace BirthdayApp.ViewModels
 
     public class CollectionsViewModel
     {
-        public List<CollectList> Collects { get; set; }
+        public List<CollectListItem> Collects { get; set; }
     }
 }

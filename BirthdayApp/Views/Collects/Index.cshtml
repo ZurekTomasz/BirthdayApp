@@ -1,4 +1,4 @@
-﻿@model BirthdayApp.ViewModels.CollectionsViewModel
+﻿@model IEnumerable<BirthdayApp.ViewModels.CollectListItem>
 
 @{
     ViewBag.Title = "Lista zbiórek";
@@ -29,7 +29,7 @@
             <th></th>
         </tr>
 
-        @foreach (var item in Model.Collects)
+        @foreach (var item in Model)
         {
             <tr>
                 <td>
