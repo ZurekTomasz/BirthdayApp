@@ -32,8 +32,8 @@ namespace BirthdayApp.DAL
 
             if (result.Succeeded)
             {
-                var mUser = new ModelUser(fName, sName, fEmail, Role, bDate, user.Id);
-                context.ModelUsers.Add(mUser);
+                var mUser = new User(fName, sName, fEmail, Role, bDate, user.Id);
+                context.MyUsers.Add(mUser);
                 context.SaveChanges();
           
             }
@@ -54,8 +54,8 @@ namespace BirthdayApp.DAL
 
             if (result2.Succeeded)
             {
-                var mUser2 = new ModelUser(fName, sName, fEmail, Role, bDate, user2.Id);
-                context.ModelUsers.Add(mUser2);
+                var mUser2 = new User(fName, sName, fEmail, Role, bDate, user2.Id);
+                context.MyUsers.Add(mUser2);
                 context.SaveChanges();
             }
             //**//
@@ -77,8 +77,8 @@ namespace BirthdayApp.DAL
 
             if (result3.Succeeded)
             {
-                var mUser3 = new ModelUser(fName, sName, fEmail, Role, bDate, user3.Id);
-                context.ModelUsers.Add(mUser3);
+                var mUser3 = new User(fName, sName, fEmail, Role, bDate, user3.Id);
+                context.MyUsers.Add(mUser3);
                 context.SaveChanges();
             }
             //**//

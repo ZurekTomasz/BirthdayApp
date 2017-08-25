@@ -13,9 +13,8 @@ namespace AppModels
     {
         public Collect()
         {
-            this.CollectUsers2 = new HashSet<CollectUser>();
-
-            this.CollectGifts2 = new HashSet<CollectGift>();
+            this.Users = new HashSet<CollectUser>();
+            this.Gifts = new HashSet<CollectGift>();
 
             this.DateOfAdd = DateTime.Now;
         }
@@ -30,7 +29,7 @@ namespace AppModels
         public string Description { get; set; }
         [DataType(DataType.Currency)]
         [RegularExpression("^[0-9]{0,99999}$", ErrorMessage = "Value must be a natural number")]
-        public int Amount { get; set; }
+        public decimal Amount { get; set; }
         public bool IsConfirmed { get; set; }
         [Required]
         [DataType(DataType.Date), DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
@@ -38,13 +37,12 @@ namespace AppModels
         [DataType(DataType.Date), DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime? DateOfAdd { get; set; }
 
-        public virtual ModelUser Owner { get; set; }
-        public virtual ModelUser Recipient { get; set; }
+        public virtual User Owner { get; set; }
+        public virtual User Recipient { get; set; }
 
         [InverseProperty("Collect")]
-        public virtual ICollection<CollectUser> CollectUsers2 { get; set; }
-
+        public virtual ICollection<CollectUser> Users { get; set; }
         [InverseProperty("Collect")]
-        public virtual ICollection<CollectGift> CollectGifts2 { get; set; }
+        public virtual ICollection<CollectGift> Gifts { get; set; }
     }
 }

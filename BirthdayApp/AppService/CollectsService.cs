@@ -34,11 +34,11 @@ namespace BirthdayApp.AppService
             db.SaveChanges();
         }
 
-        public CollectViewModel UpdateCollectViewModel(int id)
+        public CollectViewModels UpdateCollectViewModel(int id)
         {
             var collect = GetCollect(id);
 
-            CollectViewModel collectViewModel = new CollectViewModel();
+            CollectViewModels collectViewModel = new CollectViewModels();
             collectViewModel.Id = collect.Id;
             collectViewModel.Name = collect.Name;
             collectViewModel.OwnerId = collect.OwnerId.Value;
@@ -55,7 +55,7 @@ namespace BirthdayApp.AppService
         }
 
 
-        public IEnumerable<CollectListItem> AllCollectList_v2(int userId)
+        public IEnumerable<CollectionViewModels> AllCollectList_v2(int userId)
         {
             HashSet<int> collectIds = new HashSet<int>();
             var query = db.CollectionsUsers
@@ -69,7 +69,7 @@ namespace BirthdayApp.AppService
 
             foreach (var item in db.Collections)
             {
-                CollectListItem collectItem = new CollectListItem
+                CollectionViewModels collectItem = new CollectionViewModels
                 {
                     Id = item.Id,
                     Name = item.Name,
@@ -89,13 +89,13 @@ namespace BirthdayApp.AppService
             }
         }
 
-        public List<CollectListItem> AllCollectList(int userId)
+        public List<CollectionViewModels> AllCollectList(int userId)
         {
-            List<CollectListItem> items = new List<CollectListItem>();
+            List<CollectionViewModels> items = new List<CollectionViewModels>();
 
-            foreach (var item in db.Collections.Include(c => c.CollectUsers2))
+            foreach (var item in db.Collections.Include(c => c.Users))
             {
-                items.Add(new CollectListItem
+                items.Add(new CollectionViewModels
                 {
                     Id = item.Id,
                     Name = item.Name,
@@ -109,7 +109,7 @@ namespace BirthdayApp.AppService
                     IsConfirmed = item.IsConfirmed,
                     DateOfInitiative = item.DateOfInitiative.Value,
                     DateOfAdd = item.DateOfAdd.Value,
-                    YoureInCollection = item.CollectUsers2.Any(cu => cu.UserId == userId)
+                    YoureInCollection = item.Users.Any(cu => cu.UserId == userId)
                 });
             }
             return items;

@@ -1,10 +1,10 @@
-﻿@model IEnumerable<AppModels.ModelUser>
+﻿@model IEnumerable<AppModels.User>
 
 @{
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>Index</h2> 
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -12,13 +12,16 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.EntityId)
+            @Html.DisplayNameFor(model => model.Name)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Firstname)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Surname)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EntityId)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Email)
@@ -38,13 +41,16 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.EntityId)
+            @Html.DisplayFor(modelItem => item.Name)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Firstname)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Surname)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EntityId)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Email)

@@ -94,7 +94,7 @@
                                 @Html.RadioButton("uniqueRadio", "0", new { onchange = "this.form.submit();" })
                                 @Html.Label("Nie wybieram prezentu")
                             </li>
-                            @foreach (var item in Model.CollectGifts2.OrderByDescending(i => i.Rating))
+                            @foreach (var item in Model.Gifts.OrderByDescending(i => i.Rating))
                             {
                                 <li class="Opt">
                                     @Html.RadioButton("uniqueRadio", item.Id, new { onchange = "this.form.submit();" })
@@ -125,7 +125,7 @@
                 <td><b>Użytkownik</b></td>
                 <td><b>Czy zapłacił?</b></td>
             </tr>
-            @foreach (var item in Model.CollectUsers2)
+            @foreach (var item in Model.Users)
             {
                 <tr>
                     <td>

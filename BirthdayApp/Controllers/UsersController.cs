@@ -11,116 +11,107 @@ using BirthdayApp.Models;
 
 namespace BirthdayApp.Controllers
 {
-    public class CollectGiftRatingsController : Controller
+    public class UsersController : CommonController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: CollectGiftRatings
+        // GET: Users
         public ActionResult Index()
         {
-            var collectionsGiftRatings = db.CollectionsGiftRatings.Include(c => c.Gift).Include(c => c.User);
-            return View(collectionsGiftRatings.ToList());
+            return View(db.MyUsers);
         }
 
-        // GET: CollectGiftRatings/Details/5
+        // GET: Users/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            CollectGiftRating collectGiftRating = db.CollectionsGiftRatings.Find(id);
-            if (collectGiftRating == null)
+            User user = db.MyUsers.Find(id);
+            if (user == null)
             {
                 return HttpNotFound();
             }
-            return View(collectGiftRating);
+            return View(user);
         }
 
-        // GET: CollectGiftRatings/Create
+        // GET: Users/Create
         public ActionResult Create()
         {
-            ViewBag.GiftId = new SelectList(db.CollectionsGifts, "Id", "Name");
-            ViewBag.UserId = new SelectList(db.MyUsers, "Id", "Name");
             return View();
         }
 
-        // POST: CollectGiftRatings/Create
+        // POST: Users/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,UserId,GiftId,TheBestRating")] CollectGiftRating collectGiftRating)
+        public ActionResult Create([Bind(Include = "Id,Name,Firstname,Surname,EntityId,Email,Role,DateOfBirth,DateOfAdd")] User user)
         {
             if (ModelState.IsValid)
             {
-                db.CollectionsGiftRatings.Add(collectGiftRating);
+                db.MyUsers.Add(user);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.GiftId = new SelectList(db.CollectionsGifts, "Id", "Name", collectGiftRating.GiftId);
-            ViewBag.UserId = new SelectList(db.MyUsers, "Id", "Name", collectGiftRating.UserId);
-            return View(collectGiftRating);
+            return View(user);
         }
 
-        // GET: CollectGiftRatings/Edit/5
+        // GET: Users/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            CollectGiftRating collectGiftRating = db.CollectionsGiftRatings.Find(id);
-            if (collectGiftRating == null)
+            User user = db.MyUsers.Find(id);
+            if (user == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.GiftId = new SelectList(db.CollectionsGifts, "Id", "Name", collectGiftRating.GiftId);
-            ViewBag.UserId = new SelectList(db.MyUsers, "Id", "Name", collectGiftRating.UserId);
-            return View(collectGiftRating);
+            return View(user);
         }
 
-        // POST: CollectGiftRatings/Edit/5
+        // POST: Users/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,UserId,GiftId,TheBestRating")] CollectGiftRating collectGiftRating)
+        public ActionResult Edit([Bind(Include = "Id,Name,Firstname,Surname,EntityId,Email,Role,DateOfBirth,DateOfAdd")] User user)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(collectGiftRating).State = EntityState.Modified;
+                db.Entry(user).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.GiftId = new SelectList(db.CollectionsGifts, "Id", "Name", collectGiftRating.GiftId);
-            ViewBag.UserId = new SelectList(db.MyUsers, "Id", "Name", collectGiftRating.UserId);
-            return View(collectGiftRating);
+            return View(user);
         }
 
-        // GET: CollectGiftRatings/Delete/5
+        // GET: Users/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            CollectGiftRating collectGiftRating = db.CollectionsGiftRatings.Find(id);
-            if (collectGiftRating == null)
+            User user = db.MyUsers.Find(id);
+            if (user == null)
             {
                 return HttpNotFound();
             }
-            return View(collectGiftRating);
+            return View(user);
         }
 
-        // POST: CollectGiftRatings/Delete/5
+        // POST: Users/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            CollectGiftRating collectGiftRating = db.CollectionsGiftRatings.Find(id);
-            db.CollectionsGiftRatings.Remove(collectGiftRating);
+            User user = db.MyUsers.Find(id);
+            db.MyUsers.Remove(user);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

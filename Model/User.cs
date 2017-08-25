@@ -9,25 +9,12 @@ using System.Threading.Tasks;
 
 namespace AppModels
 {
-    public class ModelUser
+    public class User
     {
-        public ModelUser()
+        public User() { }
+
+        public User(string fName, string sName, string fEmail, string sRole, DateTime? bDate, string sEntityId)
         {
-            this.Collects = new HashSet<Collect>();
-            this.Collects2 = new HashSet<Collect>();
-
-            this.CollectUsers = new HashSet<CollectUser>();
-
-            this.CollectGifts = new HashSet<CollectGift>();
-
-            this.CollectGiftRatings = new HashSet<CollectGiftRating>();
-        }
-
-        public ModelUser(string fName, string sName, string fEmail, string sRole, DateTime? bDate, string sEntityId)
-        {
-            DateTime zDate = bDate ?? default(DateTime);
-            string sDate = zDate.ToString("yyyy-MM-dd");
-
             this.Name = fName + " " + sName;
             this.EntityId = sEntityId;
             this.Firstname = fName;
@@ -49,20 +36,5 @@ namespace AppModels
         public DateTime? DateOfBirth { get; set; }
         [DataType(DataType.Date), DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime? DateOfAdd { get; set; }
-
-        [InverseProperty("Owner")]
-        public virtual ICollection<Collect> Collects { get; set; }
-        [InverseProperty("Recipient")]
-        public virtual ICollection<Collect> Collects2 { get; set; }
-
-        [InverseProperty("User")]
-        public virtual ICollection<CollectUser> CollectUsers { get; set; }
-
-        [InverseProperty("User")]
-        public virtual ICollection<CollectGift> CollectGifts { get; set; }
-
-        [InverseProperty("User")]
-        public virtual ICollection<CollectGiftRating> CollectGiftRatings { get; set; }
-
     }
 }

@@ -31,8 +31,8 @@ namespace BirthdayApp.Controllers
 
             ViewBag.id = collect.Id;
             ViewBag.collectName = collect.Name;
-            ViewBag.recipientName = db.ModelUsers.SingleOrDefault(c => c.Id == collect.RecipientId).Name;
-            int RecipientId = db.ModelUsers.SingleOrDefault(c => c.Id == collect.RecipientId).Id;
+            ViewBag.recipientName = db.MyUsers.SingleOrDefault(c => c.Id == collect.RecipientId).Name;
+            int RecipientId = db.MyUsers.SingleOrDefault(c => c.Id == collect.RecipientId).Id;
 
             UsersListBox person = new UsersListBox();
             person.UsersList = AllPersonsList(RecipientId);
@@ -61,9 +61,9 @@ namespace BirthdayApp.Controllers
 
             ViewBag.id = collect.Id;
             ViewBag.collectName = collect.Name;
-            ViewBag.recipientName = db.ModelUsers.SingleOrDefault(c => c.Id == collect.RecipientId).Name;
+            ViewBag.recipientName = db.MyUsers.SingleOrDefault(c => c.Id == collect.RecipientId).Name;
 
-            int RecipientId = db.ModelUsers.SingleOrDefault(c => c.Id == collect.RecipientId).Id;
+            int RecipientId = db.MyUsers.SingleOrDefault(c => c.Id == collect.RecipientId).Id;
             person.UsersList = AllPersonsList(RecipientId);
             if (person.UsersListIds != null)
             {
@@ -125,7 +125,7 @@ namespace BirthdayApp.Controllers
         {
             List<SelectListItem> items = new List<SelectListItem>();
 
-            foreach (var item in db.ModelUsers.ToList())
+            foreach (var item in db.MyUsers.ToList())
             {
                 if(item.Id != RecipientId)
                 {

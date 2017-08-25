@@ -15,7 +15,8 @@ namespace AppModels
         [ForeignKey("Gift")]
         public int? GiftId { get; set; }
         public bool TheBestRating { get; set; }
-        public virtual ModelUser User { get; set; }
+
+        public virtual User User { get; set; }
         public virtual CollectGift Gift { get; set; }
     }
 }

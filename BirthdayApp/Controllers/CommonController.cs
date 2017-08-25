@@ -27,7 +27,7 @@ namespace BirthdayApp.Controllers
         protected int GetModelUserId()
         {
             string userId = User.Identity.GetUserId();
-            int modelUserId = db.ModelUsers.Single(i => i.EntityId == userId).Id;
+            int modelUserId = db.MyUsers.Single(i => i.EntityId == userId).Id;
 
             return modelUserId;
         }
@@ -35,7 +35,7 @@ namespace BirthdayApp.Controllers
         protected bool IsAdmin()
         {
             int UserId = GetModelUserId();
-            if ("Admin" == db.ModelUsers.SingleOrDefault(i => i.Id == UserId).Role)
+            if ("Admin" == db.MyUsers.SingleOrDefault(i => i.Id == UserId).Role)
             {
                 return true;
             }

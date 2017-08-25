@@ -204,7 +204,7 @@
     <Compile Include="Controllers\CollectUsersController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
-    <Compile Include="Controllers\ModelUsersController.cs" />
+    <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\UsersListController.cs" />
     <Compile Include="DAL\MyDbInitializer.cs" />
     <Compile Include="Global.asax.cs">
@@ -216,8 +216,8 @@
     <Compile Include="Models\UsersListBox.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="ViewModels\CollectionsViewModel.cs" />
-    <Compile Include="ViewModels\Collects.cs" />
+    <Compile Include="ViewModels\CollectionViewModels.cs" />
+    <Compile Include="ViewModels\CollectViewModels.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
@@ -643,14 +643,6 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Home\UsersList.cshtml" />
     <Content Include="Views\Home\AddCollectStatic.cshtml" />
-    <Content Include="Views\ModelUsers\Create.cshtml" />
-    <Content Include="Views\ModelUsers\Delete.cshtml" />
-    <Content Include="Views\ModelUsers\Details.cshtml" />
-    <Content Include="Views\ModelUsers\Edit.cshtml" />
-    <Content Include="Views\ModelUsers\Index.cshtml" />
-    <Content Include="Views\ModelUsers\MyProfile.cshtml" />
-    <Content Include="Views\ModelUsers\ThisProfile.cshtml" />
-    <Content Include="Views\ModelUsers\EditMe.cshtml" />
     <Content Include="Views\Collects\Create.cshtml" />
     <Content Include="Views\Collects\Delete.cshtml" />
     <Content Include="Views\Collects\Details.cshtml" />
@@ -681,6 +673,11 @@
     <Content Include="Views\CollectUsers\IndexById.cshtml" />
     <Content Include="Views\Collects\Edit2.cshtml" />
     <Content Include="Views\Home\ErrorPage.cshtml" />
+    <Content Include="Views\Users\Create.cshtml" />
+    <Content Include="Views\Users\Delete.cshtml" />
+    <Content Include="Views\Users\Details.cshtml" />
+    <Content Include="Views\Users\Edit.cshtml" />
+    <Content Include="Views\Users\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

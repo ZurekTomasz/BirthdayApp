@@ -1,4 +1,4 @@
-﻿@model AppModels.ModelUser
+﻿@model AppModels.User
 
 @{
     ViewBag.Title = "Delete";
@@ -8,15 +8,15 @@
 
 <h3>Are you sure you want to delete this?</h3>
 <div>
-    <h4>ModelUser</h4>
+    <h4>User</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.EntityId)
+            @Html.DisplayNameFor(model => model.Name)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.EntityId)
+            @Html.DisplayFor(model => model.Name)
         </dd>
 
         <dt>
@@ -33,6 +33,14 @@
 
         <dd>
             @Html.DisplayFor(model => model.Surname)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EntityId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EntityId)
         </dd>
 
         <dt>

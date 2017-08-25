@@ -25,7 +25,7 @@ namespace BirthdayApp.Controllers
         public int GetModelUserId()
         {
             string userId = User.Identity.GetUserId();
-            int modelUserId = db.ModelUsers.Single(i => i.EntityId == userId).Id;
+            int modelUserId = db.MyUsers.Single(i => i.EntityId == userId).Id;
 
             return modelUserId;
         }
@@ -115,7 +115,7 @@ namespace BirthdayApp.Controllers
         public ActionResult Create()
         {
             ViewBag.CollectId = new SelectList(db.Collections, "Id", "Name");
-            ViewBag.UserId = new SelectList(db.ModelUsers, "Id", "Name");
+            ViewBag.UserId = new SelectList(db.MyUsers, "Id", "Name");
             return View();
         }
 
@@ -134,7 +134,7 @@ namespace BirthdayApp.Controllers
             }
 
             ViewBag.CollectId = new SelectList(db.Collections, "Id", "Name", collectUser.CollectId);
-            ViewBag.UserId = new SelectList(db.ModelUsers, "Id", "Name", collectUser.UserId);
+            ViewBag.UserId = new SelectList(db.MyUsers, "Id", "Name", collectUser.UserId);
             return View(collectUser);
         }
 
@@ -190,7 +190,7 @@ namespace BirthdayApp.Controllers
                 return HttpNotFound();
             }
             ViewBag.CollectId = new SelectList(db.Collections, "Id", "Name", collectUser.CollectId);
-            ViewBag.UserId = new SelectList(db.ModelUsers, "Id", "Name", collectUser.UserId);
+            ViewBag.UserId = new SelectList(db.MyUsers, "Id", "Name", collectUser.UserId);
             return View(collectUser);
         }
 
@@ -208,7 +208,7 @@ namespace BirthdayApp.Controllers
                 return RedirectToAction("Index");
             }
             ViewBag.CollectId = new SelectList(db.Collections, "Id", "Name", collectUser.CollectId);
-            ViewBag.UserId = new SelectList(db.ModelUsers, "Id", "Name", collectUser.UserId);
+            ViewBag.UserId = new SelectList(db.MyUsers, "Id", "Name", collectUser.UserId);
             return View(collectUser);
         }
 

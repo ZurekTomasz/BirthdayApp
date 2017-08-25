@@ -1,4 +1,4 @@
-﻿@model AppModels.ModelUser
+﻿@model AppModels.User
 
 @{
     ViewBag.Title = "Details";
@@ -7,15 +7,15 @@
 <h2>Details</h2>
 
 <div>
-    <h4>ModelUser</h4>
+    <h4>User</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.EntityId)
+            @Html.DisplayNameFor(model => model.Name)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.EntityId)
+            @Html.DisplayFor(model => model.Name)
         </dd>
 
         <dt>
@@ -32,6 +32,14 @@
 
         <dd>
             @Html.DisplayFor(model => model.Surname)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EntityId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EntityId)
         </dd>
 
         <dt>
@@ -65,32 +73,6 @@
         <dd>
             @Html.DisplayFor(model => model.DateOfAdd)
         </dd>
-
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Collects)
-        </dt>
-        <dd>
-            <table class="table">
-                <tr>
-                    <th>Name</th>
-                    <th>OwnerID</th>
-                </tr>
-                @foreach (var item in Model.Collects)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.OwnerId)
-                        </td>
-                    </tr>
-                }
-            </table>
-        </dd>
-
-
 
     </dl>
 </div>

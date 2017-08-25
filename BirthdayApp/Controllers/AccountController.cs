@@ -160,8 +160,8 @@ namespace BirthdayApp.Controllers
 
                 if (result.Succeeded)
                 {
-                    var mUser = new ModelUser(model.Firstname, model.Surname, model.Email, "User", model.DateOfBirth, user.Id);
-                    db.ModelUsers.Add(mUser);
+                    var mUser = new User(model.Firstname, model.Surname, model.Email, "User", model.DateOfBirth, user.Id);
+                    db.MyUsers.Add(mUser);
                     db.SaveChanges();
                 }
 
