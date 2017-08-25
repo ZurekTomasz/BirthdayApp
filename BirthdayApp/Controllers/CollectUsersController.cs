@@ -157,14 +157,20 @@ namespace BirthdayApp.Controllers
 
         public ActionResult CreateFID(int? id)
         {
+            int userId = GetModelUserId();
+
             if (ModelState.IsValid)
             {
-                CollectUser collectUser = new CollectUser();
-                collectUser.UserId = GetModelUserId();
-                collectUser.CollectId = id;
-                collectUser.GaveMoney = false;
-                db.CollectionsUsers.Add(collectUser);
-                db.SaveChanges();
+                if(!db.CollectionsUsers.Any(i => i.CollectId == id && i.UserId == userId))
+                {
+                    CollectUser collectUser = new CollectUser();
+                    collectUser.UserId = userId;
+                    collectUser.CollectId = id;
+                    collectUser.GaveMoney = false;
+                    db.CollectionsUsers.Add(collectUser);
+                    db.SaveChanges();
+                }
+
                 return RedirectToAction("Index", "Collects");
             }
 
