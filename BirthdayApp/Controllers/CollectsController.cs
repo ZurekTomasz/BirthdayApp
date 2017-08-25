@@ -18,21 +18,13 @@ namespace BirthdayApp.Controllers
     public class CollectsController : CommonController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-
         CollectsService collectService = new CollectsService();
-
-        
 
         // GET: Collects
         public ActionResult Index()
         {
-            int UsrId = GetModelUserId();
-            var collections = collectService.AllCollectList(UsrId).Where(i => i.RecipientId != i.UserId).OrderByDescending(i => i.DateOfAdd).ToList();
-
-            //foreach (var item in db.Collections)
-            //{
-            //    item.Recipient.
-            //}
+            int userId = GetModelUserId();
+            var collections = collectService.AllCollectList(userId).Where(i => i.RecipientId != userId).OrderByDescending(i => i.DateOfAdd).ToList();
 
             return View(collections);
         }
