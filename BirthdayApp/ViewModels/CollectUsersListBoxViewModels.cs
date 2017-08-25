@@ -4,9 +4,9 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace BirthdayApp.Models
+namespace BirthdayApp.ViewModels
 {
-    public class UsersListBox
+    public class CollectUsersListBoxViewModel
     {
         public List<SelectListItem> UsersList { get; set; }
         public int[] UsersListIds { get; set; }

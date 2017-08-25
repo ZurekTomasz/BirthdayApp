@@ -9,7 +9,7 @@ using System.Web;
 namespace BirthdayApp.ViewModels
 {
     [DebuggerDisplay("Name: {Name}")]
-    public class CollectionViewModels
+    public class CollectListItemViewModel
     {
         public int Id { get; set; }
         public string Name { get; set; }

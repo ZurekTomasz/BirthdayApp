@@ -11,7 +11,7 @@ using System.Web.Mvc;
 
 namespace BirthdayApp.Controllers
 {
-    public class UsersListController : Controller
+    public class CollectUsersListBoxController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
@@ -34,7 +34,7 @@ namespace BirthdayApp.Controllers
             ViewBag.recipientName = db.MyUsers.SingleOrDefault(c => c.Id == collect.RecipientId).Name;
             int RecipientId = db.MyUsers.SingleOrDefault(c => c.Id == collect.RecipientId).Id;
 
-            UsersListBox person = new UsersListBox();
+            CollectUsersListBoxViewModel person = new CollectUsersListBoxViewModel();
             person.UsersList = AllPersonsList(RecipientId);
 
             foreach(var item in person.UsersList)
@@ -46,7 +46,7 @@ namespace BirthdayApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult Index(int? id, UsersListBox person)
+        public ActionResult Index(int? id, CollectUsersListBoxViewModel person)
         {
             if (id == null)
             {

@@ -34,11 +34,11 @@ namespace BirthdayApp.AppService
             db.SaveChanges();
         }
 
-        public CollectViewModels UpdateCollectViewModel(int id)
+        public CollectViewModel UpdateCollectViewModel(int id)
         {
             var collect = GetCollect(id);
 
-            CollectViewModels collectViewModel = new CollectViewModels();
+            CollectViewModel collectViewModel = new CollectViewModel();
             collectViewModel.Id = collect.Id;
             collectViewModel.Name = collect.Name;
             collectViewModel.OwnerId = collect.OwnerId.Value;
@@ -55,7 +55,7 @@ namespace BirthdayApp.AppService
         }
 
 
-        public IEnumerable<CollectionViewModels> AllCollectList_v2(int userId)
+        public IEnumerable<CollectListItemViewModel> AllCollectList_v2(int userId)
         {
             HashSet<int> collectIds = new HashSet<int>();
             var query = db.CollectionsUsers
@@ -69,7 +69,7 @@ namespace BirthdayApp.AppService
 
             foreach (var item in db.Collections)
             {
-                CollectionViewModels collectItem = new CollectionViewModels
+                CollectListItemViewModel collectItem = new CollectListItemViewModel
                 {
                     Id = item.Id,
                     Name = item.Name,
@@ -89,13 +89,13 @@ namespace BirthdayApp.AppService
             }
         }
 
-        public List<CollectionViewModels> AllCollectList(int userId)
+        public List<CollectListItemViewModel> AllCollectList(int userId)
         {
-            List<CollectionViewModels> items = new List<CollectionViewModels>();
+            List<CollectListItemViewModel> items = new List<CollectListItemViewModel>();
 
             foreach (var item in db.Collections.Include(c => c.Users))
             {
-                items.Add(new CollectionViewModels
+                items.Add(new CollectListItemViewModel
                 {
                     Id = item.Id,
                     Name = item.Name,

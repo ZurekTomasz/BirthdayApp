@@ -6,7 +6,7 @@ using System.Web;
 
 namespace BirthdayApp.ViewModels
 {
-    public class CollectViewModels
+    public class CollectViewModel
     {
         public int Id { get; set; }
         public string Name { get; set; }
