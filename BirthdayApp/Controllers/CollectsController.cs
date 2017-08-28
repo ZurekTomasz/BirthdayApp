@@ -31,22 +31,6 @@ namespace BirthdayApp.Controllers
 
         public ActionResult Details(int id)
         {
-            var collectrionsUsers = (from i in db.CollectionsUsers
-                                     where i.CollectId == id
-                                     select i).ToList();
-
-            int gmcounter = 0;
-
-            foreach (var item in collectrionsUsers)
-            {
-                if (item.GaveMoney)
-                {
-                    gmcounter++;
-                }
-            }
-
-            ViewBag.gmcounter = gmcounter;
-
             var collectViewModel = collectService.UpdateCollectViewModel(id,GetModelUserId());
 
             return View(collectViewModel);
@@ -59,44 +43,8 @@ namespace BirthdayApp.Controllers
 
             if (ModelState.IsValid)
             {
-                ViewBag.request = model.Gift.Id;
-
-                if(!db.CollectionsGiftRatings.Any(c => c.CollectId == id && c.UserId == userId))
-                {
-                    var newCollectionGiftRatings = new CollectGiftRating();
-                    newCollectionGiftRatings.CollectId = id;
-                    newCollectionGiftRatings.UserId = userId;
-                    db.CollectionsGiftRatings.Add(newCollectionGiftRatings);
-                    db.SaveChanges();
-                }
-
-                CollectGiftRating cgr = db.CollectionsGiftRatings.First(c => c.CollectId == id && c.UserId == userId);
-                if (model.Gift.Id != "0")
-                {
-                    cgr.TheBestGiftId = Int32.Parse(model.Gift.Id);
-                }
-                else
-                {
-                    db.CollectionsGiftRatings.Remove(cgr);
-                }
-                db.SaveChanges();
+                collectService.ChangeRadioButtonChoose(id, userId, model.Gift.Id);
             }
-
-            var collectrionsUsers = (from i in db.CollectionsUsers
-                                     where i.CollectId == id
-                                     select i).ToList();
-
-            int gmcounter = 0;
-
-            foreach (var item in collectrionsUsers)
-            {
-                if (item.GaveMoney)
-                {
-                    gmcounter++;
-                }
-            }
-
-            ViewBag.gmcounter = gmcounter;
 
             var collectViewModel = collectService.UpdateCollectViewModel(id,GetModelUserId());
 

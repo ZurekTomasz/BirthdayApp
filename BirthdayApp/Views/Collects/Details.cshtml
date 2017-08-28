@@ -10,6 +10,28 @@
 
 <div>
     <hr />
+
+    @if (Model.IsConfirmed)
+    {
+        <font color="red">Zbiórka została zatwierdzona przez założyciela zbiórki!</font>
+            <br />
+            @Html.Raw("")
+            <br />
+            @Html.Raw("Wybrany prezent: ")
+            @Html.Raw(ViewBag.SelectedGiftName)
+            <br />
+            @Html.Raw("Kwota prezentu: ")
+            @Html.Raw(Model.Amount)
+            <br />
+            @Html.Raw("Pojedyńcza kwota: ")
+            @Html.Raw(ViewBag.AmountPerPerson)
+    }
+    else
+    {
+        <font color="red">Zbiórka jest otwarta</font>
+    }
+    
+    <hr />
     <table class="mytable">
         <tr>
             <td>
@@ -141,7 +163,7 @@
                         <br />
                         @Html.ActionLink("Zarządzaj tym kto zapłacił", "IndexById", "CollectUsers", new { id = Model.Id }, null)
                         <br />
-        if (ViewBag.gmcounter == 0)
+        if (Model.PossibilityEditCollectGift)
         {
             @Html.ActionLink("Zatwierdzanie prezentu", "Confirm", "Collects", new { id = Model.Id }, null)
         }

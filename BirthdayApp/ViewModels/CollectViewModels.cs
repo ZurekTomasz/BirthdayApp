@@ -42,5 +42,6 @@ namespace BirthdayApp.ViewModels
         public RadioGiftItem Gift { get; set; }
         public List<RadioGiftItem> RadioGiftItems { get; set; }
         public List<CollectUserItem> Users { get; set; }
+        public bool PossibilityEditCollectGift { get; set; }
     }
 }

@@ -13,9 +13,9 @@ namespace BirthdayApp.AppService
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        public Collect GetCollect(int id)
+        public Collect GetCollect(int collectId)
         {
-            Collect collect = db.Collections.Find(id);
+            Collect collect = db.Collections.Find(collectId);
             if (collect == null)
             {
                 throw new Exception();
@@ -24,23 +24,23 @@ namespace BirthdayApp.AppService
             return collect;
         }
 
-        public void CollectConfirmChange(int id, bool IsC)
+        public void CollectConfirmChange(int collectId, bool IsConfirm)
         {
-            var collect = GetCollect(id);
+            var collect = GetCollect(collectId);
 
-            collect.IsConfirmed = IsC;
+            collect.IsConfirmed = IsConfirm;
             db.Collections.Attach(collect);
             db.Entry(collect).State = EntityState.Modified;
             db.SaveChanges();
         }
 
-        public CollectViewModel UpdateCollectViewModel(int id, int userid)
+        public CollectViewModel UpdateCollectViewModel(int collectId, int userId)
         {
-            var collect = GetCollect(id);
+            var collect = GetCollect(collectId);
 
             CollectViewModel collectViewModel = new CollectViewModel();
             collectViewModel.Id = collect.Id;
-            collectViewModel.UserId = userid;
+            collectViewModel.UserId = userId;
             collectViewModel.Name = collect.Name;
             collectViewModel.OwnerId = collect.OwnerId.Value;
             collectViewModel.RecipientId = collect.RecipientId.Value;
@@ -51,8 +51,9 @@ namespace BirthdayApp.AppService
             collectViewModel.IsConfirmed = collect.IsConfirmed;
             collectViewModel.DateOfInitiative = collect.DateOfInitiative.Value;
             collectViewModel.DateOfAdd = collect.DateOfAdd.Value;
-            collectViewModel.RadioGiftItems = AllRadioGiftList(1,1).OrderByDescending(i => i.Rating).ToList();
+            collectViewModel.RadioGiftItems = AllRadioGiftList(collectId, userId).OrderByDescending(i => i.Rating).ToList();
             collectViewModel.Users = AllCollectUsersGaveMoney(collect.Id);
+            collectViewModel.PossibilityEditCollectGift = GetPossibilityEditCollectGift(collectId);
 
             return collectViewModel;
         }
@@ -72,7 +73,7 @@ namespace BirthdayApp.AppService
 
             foreach (var item in db.Collections)
             {
-                CollectListItemViewModel collectItem = new CollectListItemViewModel
+                CollectListItemViewModel items = new CollectListItemViewModel
                 {
                     Id = item.Id,
                     Name = item.Name,
@@ -88,7 +89,7 @@ namespace BirthdayApp.AppService
                     DateOfAdd = item.DateOfAdd.Value,
                     YoureInCollection = collectIds.Contains(item.Id)
                 };
-                yield return collectItem;
+                yield return items;
             }
         }
 
@@ -119,42 +120,33 @@ namespace BirthdayApp.AppService
         }
 
 
-        public List<RadioGiftItem> AllRadioGiftList(int userId, int collectId)
+        public List<RadioGiftItem> AllRadioGiftList(int collectId, int userId)
         {
             List<RadioGiftItem> items = new List<RadioGiftItem>();
 
-            foreach (var item in db.CollectionsGifts.Where(c=>c.CollectId == collectId))
+            foreach (var item in db.CollectionsGifts.Where(i => i.CollectId == collectId))
             {
-                bool val2 = false;
-                if(db.CollectionsGiftRatings.Any(c => c.CollectId == collectId))
+                bool isChecked = false;
+                if(db.CollectionsGiftRatings.Any(i => i.CollectId == collectId && i.UserId == userId && i.TheBestGiftId == item.Id))
                 {
-                    if (db.CollectionsGiftRatings.First(c => c.CollectId == collectId).TheBestGiftId == item.Id)
-                    {
-                        val2 = true;
-                    }
+                    isChecked = true;
                 }
 
-                int rate = 0;
-
-                foreach (var item3 in db.CollectionsGifts.OrderBy(i => i.Id).ToList())
+                int rating = 0;
+                foreach (var item2 in db.CollectionsUsers.Where(i => i.CollectId == collectId).ToList())
                 {
-                    rate = 0;
-                    foreach (var item2 in db.CollectionsUsers.Where(i => i.CollectId == collectId).ToList())
+                    if (db.CollectionsGiftRatings.Any(i => i.CollectId == collectId && i.UserId == item2.UserId && i.TheBestGiftId == item.Id))
                     {
-                        if (db.CollectionsGiftRatings.Any(i => i.CollectId == collectId && i.UserId == item2.UserId && i.TheBestGiftId == item.Id))
-                        {
-                            rate++;
-                        }
+                        rating++;
                     }
                 }
-
 
                 items.Add(new RadioGiftItem
                 {
                     Id = item.Id.ToString(),
                     Name = item.Name,
-                    Rating = rate,
-                    Checked = val2
+                    Rating = rating,
+                    Checked = isChecked
                 });
             }
             return items;
@@ -164,15 +156,62 @@ namespace BirthdayApp.AppService
         {
             List<CollectUserItem> items = new List<CollectUserItem>();
 
-            foreach (var item in db.CollectionsUsers.Where(i=>i.CollectId == collectId))
+            foreach (var item in db.CollectionsUsers.Where(i => i.CollectId == collectId))
             {
                 items.Add(new CollectUserItem
                 {
                     UserName = db.MyUsers.SingleOrDefault(i => i.Id == item.UserId).Name,
-                    GaveMoney= item.GaveMoney
+                    GaveMoney = item.GaveMoney
                 });
             }
             return items;
+        }
+
+        public bool GetPossibilityEditCollectGift(int collectId)
+        {
+            var CollectionsUsers = (from i in db.CollectionsUsers
+                                    where i.CollectId == collectId
+                                    select i).ToList();
+
+            int GaveMoneyCounter = 0;
+            foreach (var item in CollectionsUsers)
+            {
+                if (item.GaveMoney)
+                {
+                    GaveMoneyCounter++;
+                }
+            }
+
+            bool result = true;
+            if(GaveMoneyCounter > 0)
+            {
+                result = false;
+            }
+
+            return result;
+        }
+
+        public void ChangeRadioButtonChoose(int collectId, int userId, string radioChoice)
+        {
+            if (!db.CollectionsGiftRatings.Any(c => c.CollectId == collectId && c.UserId == userId))
+            {
+                var newCollectionGiftRatings = new CollectGiftRating();
+                newCollectionGiftRatings.CollectId = collectId;
+                newCollectionGiftRatings.UserId = userId;
+                db.CollectionsGiftRatings.Add(newCollectionGiftRatings);
+                db.SaveChanges();
+            }
+
+            CollectGiftRating collectionGiftRatings = db.CollectionsGiftRatings.SingleOrDefault(c => c.CollectId == collectId && c.UserId == userId);
+            if (radioChoice != "0")
+            {
+                collectionGiftRatings.TheBestGiftId = Int32.Parse(radioChoice);
+            }
+            else
+            {
+                db.CollectionsGiftRatings.Remove(collectionGiftRatings);
+            }
+            db.SaveChanges();
         }
 
     }
