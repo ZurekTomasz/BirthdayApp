@@ -29,10 +29,76 @@ namespace BirthdayApp.Controllers
             return View(collections);
         }
 
-        // GET: Collects/Details/5
         public ActionResult Details(int id)
         {
-            var collectViewModel = collectService.UpdateCollectViewModel(id);
+            var collectrionsUsers = (from i in db.CollectionsUsers
+                                     where i.CollectId == id
+                                     select i).ToList();
+
+            int gmcounter = 0;
+
+            foreach (var item in collectrionsUsers)
+            {
+                if (item.GaveMoney)
+                {
+                    gmcounter++;
+                }
+            }
+
+            ViewBag.gmcounter = gmcounter;
+
+            var collectViewModel = collectService.UpdateCollectViewModel(id,GetModelUserId());
+
+            return View(collectViewModel);
+        }
+
+        [HttpPost]
+        public ActionResult Details(int id, CollectViewModel model)
+        {
+            int userId = GetModelUserId();
+
+            if (ModelState.IsValid)
+            {
+                ViewBag.request = model.Gift.Id;
+
+                if(!db.CollectionsGiftRatings.Any(c => c.CollectId == id && c.UserId == userId))
+                {
+                    var newCollectionGiftRatings = new CollectGiftRating();
+                    newCollectionGiftRatings.CollectId = id;
+                    newCollectionGiftRatings.UserId = userId;
+                    db.CollectionsGiftRatings.Add(newCollectionGiftRatings);
+                    db.SaveChanges();
+                }
+
+                CollectGiftRating cgr = db.CollectionsGiftRatings.First(c => c.CollectId == id && c.UserId == userId);
+                if (model.Gift.Id != "0")
+                {
+                    cgr.TheBestGiftId = Int32.Parse(model.Gift.Id);
+                }
+                else
+                {
+                    db.CollectionsGiftRatings.Remove(cgr);
+                }
+                db.SaveChanges();
+            }
+
+            var collectrionsUsers = (from i in db.CollectionsUsers
+                                     where i.CollectId == id
+                                     select i).ToList();
+
+            int gmcounter = 0;
+
+            foreach (var item in collectrionsUsers)
+            {
+                if (item.GaveMoney)
+                {
+                    gmcounter++;
+                }
+            }
+
+            ViewBag.gmcounter = gmcounter;
+
+            var collectViewModel = collectService.UpdateCollectViewModel(id,GetModelUserId());
 
             return View(collectViewModel);
         }

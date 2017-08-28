@@ -3,13 +3,29 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using AppModels;
 
 namespace BirthdayApp.ViewModels
 {
+    public class CollectUserItem
+    {
+        public string UserName { get; set; }
+        public bool GaveMoney { get; set; }
+    }
+
+    public class RadioGiftItem
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public int Rating { get; set; }
+        public bool Checked { get; set; }
+    }
+
     public class CollectViewModel
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public int UserId { get; set; }
         public int OwnerId { get; set; }
         public int RecipientId { get; set; }
         public string OwnerName { get; set; }
@@ -23,5 +39,8 @@ namespace BirthdayApp.ViewModels
         public DateTime DateOfInitiative { get; set; }
         [DataType(DataType.Date), DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime DateOfAdd { get; set; }
+        public RadioGiftItem Gift { get; set; }
+        public List<RadioGiftItem> RadioGiftItems { get; set; }
+        public List<CollectUserItem> Users { get; set; }
     }
 }

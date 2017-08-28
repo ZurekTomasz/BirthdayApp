@@ -16,7 +16,14 @@ namespace AppModels
         public int? GiftId { get; set; }
         public bool TheBestRating { get; set; }
 
+        public int? CollectId { get; set; }
+        public int? TheBestGiftId { get; set; }
+
+
         public virtual User User { get; set; }
         public virtual CollectGift Gift { get; set; }
+
+        public virtual Collect Collect { get; set; }
+        public virtual CollectGift TheBestGift { get; set; }
     }
 }
