@@ -1,4 +1,4 @@
-﻿@model AppModels.Collect
+﻿@model BirthdayApp.ViewModels.CollectViewModel
 
 @{
     ViewBag.Title = "Panel zarządzania zbiórką";
@@ -36,10 +36,10 @@
         </tr>
         <tr>
             <td>
-                @Html.DisplayFor(model => model.Owner.Name)
+                @Html.DisplayFor(model => model.OwnerName)
             </td>
             <td>
-                @Html.DisplayFor(model => model.Recipient.Name)
+                @Html.DisplayFor(model => model.RecipientName)
             </td>
         </tr>
 
@@ -57,29 +57,38 @@
         </tr>
     </table>
 
-    <br />
-    Propozycje prezentów:
-    <br />
+    <hr />
+
     @using (Html.BeginForm())
     {
+        @Html.Raw("Wybierz jeden z prezentów:")
         <table class="mytable">
             <tr>
                 <td>
-                    <font color="red">@ViewBag.MustChooseItem</font>
                     <ol class="Opt">
-                        @foreach (var item in Model.CollectGifts2.OrderByDescending(i => i.Rating))
+
+                        @foreach (var item in Model.RadioGiftItems)
                         {
                             <li class="Opt">
-                                @Html.RadioButton("uniqueRadio", item.Id)
+                                @if (item.Checked)
+                                {
+                                    @Html.RadioButtonFor(model => model.Gift.Id, item.Id, new { id = item.Id, @checked = true })
+                                }
+                                else
+                                {
+                                    @Html.RadioButtonFor(model => model.Gift.Id, item.Id, new { id = item.Id })
+                                }
+
                                 @Html.Label(item.Name + " (" + item.Rating + ")")
                             </li>
                         }
-                    </ol>
 
-                    <br />
+                    </ol>
+                    
                     @Html.Raw("Szacowana kwota: ") @Html.DisplayFor(model => model.Amount)
                     <br />
                     @Html.Raw("Nowa kwota: ") <input type="text" name="fname" value="@Model.Amount">
+                    <br />
                     <br />
                     <input type="submit" value="Zatwierdź prezent" />
 
@@ -88,10 +97,11 @@
         </table>
     }
 
-    <br />
+    <hr />
+
     @Html.ActionLink("Cofnij propozycję prezentu", "UndoConfirm", "Collects", new { id = Model.Id }, null)
     <br />
 
 </div>
 <hr />
-@Html.ActionLink("Wróć do szczegółów prezentu", "Details2", "Collects", new { id = Model.Id }, null)
+@Html.ActionLink("Wróć do szczegółów prezentu", "Details", "Collects", new { id = Model.Id }, null)

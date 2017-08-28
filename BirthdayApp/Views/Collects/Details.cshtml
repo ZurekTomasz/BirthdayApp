@@ -18,13 +18,13 @@
             @Html.Raw("")
             <br />
             @Html.Raw("Wybrany prezent: ")
-            @Html.Raw(ViewBag.SelectedGiftName)
+            @Html.Raw(Model.GiftName)
             <br />
             @Html.Raw("Kwota prezentu: ")
             @Html.Raw(Model.Amount)
             <br />
             @Html.Raw("Pojedyńcza kwota: ")
-            @Html.Raw(ViewBag.AmountPerPerson)
+            @Html.Raw(Model.AmountPerPerson)
     }
     else
     {
@@ -179,6 +179,19 @@
 
 </div>
 
-        <p>
-            @Html.ActionLink("Wróć do listy", "Index")
-        </p>
+<p>
+    @Html.ActionLink("Wróć do listy", "Index")
+</p>
+
+
+@section Scripts {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    @if (Model.IsConfirmed)
+    {
+        <script>
+            $(document).ready(function(){
+                $(':radio:not(:checked)').attr('disabled', true);
+            });
+        </script>
+    }
+}

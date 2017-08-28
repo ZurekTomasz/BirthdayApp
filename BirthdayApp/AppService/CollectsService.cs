@@ -38,6 +38,10 @@ namespace BirthdayApp.AppService
         {
             var collect = GetCollect(collectId);
 
+            decimal NumberUsersInCollect = db.CollectionsUsers.Count(c => c.CollectId == collectId);
+            decimal MyAmount = db.Collections.SingleOrDefault(c => c.Id == collectId).Amount;
+            decimal AmountPerPerson = MyAmount / NumberUsersInCollect;
+
             CollectViewModel collectViewModel = new CollectViewModel();
             collectViewModel.Id = collect.Id;
             collectViewModel.UserId = userId;
@@ -54,6 +58,9 @@ namespace BirthdayApp.AppService
             collectViewModel.RadioGiftItems = AllRadioGiftList(collectId, userId).OrderByDescending(i => i.Rating).ToList();
             collectViewModel.Users = AllCollectUsersGaveMoney(collect.Id);
             collectViewModel.PossibilityEditCollectGift = GetPossibilityEditCollectGift(collectId);
+            //collectViewModel.GiftName = db.CollectionsGifts.SingleOrDefault(i => i.Id == db.CollectionsGiftRatings.FirstOrDefault(c => c.CollectId == collectId && c.UserId == userId).Id).Name;
+            collectViewModel.GiftName = "Example GiftName";
+            collectViewModel.AmountPerPerson = AmountPerPerson;
 
             return collectViewModel;
         }
