@@ -7,42 +7,36 @@ using Microsoft.AspNet.Identity;
 using BirthdayApp.ViewModels;
 using System.Collections.Generic;
 using BirthdayApp.Repository;
+using BirthdayApp.Repository.Contracts;
 
 namespace BirthdayApp.AppService
 {
-    public class CollectsService
+    public class CollectsService : IDisposable
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        ApplicationDbContext _context = new ApplicationDbContext();
+        IUnitOfWork _unitOfWork = new UnitOfWork();
 
-        private ICollectRepository _collectRepository;
+        //private IRepository<Collect> _collectRepository;
+        //private IRepository<CollectUser> _collectuserRepository;
 
         public CollectsService()
         {
-            _collectRepository = new CollectRepository(new Models.ApplicationDbContext());
-        }
-        public CollectsService(ICollectRepository collectRepository)
-        {
-            _collectRepository = collectRepository;
+            //_collectRepository = new Repository<Collect>(_context);
+            //_collectuserRepository = new Repository<CollectUser>(_context);
         }
 
         public Collect GetCollect(int collectId)
         {
-            Collect collect = _collectRepository.GetCollectById(collectId);
-            //Collect collect = db.Collections.Find(collectId);
-            if (collect == null)
-            {
-                throw new Exception();
-            }
-
+            Collect collect = _unitOfWork.CollectRepository.GetById(collectId);
             return collect;
         }
 
         public void CollectConfirmChange(int collectId, bool IsConfirm)
         {
             var collect = GetCollect(collectId);
-
             collect.IsConfirmed = IsConfirm;
-            _collectRepository.UpdateCollect(collect);
+            _unitOfWork.CollectRepository.Update(collect);
+            _unitOfWork.SaveChanges();
             //db.Collections.Attach(collect);
             //db.Entry(collect).State = EntityState.Modified;
             //db.SaveChanges();
@@ -53,7 +47,8 @@ namespace BirthdayApp.AppService
             var collect = GetCollect(collectId);
 
             collect.Amount = Amount;
-            _collectRepository.UpdateCollect(collect);
+            _unitOfWork.CollectRepository.Update(collect);
+            _unitOfWork.SaveChanges();
             //db.Collections.Attach(collect);
             //db.Entry(collect).State = EntityState.Modified;
             //db.SaveChanges();
@@ -63,8 +58,8 @@ namespace BirthdayApp.AppService
         {
             var collect = GetCollect(collectId);
 
-            double NumberUsersInCollect = db.CollectionsUsers.Count(c => c.CollectId == collectId);
-            double MyAmount = db.Collections.SingleOrDefault(c => c.Id == collectId).Amount;
+            double NumberUsersInCollect = _unitOfWork.CollectUserRepository.Get().Count(c => c.CollectId == collectId);
+            double MyAmount = _unitOfWork.CollectRepository.Get().SingleOrDefault(c => c.Id == collectId).Amount;
             double AmountPerPerson = MyAmount / NumberUsersInCollect;
 
             CollectViewModel collectViewModel = new CollectViewModel();
@@ -83,9 +78,9 @@ namespace BirthdayApp.AppService
             collectViewModel.RadioGiftItems = AllRadioGiftList(collectId, userId).OrderByDescending(i => i.Rating).ToList();
             collectViewModel.Users = AllCollectUsersGaveMoney(collect.Id);
             collectViewModel.PossibilityEditCollectGift = GetPossibilityEditCollectGift(collectId);
-            if(db.CollectionsGiftRatings.Any(c => c.CollectId == collectId && c.UserId == userId))
+            if(_context.CollectionsGiftRatings.Any(c => c.CollectId == collectId && c.UserId == userId))
             {
-                collectViewModel.GiftName = db.CollectionsGifts.Single(i => i.Id == db.CollectionsGiftRatings.FirstOrDefault(c => c.CollectId == collectId && c.UserId == userId).TheBestGiftId).Name;
+                collectViewModel.GiftName = _context.CollectionsGifts.Single(i => i.Id == _context.CollectionsGiftRatings.FirstOrDefault(c => c.CollectId == collectId && c.UserId == userId).TheBestGiftId).Name;
             }
             else
             {
@@ -100,7 +95,7 @@ namespace BirthdayApp.AppService
         public IEnumerable<CollectListItemViewModel> AllCollectList_v2(int userId)
         {
             HashSet<int> collectIds = new HashSet<int>();
-            var query = db.CollectionsUsers
+            var query = _context.CollectionsUsers
                            .Where(x => x.UserId == userId && x.CollectId.HasValue)
                            .Select(x => x.CollectId.Value);
 
@@ -109,7 +104,7 @@ namespace BirthdayApp.AppService
                 collectIds.Add(id);
             }
 
-            foreach (var item in db.Collections)
+            foreach (var item in _context.Collections)
             {
                 CollectListItemViewModel items = new CollectListItemViewModel
                 {
@@ -136,7 +131,7 @@ namespace BirthdayApp.AppService
             List<CollectListItemViewModel> items = new List<CollectListItemViewModel>();
 
             //foreach (var item in db.Collections.Include(c => c.Users))
-            foreach(var item in _collectRepository.GetAllCollectIncludeUsers())
+            foreach(var item in _unitOfWork.CollectRepository.Get().Include(c=>c.Users))
             {
                 items.Add(new CollectListItemViewModel
                 {
@@ -163,18 +158,18 @@ namespace BirthdayApp.AppService
         {
             List<RadioGiftItem> items = new List<RadioGiftItem>();
 
-            foreach (var item in db.CollectionsGifts.Where(i => i.CollectId == collectId))
+            foreach (var item in _context.CollectionsGifts.Where(i => i.CollectId == collectId))
             {
                 bool isChecked = false;
-                if(db.CollectionsGiftRatings.Any(i => i.CollectId == collectId && i.UserId == userId && i.TheBestGiftId == item.Id))
+                if(_context.CollectionsGiftRatings.Any(i => i.CollectId == collectId && i.UserId == userId && i.TheBestGiftId == item.Id))
                 {
                     isChecked = true;
                 }
 
                 int rating = 0;
-                foreach (var item2 in db.CollectionsUsers.Where(i => i.CollectId == collectId).ToList())
+                foreach (var item2 in _context.CollectionsUsers.Where(i => i.CollectId == collectId).ToList())
                 {
-                    if (db.CollectionsGiftRatings.Any(i => i.CollectId == collectId && i.UserId == item2.UserId && i.TheBestGiftId == item.Id))
+                    if (_context.CollectionsGiftRatings.Any(i => i.CollectId == collectId && i.UserId == item2.UserId && i.TheBestGiftId == item.Id))
                     {
                         rating++;
                     }
@@ -195,11 +190,11 @@ namespace BirthdayApp.AppService
         {
             List<CollectUserItem> items = new List<CollectUserItem>();
 
-            foreach (var item in db.CollectionsUsers.Where(i => i.CollectId == collectId))
+            foreach (var item in _context.CollectionsUsers.Where(i => i.CollectId == collectId))
             {
                 items.Add(new CollectUserItem
                 {
-                    UserName = db.MyUsers.SingleOrDefault(i => i.Id == item.UserId).Name,
+                    UserName = _context.MyUsers.SingleOrDefault(i => i.Id == item.UserId).Name,
                     GaveMoney = item.GaveMoney
                 });
             }
@@ -208,7 +203,7 @@ namespace BirthdayApp.AppService
 
         public bool GetPossibilityEditCollectGift(int collectId)
         {
-            var CollectionsUsers = (from i in db.CollectionsUsers
+            var CollectionsUsers = (from i in _context.CollectionsUsers
                                     where i.CollectId == collectId
                                     select i).ToList();
 
@@ -232,30 +227,30 @@ namespace BirthdayApp.AppService
 
         public void ChangeRadioButtonChoose(int collectId, int userId, string radioChoice)
         {
-            if (!db.CollectionsGiftRatings.Any(c => c.CollectId == collectId && c.UserId == userId))
+            if (!_context.CollectionsGiftRatings.Any(c => c.CollectId == collectId && c.UserId == userId))
             {
                 var newCollectionGiftRatings = new CollectGiftRating();
                 newCollectionGiftRatings.CollectId = collectId;
                 newCollectionGiftRatings.UserId = userId;
-                db.CollectionsGiftRatings.Add(newCollectionGiftRatings);
-                db.SaveChanges();
+                _context.CollectionsGiftRatings.Add(newCollectionGiftRatings);
+                _context.SaveChanges();
             }
 
-            CollectGiftRating collectionGiftRatings = db.CollectionsGiftRatings.SingleOrDefault(c => c.CollectId == collectId && c.UserId == userId);
+            CollectGiftRating collectionGiftRatings = _context.CollectionsGiftRatings.SingleOrDefault(c => c.CollectId == collectId && c.UserId == userId);
             if (radioChoice != "0")
             {
                 collectionGiftRatings.TheBestGiftId = Int32.Parse(radioChoice);
             }
             else
             {
-                db.CollectionsGiftRatings.Remove(collectionGiftRatings);
+                _context.CollectionsGiftRatings.Remove(collectionGiftRatings);
             }
-            db.SaveChanges();
+            _context.SaveChanges();
         }
 
         public bool IsCollectionsUser(int collectId, int userId)
         {
-            if (db.CollectionsUsers.Any(i => i.CollectId == collectId && i.UserId == userId))
+            if (_context.CollectionsUsers.Any(i => i.CollectId == collectId && i.UserId == userId))
                 return true;
 
             return false;
@@ -263,12 +258,30 @@ namespace BirthdayApp.AppService
 
         public int CounterCollectionsGifts(int collectId)
         {
-            int result = db.CollectionsGifts.Count(i => i.CollectId == collectId);
+            int result = _context.CollectionsGifts.Count(i => i.CollectId == collectId);
 
             return result;
         }
 
-        
+        private bool disposed = false;
 
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    _unitOfWork.Dispose();
+                }
+            }
+            this.disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+
+            GC.SuppressFinalize(this);
+        }
     }
 }

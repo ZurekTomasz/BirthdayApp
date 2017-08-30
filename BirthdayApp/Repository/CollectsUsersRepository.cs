@@ -9,45 +9,40 @@ using System.Web;
 
 namespace BirthdayApp.Repository
 {
-    public class CollectRepository : ICollectRepository
+    public class CollectsUsersRepository : ICollectsUsersRepository
     {
         private readonly ApplicationDbContext _context;
 
-        public CollectRepository(ApplicationDbContext context)
+        public CollectsUsersRepository(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public IEnumerable<Collect> GetAllCollect()
+        public IEnumerable<CollectUser> GetAllCollectUser()
         {
-            return _context.Collections.ToList();
+            return _context.CollectionsUsers.ToList();
         }
 
-        public IEnumerable<Collect> GetAllCollectIncludeUsers()
+        public CollectUser GetCollectUserById(int collectId)
         {
-            return _context.Collections.Include(i => i.Users).ToList();
+            return _context.CollectionsUsers.Find(collectId);
         }
 
-        public Collect GetCollectById(int collectId)
-        {
-            return _context.Collections.Find(collectId);
-        }
-
-        public int AddCollect(Collect collect)
+        public int AddCollectUser(CollectUser collect)
 
         {
             int result = -1;
 
             if (collect != null)
             {
-                _context.Collections.Add(collect);
+                _context.CollectionsUsers.Add(collect);
                 _context.SaveChanges();
                 result = collect.Id;
             }
             return result;
 
         }
-        public int UpdateCollect(Collect collect)
+        public int UpdateCollectUser(CollectUser collect)
         {
             int result = -1;
 
@@ -59,10 +54,10 @@ namespace BirthdayApp.Repository
             }
             return result;
         }
-        public void DeleteCollect(int collectId)
+        public void DeleteCollectUser(int collectId)
         {
-            Collect collect = _context.Collections.Find(collectId);
-            _context.Collections.Remove(collect);
+            CollectUser collect = _context.CollectionsUsers.Find(collectId);
+            _context.CollectionsUsers.Remove(collect);
             _context.SaveChanges();
 
         }

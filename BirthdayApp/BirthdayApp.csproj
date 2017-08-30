@@ -213,8 +213,14 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Repository\CollectRepository.cs" />
-    <Compile Include="Repository\ICollectRepository.cs" />
+    <Compile Include="Repository\CollectsUsersRepository.cs" />
+    <Compile Include="Repository\CollectsRepository.cs" />
+    <Compile Include="Repository\Contracts\IRepository.cs" />
+    <Compile Include="Repository\Contracts\IUnitOfWork.cs" />
+    <Compile Include="Repository\ICollectsUsersRepository.cs" />
+    <Compile Include="Repository\ICollectsRepository.cs" />
+    <Compile Include="Repository\Repository.cs" />
+    <Compile Include="Repository\UnitOfWork.cs" />
     <Compile Include="ViewModels\CollectUsersListBoxViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
