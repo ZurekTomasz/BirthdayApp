@@ -131,7 +131,7 @@ namespace BirthdayApp.Controllers
                 collectGift.Rating = 0;
                 db.CollectionsGifts.Add(collectGift);
                 db.SaveChanges();
-                return RedirectToAction("Details2", "Collects", new { id = id });
+                return RedirectToAction("Details", "Collects", new { id = id });
             }
 
             return View(collectGift);

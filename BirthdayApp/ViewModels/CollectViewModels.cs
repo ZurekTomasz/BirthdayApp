@@ -31,10 +31,8 @@ namespace BirthdayApp.ViewModels
         public string OwnerName { get; set; }
         public string RecipientName { get; set; }
         public string Description { get; set; }
-        [DataType(DataType.Currency)]
-        [RegularExpression("^[0-9]{0,99999}$", ErrorMessage = "Value must be a natural number")]
-        public decimal Amount { get; set; }
         public bool IsConfirmed { get; set; }
+        public int Amount { get; set; }
         [DataType(DataType.Date), DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime DateOfInitiative { get; set; }
         [DataType(DataType.Date), DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
@@ -44,6 +42,6 @@ namespace BirthdayApp.ViewModels
         public List<CollectUserItem> Users { get; set; }
         public bool PossibilityEditCollectGift { get; set; }
         public string GiftName { get; set;}
-        public decimal AmountPerPerson { get; set; }
+        public double AmountPerPerson { get; set; }
     }
 }

@@ -132,19 +132,19 @@ namespace BirthdayApp.DAL
             var newCollectionGifts = new CollectGift();
             newCollectionGifts.UserId = 1;
             newCollectionGifts.CollectId = 1;
-            newCollectionGifts.Name = "Kurtka dla Oli";
+            newCollectionGifts.Name = "Kurtka";
             context.CollectionsGifts.Add(newCollectionGifts);
             context.SaveChanges();
             //**//
 
-            //CollectGiftRatings #1
-            var newCollectionGiftRatings = new CollectGiftRating();
-            newCollectionGiftRatings.UserId = 1;
-            newCollectionGiftRatings.GiftId = 1;
-            newCollectionGiftRatings.TheBestRating = true;
-            context.CollectionsGiftRatings.Add(newCollectionGiftRatings);
-            context.SaveChanges();
-            //**//
+            ////CollectGiftRatings #1
+            //var newCollectionGiftRatings = new CollectGiftRating();
+            //newCollectionGiftRatings.UserId = 1;
+            //newCollectionGiftRatings.GiftId = 1;
+            //newCollectionGiftRatings.TheBestRating = true;
+            //context.CollectionsGiftRatings.Add(newCollectionGiftRatings);
+            //context.SaveChanges();
+            ////**//
 
             //Seed
             base.Seed(context);

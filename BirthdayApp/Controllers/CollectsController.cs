@@ -39,11 +39,9 @@ namespace BirthdayApp.Controllers
         [HttpPost]
         public ActionResult Details(int id, CollectViewModel model)
         {
-            int userId = GetModelUserId();
-
             if (ModelState.IsValid)
             {
-                collectService.ChangeRadioButtonChoose(id, userId, model.Gift.Id);
+                collectService.ChangeRadioButtonChoose(id, GetModelUserId(), model.Gift.Id);
             }
 
             var collectViewModel = collectService.UpdateCollectViewModel(id,GetModelUserId());
@@ -58,205 +56,20 @@ namespace BirthdayApp.Controllers
             return RedirectToAction("Details", "Collects", new { id = id });
         }
 
-        //// GET: Collects/Details/5
-        //public ActionResult Details2(int? id)
-        //{
-        //    var collect = collectService.GetCollect(id.Value);
-        //    int UserId = GetModelUserId();
-
-        //    if(!IsAdmin())
-        //    {
-        //        if (!db.CollectionsUsers.Any(i => i.UserId == UserId && i.CollectId == id))
-        //        {
-        //            return HttpNotFound();
-        //        }
-        //    }
-
-        //    if(db.CollectionsGiftRatings.Any(i => i.TheBestRating == true & i.UserId == UserId))
-        //    { 
-        //        ViewData["uniqueRadio"] = db.CollectionsGiftRatings.SingleOrDefault(i => i.TheBestRating == true & i.UserId == UserId).GiftId;
-        //    }
-        //    else
-        //    {
-        //        ViewData["uniqueRadio"] = "0";
-        //    }
-
-        //    var collectrionsUsers = (from i in db.CollectionsUsers
-        //                             where i.CollectId == id
-        //                             select i).ToList();
-
-        //    int gmcounter = 0;
-
-        //    foreach (var item in collectrionsUsers)
-        //    {
-        //        if (item.GaveMoney)
-        //        {
-        //            gmcounter++;
-        //        }
-        //    }
-
-        //    ViewBag.gmcounter = gmcounter;
-
-
-        //    foreach (var item in db.CollectionsGifts.OrderBy(i => i.Id).ToList())
-        //    {
-        //        item.Rating = 0;
-        //        foreach (var item2 in db.CollectionsUsers.Where(i => i.CollectId == id).ToList())
-        //        {
-        //            if(db.CollectionsGiftRatings.Any(i => i.GiftId == item.Id && i.UserId == item2.UserId && i.TheBestRating == true))
-        //            {
-        //                item.Rating++;
-        //            }
-        //        }
-        //    }
-
-        //    ViewBag.UserId = GetModelUserId();
-
-        //    int SelectedGiftId = 0;
-        //    try
-        //    {
-        //        int? SelectedGiftIdNull = db.CollectionsGiftRatings.SingleOrDefault(i => i.TheBestRating == true & i.UserId == db.Collections.FirstOrDefault(c => c.Id == id).OwnerId).GiftId;
-        //        SelectedGiftId = SelectedGiftIdNull ?? 0;
-        //    }
-        //    catch { }
-
-        //    string SelectedGiftName = "";
-        //    if (SelectedGiftId != 0)
-        //    {
-        //        SelectedGiftName = db.CollectionsGifts.SingleOrDefault(i => i.Id == SelectedGiftId).Name;
-        //    }
-            
-        //    ViewBag.SelectedGiftName = SelectedGiftName;
-
-        //    decimal NumberUsersInCollect = db.CollectionsUsers.Count(c => c.CollectId == id);
-        //    decimal MyAmount = db.Collections.SingleOrDefault(c => c.Id == id).Amount;
-        //    decimal AmountPerPerson = MyAmount / NumberUsersInCollect;
-
-        //    ViewBag.AmountPerPerson = AmountPerPerson;
-
-        //    return View(collect);
-        //}
-
-
-        //[HttpPost]
-        //public ActionResult Details2(int? id, string uniqueRadio)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Collect collect = db.Collections.Find(id);
-        //    if (collect == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-
-        //    int wybranyid = Int32.Parse(Request.Form["uniqueRadio"]);
-
-        //    if (Request.Form["uniqueRadio"] == "0")
-        //    {
-        //        wybranyid = 0;
-        //    }
-
-        //    var ModelUserId = GetModelUserId();
-        //    if(db.CollectionsGiftRatings.Any(i => i.TheBestRating == true & i.UserId == ModelUserId))
-        //    {
-        //        CollectGiftRating cgrx = db.CollectionsGiftRatings.Find(db.CollectionsGiftRatings.SingleOrDefault(i => i.TheBestRating == true & i.UserId == ModelUserId).Id);
-        //        cgrx.TheBestRating = false;
-        //        db.SaveChanges();
-        //    }
-                
-
-        //    //////////////**//
-        //    if(db.CollectionsGiftRatings.Any(i => i.GiftId == wybranyid & i.UserId == ModelUserId))
-        //    {
-        //        CollectGiftRating cgr = db.CollectionsGiftRatings.Find(db.CollectionsGiftRatings.SingleOrDefault(i => i.GiftId == wybranyid & i.UserId == ModelUserId).Id);
-        //        cgr.TheBestRating = true;
-        //        db.SaveChanges();
-        //    }
-        //    else
-        //    {
-        //        if(wybranyid!=0)
-        //        {
-        //            var cgr = new CollectGiftRating();
-        //            cgr.UserId = ModelUserId;
-        //            cgr.GiftId = wybranyid;
-        //            cgr.TheBestRating = true;
-        //            db.CollectionsGiftRatings.Add(cgr);
-        //            db.SaveChanges();
-        //        }
-        //    }
-
-
-            
-
-        //    var YourRadioButtonx = Request.Form["uniqueRadio"];
-        //    ViewBag.wybor = wybranyid;
-        //    ViewBag.userid = GetModelUserId();
-
-        //    try
-        //    {
-        //        ViewData["uniqueRadio"] = db.CollectionsGiftRatings.Single(i => i.TheBestRating == true & i.UserId == ModelUserId).GiftId;
-        //    }
-        //    catch (Exception)
-        //    {
-        //        ViewData["uniqueRadio"] = "0";
-        //    }
-
-        //    var collectrionsUsers = (from i in db.CollectionsUsers
-        //                             where i.CollectId == id
-        //                             select i).ToList();
-
-        //    int gmcounter = 0;
-
-        //    foreach (var item in collectrionsUsers)
-        //    {
-        //        if (item.GaveMoney)
-        //        {
-        //            gmcounter++;
-        //        }
-        //    }
-
-        //    ViewBag.gmcounter = gmcounter;
-
-        //    foreach (var item in db.CollectionsGifts.OrderBy(i => i.Id).ToList())
-        //    {
-        //        item.Rating = 0;
-        //        foreach (var item2 in db.CollectionsUsers.Where(i => i.CollectId == id).ToList())
-        //        {
-        //            if (db.CollectionsGiftRatings.Any(i => i.GiftId == item.Id && i.UserId == item2.UserId && i.TheBestRating == true))
-        //            {
-        //                item.Rating++;
-        //            }
-        //        }
-        //    }
-
-        //    ViewBag.UserId = GetModelUserId();
-
-        //    return View(collect);
-        //}
-
-        // GET: Collects/Details/5
-
         public ActionResult Confirm(int id)
         {
-            Collect collect = db.Collections.Find(id);
-            if (collect == null)
-            {
-                return HttpNotFound();
-            }
-
-            int userId = GetModelUserId();
+            var collectViewModel = collectService.UpdateCollectViewModel(id, GetModelUserId());
 
             if (!IsAdmin())
             {
-                if (!db.CollectionsUsers.Any(i => i.UserId == userId && i.CollectId == id))
+                if (!collectService.IsCollectionsUser(id, GetModelUserId()))
                 {
                     return HttpNotFound();
                 }
             }
 
-            var collectViewModel = collectService.UpdateCollectViewModel(id, GetModelUserId());
+            if(collectService.CounterCollectionsGifts(id) == 0)
+                ViewBag.MustChooseItem = "Musisz wybrać któryś z prezentów !";
 
             return View(collectViewModel);
         }
@@ -265,119 +78,25 @@ namespace BirthdayApp.Controllers
         [HttpPost]
         public ActionResult Confirm(int id, string uniqueRadio, string fname, CollectViewModel model)
         {
-            Collect collect = db.Collections.Find(id);
-            if (collect == null)
+            try
             {
-                return HttpNotFound();
+                int selectedId = Int32.Parse(model.Gift.Id);
+                if (ModelState.IsValid)
+                {
+                    collectService.ChangeRadioButtonChoose(id, GetModelUserId(), model.Gift.Id);
+                }
+                collectService.CollectAmountChange(id, model.Amount);
+                collectService.CollectConfirmChange(id, true);
+                return RedirectToAction("Details", "Collects", new { id = id });
             }
-
-
-            int wybranyid = Int32.Parse(model.Gift.Id);
-            //try
-            //{
-            //    int? wybranyidNull = Int32.Parse(Request.Form["uniqueRadio"]);
-            //    wybranyid = wybranyidNull ?? 0;
-            //}
-            //catch { }
-
-            //int ggrid = db.CollectionsGiftRatings.SingleOrDefault(i => i.Id == wybranyid).Id;
-
-            //if (Request.Form["uniqueRadio"] == "0")
-            //{
-            //    wybranyid = 0;
-            //}
-
-
-
-            int userId = GetModelUserId();
-
-
-            if (wybranyid != 0)
-            {
-
-                //if (db.CollectionsGiftRatings.Any(i => i.TheBestRating == true & i.UserId == userId))
-                //{
-                //    CollectGiftRating cgrx = db.CollectionsGiftRatings.Find(db.CollectionsGiftRatings.SingleOrDefault(i => i.TheBestRating == true & i.UserId == userId).Id);
-                //    cgrx.TheBestRating = false;
-                //    db.SaveChanges();
-                //}
-
-
-                ////////////////**//
-                //if (db.CollectionsGiftRatings.Any(i => i.GiftId == wybranyid & i.UserId == userId))
-                //{
-                //    CollectGiftRating cgr = db.CollectionsGiftRatings.Find(db.CollectionsGiftRatings.SingleOrDefault(i => i.GiftId == wybranyid & i.UserId == userId).Id);
-                //    cgr.TheBestRating = true;
-                //    db.SaveChanges();
-                //}
-                //else
-                //{
-                //    if (wybranyid != 0)
-                //    {
-                //        var cgr = new CollectGiftRating();
-                //        cgr.UserId = userId;
-                //        cgr.GiftId = wybranyid;
-                //        cgr.TheBestRating = true;
-                //        db.CollectionsGiftRatings.Add(cgr);
-                //        db.SaveChanges();
-                //    }
-                //}
-
-
-
-
-                //var YourRadioButtonx = Request.Form["uniqueRadio"];
-                //ViewBag.wybor = wybranyid;
-
-                //try
-                //{
-                //    ViewData["uniqueRadio"] = db.CollectionsGiftRatings.Single(i => i.TheBestRating == true & i.UserId == userId).GiftId;
-                //}
-                //catch (Exception)
-                //{
-                //    ViewData["uniqueRadio"] = "0";
-                //}
-
-               decimal mojakwota = Decimal.Parse(Request.Form["fname"]);
-
-
-                //ViewBag.mojakwota = mojakwota;
-                //int liczba_uzytkownikow_w_zrzutce = db.CollectionsUsers.Count(c => c.CollectId == id);
-                //int nalepka = Int32.Parse(mojakwota) / liczba_uzytkownikow_w_zrzutce;
-                //ViewBag.nalepka = nalepka;
-                //ViewBag.liczba_uzytkownikow_w_zrzutce = liczba_uzytkownikow_w_zrzutce;
-
-                collect.Amount = mojakwota;
-                collect.IsConfirmed = true;
-                db.Collections.Attach(collect);
-                db.Entry(collect).State = EntityState.Modified;
-                db.SaveChanges();
-
-                //foreach (var item in db.CollectionsGifts.OrderBy(i => i.Id).ToList())
-                //{
-                //    item.Rating = 0;
-                //    foreach (var item2 in db.CollectionsUsers.Where(i => i.CollectId == id).ToList())
-                //    {
-                //        if (db.CollectionsGiftRatings.Any(i => i.GiftId == item.Id && i.UserId == item2.UserId && i.TheBestRating == true))
-                //        {
-                //            item.Rating++;
-                //        }
-                //    }
-                //}
-            }
-            else
+            catch(NullReferenceException)
             {
                 ViewBag.MustChooseItem = "Musisz wybrać któryś z prezentów !";
             }
 
+            var collectViewModel = collectService.UpdateCollectViewModel(id, GetModelUserId());
 
-            if (wybranyid == 0)
-            {
-                return RedirectToAction("Confirm", "Collects", new { id = id });
-            }
-
-            return RedirectToAction("Details","Collects", new { id = id });
-
+            return View(collectViewModel);
         }
 
         // GET: Collects/Create

@@ -34,13 +34,23 @@ namespace BirthdayApp.AppService
             db.SaveChanges();
         }
 
+        public void CollectAmountChange(int collectId, int Amount)
+        {
+            var collect = GetCollect(collectId);
+
+            collect.Amount = Amount;
+            db.Collections.Attach(collect);
+            db.Entry(collect).State = EntityState.Modified;
+            db.SaveChanges();
+        }
+
         public CollectViewModel UpdateCollectViewModel(int collectId, int userId)
         {
             var collect = GetCollect(collectId);
 
-            decimal NumberUsersInCollect = db.CollectionsUsers.Count(c => c.CollectId == collectId);
-            decimal MyAmount = db.Collections.SingleOrDefault(c => c.Id == collectId).Amount;
-            decimal AmountPerPerson = MyAmount / NumberUsersInCollect;
+            double NumberUsersInCollect = db.CollectionsUsers.Count(c => c.CollectId == collectId);
+            double MyAmount = db.Collections.SingleOrDefault(c => c.Id == collectId).Amount;
+            double AmountPerPerson = MyAmount / NumberUsersInCollect;
 
             CollectViewModel collectViewModel = new CollectViewModel();
             collectViewModel.Id = collect.Id;
@@ -58,8 +68,14 @@ namespace BirthdayApp.AppService
             collectViewModel.RadioGiftItems = AllRadioGiftList(collectId, userId).OrderByDescending(i => i.Rating).ToList();
             collectViewModel.Users = AllCollectUsersGaveMoney(collect.Id);
             collectViewModel.PossibilityEditCollectGift = GetPossibilityEditCollectGift(collectId);
-            //collectViewModel.GiftName = db.CollectionsGifts.SingleOrDefault(i => i.Id == db.CollectionsGiftRatings.FirstOrDefault(c => c.CollectId == collectId && c.UserId == userId).Id).Name;
-            collectViewModel.GiftName = "Example GiftName";
+            if(db.CollectionsGiftRatings.Any(c => c.CollectId == collectId && c.UserId == userId))
+            {
+                collectViewModel.GiftName = db.CollectionsGifts.Single(i => i.Id == db.CollectionsGiftRatings.FirstOrDefault(c => c.CollectId == collectId && c.UserId == userId).TheBestGiftId).Name;
+            }
+            else
+            {
+                collectViewModel.GiftName = "Null Gift Name";
+            }
             collectViewModel.AmountPerPerson = AmountPerPerson;
 
             return collectViewModel;
@@ -220,6 +236,23 @@ namespace BirthdayApp.AppService
             }
             db.SaveChanges();
         }
+
+        public bool IsCollectionsUser(int collectId, int userId)
+        {
+            if (db.CollectionsUsers.Any(i => i.CollectId == collectId && i.UserId == userId))
+                return true;
+
+            return false;
+        }
+
+        public int CounterCollectionsGifts(int collectId)
+        {
+            int result = db.CollectionsGifts.Count(i => i.CollectId == collectId);
+
+            return result;
+        }
+
+        
 
     }
 }
