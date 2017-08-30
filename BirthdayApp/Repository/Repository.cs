@@ -54,5 +54,15 @@ namespace BirthdayApp.Repository
             var entity = _context.Set<TEntity>().Find(entityId);
             _context.Set<TEntity>().Remove(entity);
         }
+
+        public void DeleteRange(IQueryable<TEntity> entity)
+        {
+            if (entity == null)
+            {
+                throw new ArgumentNullException(nameof(entity));
+            }
+
+            _context.Set<TEntity>().RemoveRange(entity);
+        }
     }
 }

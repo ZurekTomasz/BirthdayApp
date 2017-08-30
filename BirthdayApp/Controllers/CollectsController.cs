@@ -17,8 +17,6 @@ namespace BirthdayApp.Controllers
 {
     public class CollectsController : CommonController
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
-
         public ActionResult Index()
         {
             int userId = GetUserId();
@@ -101,7 +99,7 @@ namespace BirthdayApp.Controllers
                 }
                 catch (NullReferenceException)
                 {
-                    ViewBag.MustChooseItem = "Musisz wybrać któryś z prezentów !";
+                    ViewBag.MustChooseItem = "Musisz wybrać jakikolwiek prezent !";
                 }
 
                 var collectViewModel = collectService.GetCollectViewModel(id, GetUserId());
@@ -114,8 +112,8 @@ namespace BirthdayApp.Controllers
         {
             using (var collectService = new CollectsService())
             {
-                ViewBag.OwnerId = new SelectList(db.MyUsers, "Id", "Name");
-                ViewBag.RecipientId = new SelectList(db.MyUsers, "Id", "Name");
+                ViewBag.OwnerId = new SelectList(collectService.AllMyUserList(), "Id", "Name");
+                ViewBag.RecipientId = new SelectList(collectService.AllMyUserList(), "Id", "Name");
                 return View();
             }
         }
@@ -126,170 +124,102 @@ namespace BirthdayApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Collections.Add(collect);
-                db.SaveChanges();
+                using (var collectService = new CollectsService())
+                {
+                    collectService.CollectAdd(collect);
+                    
+                    var newCollectionUsers = new CollectUser();
+                    newCollectionUsers.UserId = collect.OwnerId;
+                    newCollectionUsers.CollectId = collect.Id;
+                    collectService.CollectUserAdd(newCollectionUsers);
 
-                //Add user to collect
-                var newCollectionUsers = new CollectUser();
-                newCollectionUsers.UserId = collect.OwnerId;
-                newCollectionUsers.CollectId = collect.Id;
-                db.CollectionsUsers.Add(newCollectionUsers);
-                db.SaveChanges();
-
-                return RedirectToAction("Index");
+                    return RedirectToAction("Index");
+                }
             }
 
-            ViewBag.OwnerId = new SelectList(db.MyUsers, "Id", "Name", collect.OwnerId);
-            ViewBag.RecipientId = new SelectList(db.MyUsers, "Id", "Name", collect.RecipientId);
-            return View(collect);
+            using (var collectService = new CollectsService())
+            {
+                ViewBag.OwnerId = new SelectList(collectService.AllMyUserList(), "Id", "Name", collect.OwnerId);
+                ViewBag.RecipientId = new SelectList(collectService.AllMyUserList(), "Id", "Name", collect.RecipientId);
+                return View(collect);
+            }
+            
         }
 
-        // GET: Collects/Create
         public ActionResult Create2()
         {
-            int UserId = GetUserId();
-            var ModelUsersWithoutThisUser = db.MyUsers.Where(i => i.Id != UserId);
-            ViewBag.RecipientId = new SelectList(ModelUsersWithoutThisUser, "Id", "Name");
-            return View();
+            using (var collectService = new CollectsService())
+            {
+                int userId = GetUserId();
+                var modelUsersWithoutThisUser = collectService.AllMyUserList().Where(i => i.Id != userId);
+                ViewBag.RecipientId = new SelectList(modelUsersWithoutThisUser, "Id", "Name");
+                return View();
+            }
         }
 
-        // POST: Collects/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create2([Bind(Include = "Id,RecipientId,Name,Description,Amount,DateOfInitiative")] Collect collect)
         {
             if (ModelState.IsValid)
             {
-                collect.OwnerId = GetUserId();
-                db.Collections.Add(collect);
-                db.SaveChanges();
+                using (var collectService = new CollectsService())
+                {
+                    collect.OwnerId = GetUserId();
+                    collectService.CollectAdd(collect);
 
-                //Add user to collect
-                var newCollectionUsers = new CollectUser();
-                newCollectionUsers.UserId = collect.OwnerId;
-                newCollectionUsers.CollectId = collect.Id;
-                db.CollectionsUsers.Add(newCollectionUsers);
-                db.SaveChanges();
+                    var newCollectionUsers = new CollectUser();
+                    newCollectionUsers.UserId = collect.OwnerId;
+                    newCollectionUsers.CollectId = collect.Id;
+                    collectService.CollectUserAdd(newCollectionUsers);
 
-                return RedirectToAction("Index", "CollectUsersListBox", new { id = collect.Id });
+                    return RedirectToAction("Index", "CollectUsersListBox", new { id = collect.Id });
+                }
             }
 
-            ViewBag.OwnerId = new SelectList(db.MyUsers, "Id", "Name", collect.OwnerId);
-            ViewBag.RecipientId = new SelectList(db.MyUsers, "Id", "Name", collect.RecipientId);
-            return View(collect);
+            using (var collectService = new CollectsService())
+            {
+                ViewBag.OwnerId = new SelectList(collectService.AllMyUserList(), "Id", "Name", collect.OwnerId);
+                ViewBag.RecipientId = new SelectList(collectService.AllMyUserList(), "Id", "Name", collect.RecipientId);
+                return View(collect);
+            }
         }
 
-        // GET: Collects/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit2(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Collect collect = db.Collections.Find(id);
-            if (collect == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.OwnerId = new SelectList(db.MyUsers, "Id", "Name", collect.OwnerId);
-            ViewBag.RecipientId = new SelectList(db.MyUsers, "Id", "Name", collect.RecipientId);
-            return View(collect);
+            using (var collectService = new CollectsService())
+                return View(collectService.GetCollect(id));
         }
 
-        // POST: Collects/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,OwnerId,RecipientId,Name,Description,Amount,DateOfInitiative")] Collect collect)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(collect).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            ViewBag.OwnerId = new SelectList(db.MyUsers, "Id", "Name", collect.OwnerId);
-            ViewBag.RecipientId = new SelectList(db.MyUsers, "Id", "Name", collect.RecipientId);
-            return View(collect);
-        }
-
-        // GET: Collects/Edit/5
-        public ActionResult Edit2(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Collect collect = db.Collections.Find(id);
-            if (collect == null)
-            {
-                return HttpNotFound();
-            }
-            return View(collect);
-        }
-
-        // POST: Collects/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit2([Bind(Include = "Id,OwnerId,RecipientId,Name,Description,Amount,DateOfInitiative")] Collect collect)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(collect).State = EntityState.Modified;
-                db.SaveChanges();
+                using (var collectService = new CollectsService())
+                    collectService.CollectChange(collect);
+
                 return RedirectToAction("Index");
             }
             return View(collect);
         }
 
-        // GET: Collects/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Collect collect = db.Collections.Find(id);
-            if (collect == null)
-            {
-                return HttpNotFound();
-            }
-            return View(collect);
+            using (var collectService = new CollectsService())
+                return View(collectService.GetCollect(id));
         }
 
-        // POST: Collects/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Collect collect = db.Collections.Find(id);
-            var collectGift = db.CollectionsGifts.Where(x => x.CollectId == collect.Id);
-            foreach (var item in collectGift.ToList())
+            using (var collectService = new CollectsService())
             {
-                var collectGiftRating = db.CollectionsGiftRatings.Where(x => x.TheBestGiftId == item.Id);
-                db.CollectionsGiftRatings.RemoveRange(collectGiftRating);
-                db.SaveChanges();
+                collectService.DeleteConfirmed(id);
+                return RedirectToAction("Index");
             }
-            var collectUser = db.CollectionsUsers.Where(x => x.CollectId == collect.Id);
-            db.CollectionsGifts.RemoveRange(collectGift);
-            db.CollectionsUsers.RemoveRange(collectUser);
-            db.Collections.Remove(collect);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
         }
     }
 }

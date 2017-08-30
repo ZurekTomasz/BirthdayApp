@@ -14,5 +14,6 @@ namespace BirthdayApp.Repository.Contracts
         void Add(TEntity entity);
         void Update(TEntity entity);
         void Delete(object entityId);
+        void DeleteRange(IQueryable<TEntity> entity);
     }
 }

@@ -53,6 +53,30 @@ namespace BirthdayApp.AppService
             _unitOfWork.SaveChanges();
         }
 
+        public void CollectChange(Collect collect)
+        {
+            _unitOfWork.CollectRepository.Update(collect);
+            _unitOfWork.SaveChanges();
+        }
+
+        public void DeleteConfirmed(int id)
+        {
+            var collect = GetCollect(id);
+            var collectGift = _unitOfWork.CollectGiftRepository.Get().Where(x => x.CollectId == collect.Id);
+            foreach (var item in collectGift.ToList())
+            {
+                var collectGiftRating = _unitOfWork.CollectGiftRatingRepository.Get().Where(x => x.TheBestGiftId == item.Id);
+                _unitOfWork.CollectGiftRatingRepository.DeleteRange(collectGiftRating);
+                _unitOfWork.SaveChanges();
+            }
+            var collectUser = _unitOfWork.CollectUserRepository.Get().Where(x => x.CollectId == collect.Id);
+            _unitOfWork.CollectGiftRepository.DeleteRange(collectGift);
+            _unitOfWork.CollectUserRepository.DeleteRange(collectUser);
+            _unitOfWork.CollectRepository.Delete(collect.Id);
+
+            _unitOfWork.SaveChanges();
+        }
+
         public CollectViewModel GetCollectViewModel(int collectId, int userId)
         {
             var collect = GetCollect(collectId);
@@ -152,6 +176,25 @@ namespace BirthdayApp.AppService
             return items;
         }
 
+        public List<User> AllMyUserList()
+        {
+            var items = _unitOfWork.MyUserRepository.Get().ToList();
+
+            return items;
+        }
+
+        public void CollectAdd(Collect collect)
+        {
+            _unitOfWork.CollectRepository.Add(collect);
+            _unitOfWork.SaveChanges();
+        }
+
+        public void CollectUserAdd(CollectUser collectuser)
+        {
+            _unitOfWork.CollectUserRepository.Add(collectuser);
+            _unitOfWork.SaveChanges();
+        }
+
 
         public List<RadioGiftItem> AllRadioGiftList(int collectId, int userId)
         {
@@ -242,7 +285,7 @@ namespace BirthdayApp.AppService
             }
             else
             {
-                _unitOfWork.CollectGiftRatingRepository.Delete(collectionGiftRatings);
+                _unitOfWork.CollectGiftRatingRepository.Delete(collectionGiftRatings.Id);
             }
             _unitOfWork.SaveChanges();
         }
