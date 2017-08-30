@@ -6,6 +6,7 @@ using System.Data.Entity;
 using Microsoft.AspNet.Identity;
 using BirthdayApp.ViewModels;
 using System.Collections.Generic;
+using BirthdayApp.Repository;
 
 namespace BirthdayApp.AppService
 {
@@ -13,9 +14,21 @@ namespace BirthdayApp.AppService
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
+        private ICollectRepository _collectRepository;
+
+        public CollectsService()
+        {
+            _collectRepository = new CollectRepository(new Models.ApplicationDbContext());
+        }
+        public CollectsService(ICollectRepository collectRepository)
+        {
+            _collectRepository = collectRepository;
+        }
+
         public Collect GetCollect(int collectId)
         {
-            Collect collect = db.Collections.Find(collectId);
+            Collect collect = _collectRepository.GetCollectById(collectId);
+            //Collect collect = db.Collections.Find(collectId);
             if (collect == null)
             {
                 throw new Exception();
@@ -29,9 +42,10 @@ namespace BirthdayApp.AppService
             var collect = GetCollect(collectId);
 
             collect.IsConfirmed = IsConfirm;
-            db.Collections.Attach(collect);
-            db.Entry(collect).State = EntityState.Modified;
-            db.SaveChanges();
+            _collectRepository.UpdateCollect(collect);
+            //db.Collections.Attach(collect);
+            //db.Entry(collect).State = EntityState.Modified;
+            //db.SaveChanges();
         }
 
         public void CollectAmountChange(int collectId, int Amount)
@@ -39,9 +53,10 @@ namespace BirthdayApp.AppService
             var collect = GetCollect(collectId);
 
             collect.Amount = Amount;
-            db.Collections.Attach(collect);
-            db.Entry(collect).State = EntityState.Modified;
-            db.SaveChanges();
+            _collectRepository.UpdateCollect(collect);
+            //db.Collections.Attach(collect);
+            //db.Entry(collect).State = EntityState.Modified;
+            //db.SaveChanges();
         }
 
         public CollectViewModel UpdateCollectViewModel(int collectId, int userId)
@@ -120,7 +135,8 @@ namespace BirthdayApp.AppService
         {
             List<CollectListItemViewModel> items = new List<CollectListItemViewModel>();
 
-            foreach (var item in db.Collections.Include(c => c.Users))
+            //foreach (var item in db.Collections.Include(c => c.Users))
+            foreach(var item in _collectRepository.GetAllCollectIncludeUsers())
             {
                 items.Add(new CollectListItemViewModel
                 {
