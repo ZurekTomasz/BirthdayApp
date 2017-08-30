@@ -24,7 +24,7 @@ namespace BirthdayApp.Controllers
         // GET: Collects
         public ActionResult Index()
         {
-            int userId = GetModelUserId();
+            int userId = GetUserId();
             using (var collectService = new CollectsService())
             {
                 var collections = collectService.AllCollectList(userId).Where(i => i.RecipientId != userId).OrderByDescending(i => i.DateOfAdd).ToList();
@@ -34,85 +34,95 @@ namespace BirthdayApp.Controllers
 
         public ActionResult Details(int id)
         {
-            var collectViewModel = collectService.UpdateCollectViewModel(id,GetModelUserId());
-
-            return View(collectViewModel);
+            using (var collectService = new CollectsService())
+            {
+                var collectViewModel = collectService.GetCollectViewModel(id, GetUserId());
+                return View(collectViewModel);
+            }
         }
 
         [HttpPost]
         public ActionResult Details(int id, CollectViewModel model)
         {
-            if (ModelState.IsValid)
+            using (var collectService = new CollectsService())
             {
-                collectService.ChangeRadioButtonChoose(id, GetModelUserId(), model.Gift.Id);
+                if (ModelState.IsValid)
+                    collectService.ChangeRadioButtonChoose(id, GetUserId(), model.Gift.Id);
+
+                var collectViewModel = collectService.GetCollectViewModel(id, GetUserId());
+                return View(collectViewModel);
             }
-
-            var collectViewModel = collectService.UpdateCollectViewModel(id,GetModelUserId());
-
-            return View(collectViewModel);
         }
 
         public ActionResult UndoConfirm(int id)
         {
-            collectService.CollectConfirmChange(id, false);
+            using (var collectService = new CollectsService())
+            {
+                collectService.CollectConfirmChange(id, false);
+            }
 
             return RedirectToAction("Details", "Collects", new { id = id });
         }
 
         public ActionResult Confirm(int id)
         {
-            var collectViewModel = collectService.UpdateCollectViewModel(id, GetModelUserId());
-
-            if (!IsAdmin())
+            using (var collectService = new CollectsService())
             {
-                if (!collectService.IsCollectionsUser(id, GetModelUserId()))
+                var collectViewModel = collectService.GetCollectViewModel(id, GetUserId());
+
+                if (!collectService.IsAdmin(GetUserId()))
                 {
-                    return HttpNotFound();
+                    if (!collectService.IsCollectionsUser(id, GetUserId()))
+                    {
+                        return HttpNotFound();
+                    }
                 }
+
+                if (collectService.CounterCollectionsGifts(id) == 0)
+                    ViewBag.MustChooseItem = "Musisz wybrać któryś z prezentów !";
+
+                return View(collectViewModel);
             }
-
-            if(collectService.CounterCollectionsGifts(id) == 0)
-                ViewBag.MustChooseItem = "Musisz wybrać któryś z prezentów !";
-
-            return View(collectViewModel);
         }
 
 
         [HttpPost]
         public ActionResult Confirm(int id, string uniqueRadio, string fname, CollectViewModel model)
         {
-            try
+            using (var collectService = new CollectsService())
             {
-                int selectedId = Int32.Parse(model.Gift.Id);
-                if (ModelState.IsValid)
+                try
                 {
-                    collectService.ChangeRadioButtonChoose(id, GetModelUserId(), model.Gift.Id);
+                    int selectedId = Int32.Parse(model.Gift.Id);
+                    if (ModelState.IsValid)
+                    {
+                        collectService.ChangeRadioButtonChoose(id, GetUserId(), model.Gift.Id);
+                    }
+                    collectService.CollectAmountChange(id, model.Amount);
+                    collectService.CollectConfirmChange(id, true);
+                    return RedirectToAction("Details", "Collects", new { id = id });
                 }
-                collectService.CollectAmountChange(id, model.Amount);
-                collectService.CollectConfirmChange(id, true);
-                return RedirectToAction("Details", "Collects", new { id = id });
-            }
-            catch(NullReferenceException)
-            {
-                ViewBag.MustChooseItem = "Musisz wybrać któryś z prezentów !";
-            }
+                catch (NullReferenceException)
+                {
+                    ViewBag.MustChooseItem = "Musisz wybrać któryś z prezentów !";
+                }
 
-            var collectViewModel = collectService.UpdateCollectViewModel(id, GetModelUserId());
+                var collectViewModel = collectService.GetCollectViewModel(id, GetUserId());
 
-            return View(collectViewModel);
+                return View(collectViewModel);
+            }
         }
 
-        // GET: Collects/Create
         public ActionResult Create()
         {
-            ViewBag.OwnerId = new SelectList(db.MyUsers, "Id", "Name");
-            ViewBag.RecipientId = new SelectList(db.MyUsers, "Id", "Name");
-            return View();
+            using (var collectService = new CollectsService())
+            {
+                ViewBag.OwnerId = new SelectList(db.MyUsers, "Id", "Name");
+                ViewBag.RecipientId = new SelectList(db.MyUsers, "Id", "Name");
+                return View();
+            }
         }
 
-        // POST: Collects/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,OwnerId,RecipientId,Name,Description,Amount,DateOfInitiative")] Collect collect)
@@ -140,7 +150,7 @@ namespace BirthdayApp.Controllers
         // GET: Collects/Create
         public ActionResult Create2()
         {
-            int UserId = GetModelUserId();
+            int UserId = GetUserId();
             var ModelUsersWithoutThisUser = db.MyUsers.Where(i => i.Id != UserId);
             ViewBag.RecipientId = new SelectList(ModelUsersWithoutThisUser, "Id", "Name");
             return View();
@@ -155,7 +165,7 @@ namespace BirthdayApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                collect.OwnerId = GetModelUserId();
+                collect.OwnerId = GetUserId();
                 db.Collections.Add(collect);
                 db.SaveChanges();
 

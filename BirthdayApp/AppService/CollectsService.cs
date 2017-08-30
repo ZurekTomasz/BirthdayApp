@@ -16,13 +16,19 @@ namespace BirthdayApp.AppService
         ApplicationDbContext _context = new ApplicationDbContext();
         IUnitOfWork _unitOfWork = new UnitOfWork();
 
-        //private IRepository<Collect> _collectRepository;
-        //private IRepository<CollectUser> _collectuserRepository;
-
-        public CollectsService()
+        public int GetMyUserId(string IdentityUserId)
         {
-            //_collectRepository = new Repository<Collect>(_context);
-            //_collectuserRepository = new Repository<CollectUser>(_context);
+            int modelUserId = _context.MyUsers.Single(i => i.EntityId == IdentityUserId).Id;
+
+            return modelUserId;
+        }
+
+        public bool IsAdmin(int userId)
+        {
+            if ("Admin" == _context.MyUsers.SingleOrDefault(i => i.Id == userId).Role)
+                return true;
+
+            return false;
         }
 
         public Collect GetCollect(int collectId)
@@ -54,7 +60,7 @@ namespace BirthdayApp.AppService
             //db.SaveChanges();
         }
 
-        public CollectViewModel UpdateCollectViewModel(int collectId, int userId)
+        public CollectViewModel GetCollectViewModel(int collectId, int userId)
         {
             var collect = GetCollect(collectId);
 
