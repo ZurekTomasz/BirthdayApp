@@ -19,9 +19,6 @@ namespace BirthdayApp.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        CollectsService collectService = new CollectsService();
-
-        // GET: Collects
         public ActionResult Index()
         {
             int userId = GetUserId();

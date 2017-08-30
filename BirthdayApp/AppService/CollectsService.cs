@@ -13,19 +13,19 @@ namespace BirthdayApp.AppService
 {
     public class CollectsService : IDisposable
     {
-        ApplicationDbContext _context = new ApplicationDbContext();
+        //ApplicationDbContext _context = new ApplicationDbContext();
         IUnitOfWork _unitOfWork = new UnitOfWork();
 
         public int GetMyUserId(string IdentityUserId)
         {
-            int modelUserId = _context.MyUsers.Single(i => i.EntityId == IdentityUserId).Id;
+            int modelUserId = _unitOfWork.MyUserRepository.Get().Single(i => i.EntityId == IdentityUserId).Id;
 
             return modelUserId;
         }
 
         public bool IsAdmin(int userId)
         {
-            if ("Admin" == _context.MyUsers.SingleOrDefault(i => i.Id == userId).Role)
+            if ("Admin" == _unitOfWork.MyUserRepository.Get().SingleOrDefault(i => i.Id == userId).Role)
                 return true;
 
             return false;
@@ -84,9 +84,9 @@ namespace BirthdayApp.AppService
             collectViewModel.RadioGiftItems = AllRadioGiftList(collectId, userId).OrderByDescending(i => i.Rating).ToList();
             collectViewModel.Users = AllCollectUsersGaveMoney(collect.Id);
             collectViewModel.PossibilityEditCollectGift = GetPossibilityEditCollectGift(collectId);
-            if(_context.CollectionsGiftRatings.Any(c => c.CollectId == collectId && c.UserId == userId))
+            if(_unitOfWork.CollectGiftRatingRepository.Get().Any(c => c.CollectId == collectId && c.UserId == userId))
             {
-                collectViewModel.GiftName = _context.CollectionsGifts.Single(i => i.Id == _context.CollectionsGiftRatings.FirstOrDefault(c => c.CollectId == collectId && c.UserId == userId).TheBestGiftId).Name;
+                //collectViewModel.GiftName = _unitOfWork.CollectGiftRepository.Get().Single(i => i.Id == _unitOfWork.CollectGiftRatingRepository.Get().FirstOrDefault(c => c.CollectId == collectId && c.UserId == userId).TheBestGiftId).Name;
             }
             else
             {
@@ -101,7 +101,7 @@ namespace BirthdayApp.AppService
         public IEnumerable<CollectListItemViewModel> AllCollectList_v2(int userId)
         {
             HashSet<int> collectIds = new HashSet<int>();
-            var query = _context.CollectionsUsers
+            var query = _unitOfWork.CollectUserRepository.Get()
                            .Where(x => x.UserId == userId && x.CollectId.HasValue)
                            .Select(x => x.CollectId.Value);
 
@@ -110,7 +110,7 @@ namespace BirthdayApp.AppService
                 collectIds.Add(id);
             }
 
-            foreach (var item in _context.Collections)
+            foreach (var item in _unitOfWork.CollectRepository.Get())
             {
                 CollectListItemViewModel items = new CollectListItemViewModel
                 {
@@ -164,18 +164,18 @@ namespace BirthdayApp.AppService
         {
             List<RadioGiftItem> items = new List<RadioGiftItem>();
 
-            foreach (var item in _context.CollectionsGifts.Where(i => i.CollectId == collectId))
+            foreach (var item in _unitOfWork.CollectGiftRepository.Get().Where(i => i.CollectId == collectId))
             {
                 bool isChecked = false;
-                if(_context.CollectionsGiftRatings.Any(i => i.CollectId == collectId && i.UserId == userId && i.TheBestGiftId == item.Id))
+                if(_unitOfWork.CollectGiftRatingRepository.Get().Any(i => i.CollectId == collectId && i.UserId == userId && i.TheBestGiftId == item.Id))
                 {
                     isChecked = true;
                 }
 
                 int rating = 0;
-                foreach (var item2 in _context.CollectionsUsers.Where(i => i.CollectId == collectId).ToList())
+                foreach (var item2 in _unitOfWork.CollectUserRepository.Get().Where(i => i.CollectId == collectId).ToList())
                 {
-                    if (_context.CollectionsGiftRatings.Any(i => i.CollectId == collectId && i.UserId == item2.UserId && i.TheBestGiftId == item.Id))
+                    if (_unitOfWork.CollectGiftRatingRepository.Get().Any(i => i.CollectId == collectId && i.UserId == item2.UserId && i.TheBestGiftId == item.Id))
                     {
                         rating++;
                     }
@@ -196,11 +196,11 @@ namespace BirthdayApp.AppService
         {
             List<CollectUserItem> items = new List<CollectUserItem>();
 
-            foreach (var item in _context.CollectionsUsers.Where(i => i.CollectId == collectId))
+            foreach (var item in _unitOfWork.CollectUserRepository.Get().Where(i => i.CollectId == collectId))
             {
                 items.Add(new CollectUserItem
                 {
-                    UserName = _context.MyUsers.SingleOrDefault(i => i.Id == item.UserId).Name,
+                    UserName = _unitOfWork.MyUserRepository.Get().SingleOrDefault(i => i.Id == item.UserId).Name,
                     GaveMoney = item.GaveMoney
                 });
             }
@@ -209,7 +209,7 @@ namespace BirthdayApp.AppService
 
         public bool GetPossibilityEditCollectGift(int collectId)
         {
-            var CollectionsUsers = (from i in _context.CollectionsUsers
+            var CollectionsUsers = (from i in _unitOfWork.CollectUserRepository.Get()
                                     where i.CollectId == collectId
                                     select i).ToList();
 
@@ -233,30 +233,32 @@ namespace BirthdayApp.AppService
 
         public void ChangeRadioButtonChoose(int collectId, int userId, string radioChoice)
         {
-            if (!_context.CollectionsGiftRatings.Any(c => c.CollectId == collectId && c.UserId == userId))
+            if (!_unitOfWork.CollectGiftRatingRepository.Get().Any(c => c.CollectId == collectId && c.UserId == userId))
             {
                 var newCollectionGiftRatings = new CollectGiftRating();
                 newCollectionGiftRatings.CollectId = collectId;
                 newCollectionGiftRatings.UserId = userId;
-                _context.CollectionsGiftRatings.Add(newCollectionGiftRatings);
-                _context.SaveChanges();
+                _unitOfWork.CollectGiftRatingRepository.Add(newCollectionGiftRatings);
+                _unitOfWork.SaveChanges();
+                //_context.SaveChanges();
             }
 
-            CollectGiftRating collectionGiftRatings = _context.CollectionsGiftRatings.SingleOrDefault(c => c.CollectId == collectId && c.UserId == userId);
+            CollectGiftRating collectionGiftRatings = _unitOfWork.CollectGiftRatingRepository.Get().SingleOrDefault(c => c.CollectId == collectId && c.UserId == userId);
             if (radioChoice != "0")
             {
                 collectionGiftRatings.TheBestGiftId = Int32.Parse(radioChoice);
             }
             else
             {
-                _context.CollectionsGiftRatings.Remove(collectionGiftRatings);
+                _unitOfWork.CollectGiftRatingRepository.Delete(collectionGiftRatings);
             }
-            _context.SaveChanges();
+            _unitOfWork.SaveChanges();
+            //_context.SaveChanges();
         }
 
         public bool IsCollectionsUser(int collectId, int userId)
         {
-            if (_context.CollectionsUsers.Any(i => i.CollectId == collectId && i.UserId == userId))
+            if (_unitOfWork.CollectUserRepository.Get().Any(i => i.CollectId == collectId && i.UserId == userId))
                 return true;
 
             return false;
@@ -264,7 +266,7 @@ namespace BirthdayApp.AppService
 
         public int CounterCollectionsGifts(int collectId)
         {
-            int result = _context.CollectionsGifts.Count(i => i.CollectId == collectId);
+            int result = _unitOfWork.CollectGiftRepository.Get().Count(i => i.CollectId == collectId);
 
             return result;
         }

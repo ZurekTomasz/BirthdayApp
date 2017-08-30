@@ -40,6 +40,48 @@ namespace BirthdayApp.Repository
             }
         }
 
+        IRepository<User> _myUserRepository;
+        public IRepository<User> MyUserRepository
+        {
+            get
+            {
+                if (_myUserRepository == null)
+                {
+                    _myUserRepository = new Repository<User>(_context);
+                }
+
+                return _myUserRepository;
+            }
+        }
+
+        IRepository<CollectGift> _collectGiftRepository;
+        public IRepository<CollectGift> CollectGiftRepository
+        {
+            get
+            {
+                if (_collectGiftRepository == null)
+                {
+                    _collectGiftRepository = new Repository<CollectGift>(_context);
+                }
+
+                return _collectGiftRepository;
+            }
+        }
+
+        IRepository<CollectGiftRating> _collectGiftRatingRepository;
+        public IRepository<CollectGiftRating> CollectGiftRatingRepository
+        {
+            get
+            {
+                if (_collectGiftRatingRepository == null)
+                {
+                    _collectGiftRatingRepository = new Repository<CollectGiftRating>(_context);
+                }
+
+                return _collectGiftRatingRepository;
+            }
+        }
+
         public int SaveChanges()
         {
             return _context.SaveChanges();

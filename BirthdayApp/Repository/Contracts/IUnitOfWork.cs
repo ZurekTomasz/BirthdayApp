@@ -11,8 +11,9 @@ namespace BirthdayApp.Repository.Contracts
     {
         IRepository<Collect> CollectRepository { get; }
         IRepository<CollectUser> CollectUserRepository { get; }
-
-        // etc wszystkie repo
+        IRepository<User> MyUserRepository { get; }
+        IRepository<CollectGift> CollectGiftRepository { get; }
+        IRepository<CollectGiftRating> CollectGiftRatingRepository { get; }
 
         int SaveChanges();
     }
