@@ -13,7 +13,6 @@ namespace BirthdayApp.AppService
 {
     public class CollectsService : IDisposable
     {
-        //ApplicationDbContext _context = new ApplicationDbContext();
         IUnitOfWork _unitOfWork = new UnitOfWork();
 
         public int GetMyUserId(string IdentityUserId)
@@ -43,9 +42,6 @@ namespace BirthdayApp.AppService
             collect.IsConfirmed = IsConfirm;
             _unitOfWork.CollectRepository.Update(collect);
             _unitOfWork.SaveChanges();
-            //db.Collections.Attach(collect);
-            //db.Entry(collect).State = EntityState.Modified;
-            //db.SaveChanges();
         }
 
         public void CollectAmountChange(int collectId, int Amount)
@@ -55,9 +51,6 @@ namespace BirthdayApp.AppService
             collect.Amount = Amount;
             _unitOfWork.CollectRepository.Update(collect);
             _unitOfWork.SaveChanges();
-            //db.Collections.Attach(collect);
-            //db.Entry(collect).State = EntityState.Modified;
-            //db.SaveChanges();
         }
 
         public CollectViewModel GetCollectViewModel(int collectId, int userId)
@@ -86,7 +79,8 @@ namespace BirthdayApp.AppService
             collectViewModel.PossibilityEditCollectGift = GetPossibilityEditCollectGift(collectId);
             if(_unitOfWork.CollectGiftRatingRepository.Get().Any(c => c.CollectId == collectId && c.UserId == userId))
             {
-                //collectViewModel.GiftName = _unitOfWork.CollectGiftRepository.Get().Single(i => i.Id == _unitOfWork.CollectGiftRatingRepository.Get().FirstOrDefault(c => c.CollectId == collectId && c.UserId == userId).TheBestGiftId).Name;
+                int GiftId = _unitOfWork.CollectGiftRatingRepository.Get().FirstOrDefault(c => c.CollectId == collectId && c.UserId == userId).TheBestGiftId.Value;
+                collectViewModel.GiftName = _unitOfWork.CollectGiftRepository.Get().Single(i => i.Id == GiftId).Name;
             }
             else
             {
@@ -136,7 +130,6 @@ namespace BirthdayApp.AppService
         {
             List<CollectListItemViewModel> items = new List<CollectListItemViewModel>();
 
-            //foreach (var item in db.Collections.Include(c => c.Users))
             foreach(var item in _unitOfWork.CollectRepository.Get().Include(c=>c.Users))
             {
                 items.Add(new CollectListItemViewModel
@@ -240,7 +233,6 @@ namespace BirthdayApp.AppService
                 newCollectionGiftRatings.UserId = userId;
                 _unitOfWork.CollectGiftRatingRepository.Add(newCollectionGiftRatings);
                 _unitOfWork.SaveChanges();
-                //_context.SaveChanges();
             }
 
             CollectGiftRating collectionGiftRatings = _unitOfWork.CollectGiftRatingRepository.Get().SingleOrDefault(c => c.CollectId == collectId && c.UserId == userId);
@@ -253,7 +245,6 @@ namespace BirthdayApp.AppService
                 _unitOfWork.CollectGiftRatingRepository.Delete(collectionGiftRatings);
             }
             _unitOfWork.SaveChanges();
-            //_context.SaveChanges();
         }
 
         public bool IsCollectionsUser(int collectId, int userId)
