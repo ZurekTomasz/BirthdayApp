@@ -12,17 +12,12 @@ namespace AppModels
         public int Id { get; set; }
         [ForeignKey("User")]
         public int? UserId { get; set; }
-        [ForeignKey("Gift")]
-        public int? GiftId { get; set; }
-        public bool TheBestRating { get; set; }
-
+        [ForeignKey("Collect")]
         public int? CollectId { get; set; }
+        [ForeignKey("TheBestGift")]
         public int? TheBestGiftId { get; set; }
 
-
         public virtual User User { get; set; }
-        public virtual CollectGift Gift { get; set; }
-
         public virtual Collect Collect { get; set; }
         public virtual CollectGift TheBestGift { get; set; }
     }

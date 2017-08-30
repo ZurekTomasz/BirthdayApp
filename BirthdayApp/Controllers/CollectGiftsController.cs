@@ -128,7 +128,6 @@ namespace BirthdayApp.Controllers
             {
                 collectGift.UserId = GetModelUserId();
                 collectGift.CollectId = id;
-                collectGift.Rating = 0;
                 db.CollectionsGifts.Add(collectGift);
                 db.SaveChanges();
                 return RedirectToAction("Details", "Collects", new { id = id });

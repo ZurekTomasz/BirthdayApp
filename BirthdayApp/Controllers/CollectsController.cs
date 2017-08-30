@@ -271,7 +271,7 @@ namespace BirthdayApp.Controllers
             var collectGift = db.CollectionsGifts.Where(x => x.CollectId == collect.Id);
             foreach (var item in collectGift.ToList())
             {
-                var collectGiftRating = db.CollectionsGiftRatings.Where(x => x.GiftId == item.Id);
+                var collectGiftRating = db.CollectionsGiftRatings.Where(x => x.TheBestGiftId == item.Id);
                 db.CollectionsGiftRatings.RemoveRange(collectGiftRating);
                 db.SaveChanges();
             }

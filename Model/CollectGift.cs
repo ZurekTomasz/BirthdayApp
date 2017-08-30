@@ -16,7 +16,6 @@ namespace AppModels
         public int? UserId { get; set; }
         [ForeignKey("Collect")]
         public int? CollectId { get; set; }
-        public int Rating { get; set; }
 
         public virtual User User { get; set; }
         public virtual Collect Collect { get; set; }
