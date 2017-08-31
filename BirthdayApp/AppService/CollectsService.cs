@@ -101,7 +101,7 @@ namespace BirthdayApp.AppService
             collectViewModel.RadioGiftItems = AllRadioGiftList(collectId, userId).OrderByDescending(i => i.Rating).ToList();
             collectViewModel.Users = AllCollectUsersGaveMoney(collect.Id);
             collectViewModel.PossibilityEditCollectGift = GetPossibilityEditCollectGift(collectId);
-            if(_unitOfWork.CollectGiftRatingRepository.Get().Any(c => c.CollectId == collectId && c.UserId == userId))
+            if(_unitOfWork.CollectGiftRatingRepository.Get().Any(c => c.CollectId == collectId && c.UserId == userId && c.TheBestGiftId != null))
             {
                 int GiftId = _unitOfWork.CollectGiftRatingRepository.Get().FirstOrDefault(c => c.CollectId == collectId && c.UserId == userId).TheBestGiftId.Value;
                 collectViewModel.GiftName = _unitOfWork.CollectGiftRepository.Get().Single(i => i.Id == GiftId).Name;
