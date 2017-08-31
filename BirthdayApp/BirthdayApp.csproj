@@ -225,11 +225,17 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\icheck-bootstrap.css" />
+    <Content Include="Content\icheck-bootstrap.min.css" />
     <Content Include="CSSstyle\mystyle.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Images\info.png" />
+    <Content Include="Images\success.png" />
+    <Content Include="Images\tick-no.png" />
+    <Content Include="Images\tick-yes.png" />
     <Content Include="Scripts\ai.0.22.9-build00167.js" />
     <Content Include="Scripts\ai.0.22.9-build00167.min.js" />
     <Content Include="Scripts\bootstrap.js" />

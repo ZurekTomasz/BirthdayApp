@@ -1,8 +1,19 @@
-﻿table.mytable {
-        width: 40%;
-        border: 2px solid #000;    
-    }
+﻿table.mytable 
+{
+    width: 40%;
+    border: 2px solid #000;    
+}
 
-    table.mytable td{
-        border: 1px solid #000;
-    }
+table.mytable td
+{
+    border: 1px solid #000;
+}
+
+p {
+	font-family: Lucida Sans Unicode;
+	font-size: 14px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: 400;
+	line-height: 20px;
+}

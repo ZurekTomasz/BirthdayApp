@@ -4,106 +4,118 @@
     ViewBag.Title = "Panel zarządzania zbiórką";
 }
 <link href="~/CSSstyle/mystyle.css" rel="stylesheet" />
+<link href="~/Content/icheck-bootstrap.css" rel="stylesheet" />
+<link href="~/Content/icheck-bootstrap.min.css" rel="stylesheet" />
 
-<div>
-    <h3>@ViewBag.Title</h3>
-    <br />
-    <table class="mytable">
-        <tr>
-            <td>
-                <b>Nazwa zbiórki:</b>
-            </td>
-            <td>
-                <b>Opis zbiórki:</b>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                @Html.DisplayFor(model => model.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(model => model.Description)
-            </td>
-        </tr>
+<div class="row">
+    <div class="col-sm-12">
 
-        <tr>
-            <td>
-                <b>Zbiórkę założył:</b>
-            </td>
-            <td>
-                <b>Zbieramy na prezent dla:</b>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                @Html.DisplayFor(model => model.OwnerName)
-            </td>
-            <td>
-                @Html.DisplayFor(model => model.RecipientName)
-            </td>
-        </tr>
+        <div>
+            <h3>@ViewBag.Title</h3>
+            <hr />
+            <p><b>Szczegóły zbiórki:</b></p>
+            <table class="table table-bordered">
+                <tr>
+                    <td>
+                        <b>Nazwa zbiórki:</b>
+                    </td>
+                    <td>
+                        <b>Opis zbiórki:</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(model => model.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Description)
+                    </td>
+                </tr>
 
-        <tr>
-            <td>
-                <b>Szacowana kwota prezentu to:</b>
-            </td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>
-                @Html.DisplayFor(model => model.Amount)
-            </td>
-            <td></td>
-        </tr>
-    </table>
+                <tr>
+                    <td>
+                        <b>Zbiórkę założył:</b>
+                    </td>
+                    <td>
+                        <b>Zbieramy na prezent dla:</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(model => model.OwnerName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.RecipientName)
+                    </td>
+                </tr>
 
-    <hr />
+                <tr>
+                    <td>
+                        <b>Szacowana kwota prezentu to:</b>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(model => model.Amount) PLN
+                    </td>
+                    <td></td>
+                </tr>
+            </table>
 
-    @using (Html.BeginForm())
-    {
-        @Html.Raw("Wybierz jeden z prezentów:")
-        <table class="mytable">
-            <tr>
-                <td>
-                    <font color="red">@ViewBag.MustChooseItem</font>
-                    
-                    <ol class="Opt">
+            <hr />
 
-                        @foreach (var item in Model.RadioGiftItems)
-                        {
-                            <li class="Opt">
-                                @if (item.Checked)
+            @using (Html.BeginForm())
+            {
+                <p><b>Wybierz jeden z prezentów:</b></p>
+
+                <table class="table table-bordered">
+                    <tr>
+                        <td>
+                            <font color="red">@ViewBag.MustChooseItem</font>
+
+                            <ol class="Opt">
+
+                                @foreach (var item in Model.RadioGiftItems)
                                 {
-                                    @Html.RadioButtonFor(model => model.Gift.Id, item.Id, new { id = item.Id, @checked = true })
+                                    <li class="Opt">
+                                        <div class="radio icheck-primary">
+                                            @if (item.Checked)
+                                            {
+                                                @Html.RadioButtonFor(model => model.Gift.Id, item.Id, new { id = item.Id, @checked = true })
+                                            }
+                                            else
+                                            {
+                                                @Html.RadioButtonFor(model => model.Gift.Id, item.Id, new { id = item.Id })
+                                            }
+
+                                            <label for=@item.Id>@item.Name (@item.Rating)</label>
+                                        </div>
+                                    </li>
                                 }
-                                else
-                                {
-                                    @Html.RadioButtonFor(model => model.Gift.Id, item.Id, new { id = item.Id })
-                                }
 
-                                @Html.Label(item.Name + " (" + item.Rating + ")")
-                            </li>
-                        }
+                            </ol>
+                            <br />
+                            <p>Finalna kwota (PLN):</p>
+                            @Html.TextBoxFor(model => model.Amount, new { id = "txtAmount", Value = Model.Amount, type = "number", min = "0", step = "1" })
+                            <br />
+                            <br />
+                            <input type="submit" value="Zatwierdź prezent" class="btn btn-primary" />
 
-                    </ol>
-                    
-                    @Html.Raw("Szacowana kwota: ") @Html.DisplayFor(model => model.Amount)
-                    <br />
-                        @Html.TextBoxFor(model => model.Amount, new { id = "txtAmount", Value = Model.Amount, type = "number", min = "0", step = "1" })
-                    <br />
-                    <br />
-                    <input type="submit" value="Zatwierdź prezent" />
+                        </td>
+                    </tr>
+                </table>
+            }
 
-                </td>
-            </tr>
-        </table>
-    }
+            <hr />
 
-    <hr />
+            @Html.ActionLink("Cofnij propozycję prezentu", "UndoConfirm", "Collects", new { id = Model.Id }, null)
+            <br />
 
-    @Html.ActionLink("Cofnij propozycję prezentu", "UndoConfirm", "Collects", new { id = Model.Id }, null)
-    <br />
+        </div>
+        <hr />
+        @Html.ActionLink("Wróć do szczegółów prezentu", "Details", "Collects", new { id = Model.Id }, null)
+
 
 </div>
-<hr />
-@Html.ActionLink("Wróć do szczegółów prezentu", "Details", "Collects", new { id = Model.Id }, null)
+</div>
