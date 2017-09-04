@@ -31,15 +31,15 @@ namespace BirthdayApp.AppService
             return false;
         }
 
+        //
+        //CollectsController
+        //
+
         public Collect GetCollect(int collectId)
         {
             Collect collect = _unitOfWork.CollectRepository.GetById(collectId);
             return collect;
         }
-
-        //
-        //CollectsController
-        //
 
         //Index
         public List<CollectListItemViewModel> AllCollectList(int userId)
@@ -428,7 +428,26 @@ namespace BirthdayApp.AppService
         //CollectsGiftsController
         //
 
+        public CollectGift GetCollectGift(int collectGiftId)
+        {
+            CollectGift collectGift = _unitOfWork.CollectGiftRepository.GetById(collectGiftId);
+            return collectGift;
+        }
+
         //Index
+        public List<CollectGift> GetCollectsGiftsIndex(int collectId)
+        {
+            var collectionsGifts = _unitOfWork.CollectGiftRepository.Get().Include(c => c.Collect).Include(c => c.User).Where(c => c.CollectId == collectId).ToList();
+
+            return collectionsGifts;
+        }
+
+        //Create
+        public void CollectGiftAdd(CollectGift collectGift)
+        {
+            _unitOfWork.CollectGiftRepository.Add(collectGift);
+            _unitOfWork.SaveChanges();
+        }
 
 
         //

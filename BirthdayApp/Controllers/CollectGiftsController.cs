@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using AppModels;
 using BirthdayApp.Models;
 using Microsoft.AspNet.Identity;
+using BirthdayApp.AppService;
 
 namespace BirthdayApp.Controllers
 {
@@ -16,70 +17,49 @@ namespace BirthdayApp.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        public ActionResult Index(int? id)
+        public ActionResult Index(int id)
         {
-            if (id == null)
+            using (var collectService = new CollectsService())
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                ViewBag.collectId = id;
+                var collectionsGifts = collectService.GetCollectsGiftsIndex(id);
+                return View(collectionsGifts);
             }
-
-            var collectionsGifts = db.CollectionsGifts.Include(c => c.Collect).Include(c => c.User);
-            var collectionsGifts2 = collectionsGifts.Where(c => c.CollectId == id);
-            if (collectionsGifts2 == null)
-            {
-                return HttpNotFound();
-            }
-
-            ViewBag.ThisId = id;
-
-            return View(collectionsGifts2.ToList());
         }
         
-        public ActionResult Create(int? id)
+        public ActionResult Create(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Collect collect = db.Collections.Find(id);
-            if (collect == null)
-            {
-                return HttpNotFound();
-            }
+                ViewBag.collectId = id;
 
-            ViewBag.CollectId = id;
-
-            return View();
+                return View();      
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(int? id, [Bind(Include = "Id,Name")] CollectGift collectGift)
         {
-            if (ModelState.IsValid)
+            using (var collectService = new CollectsService())
             {
-                collectGift.UserId = GetUserId();
-                collectGift.CollectId = id;
-                db.CollectionsGifts.Add(collectGift);
-                db.SaveChanges();
-                return RedirectToAction("Details", "Collects", new { id = id });
-            }
+                if (ModelState.IsValid)
+                {
+                    collectGift.UserId = GetUserId();
+                    collectGift.CollectId = id;
+                    collectService.CollectGiftAdd(collectGift);
 
-            return View(collectGift);
+                    return RedirectToAction("Details", "Collects", new { id = id });
+                }
+
+                return View(collectGift);
+            }
         }
         
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(int id)
         {
-            if (id == null)
+            using (var collectService = new CollectsService())
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            CollectGift collectGift = db.CollectionsGifts.Find(id);
-            if (collectGift == null)
-            {
-                return HttpNotFound();
-            }
-            return View(collectGift);
+                var collectGift = collectService.GetCollectGift(id);
+                return View(collectGift);
+            } 
         }
 
         [HttpPost, ActionName("Delete")]
