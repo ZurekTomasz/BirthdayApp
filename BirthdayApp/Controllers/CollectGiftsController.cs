@@ -85,7 +85,7 @@ namespace BirthdayApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Description,UserId,CollectId,Rating")] CollectGift collectGift)
+        public ActionResult Create([Bind(Include = "Id,Name,UserId,CollectId,Rating")] CollectGift collectGift)
         {
             if (ModelState.IsValid)
             {
@@ -122,7 +122,7 @@ namespace BirthdayApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create2(int? id, [Bind(Include = "Id,Name,Description")] CollectGift collectGift)
+        public ActionResult Create2(int? id, [Bind(Include = "Id,Name")] CollectGift collectGift)
         {
             if (ModelState.IsValid)
             {
@@ -158,7 +158,7 @@ namespace BirthdayApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Description,UserId,CollectId,Rating")] CollectGift collectGift)
+        public ActionResult Edit([Bind(Include = "Id,Name,UserId,CollectId,Rating")] CollectGift collectGift)
         {
             if (ModelState.IsValid)
             {
