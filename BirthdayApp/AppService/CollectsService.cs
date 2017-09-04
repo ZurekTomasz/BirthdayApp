@@ -37,85 +37,36 @@ namespace BirthdayApp.AppService
             return collect;
         }
 
-        public void CollectConfirmChange(int collectId, bool IsConfirm)
-        {
-            var collect = GetCollect(collectId);
-            collect.IsConfirmed = IsConfirm;
-            _unitOfWork.CollectRepository.Update(collect);
-            _unitOfWork.SaveChanges();
-        }
+        //
+        //CollectsController
+        //
 
-        public void CollectAmountChange(int collectId, int Amount)
+        //Index
+        public List<CollectListItemViewModel> AllCollectList(int userId)
         {
-            var collect = GetCollect(collectId);
+            List<CollectListItemViewModel> items = new List<CollectListItemViewModel>();
 
-            collect.Amount = Amount;
-            _unitOfWork.CollectRepository.Update(collect);
-            _unitOfWork.SaveChanges();
-        }
-
-        public void CollectChange(Collect collect)
-        {
-            _unitOfWork.CollectRepository.Update(collect);
-            _unitOfWork.SaveChanges();
-        }
-
-        public void DeleteConfirmed(int id)
-        {
-            var collect = GetCollect(id);
-            var collectGift = _unitOfWork.CollectGiftRepository.Get().Where(x => x.CollectId == collect.Id);
-            foreach (var item in collectGift.ToList())
+            foreach (var item in _unitOfWork.CollectRepository.Get().Include(c => c.Users))
             {
-                var collectGiftRating = _unitOfWork.CollectGiftRatingRepository.Get().Where(x => x.TheBestGiftId == item.Id);
-                _unitOfWork.CollectGiftRatingRepository.DeleteRange(collectGiftRating);
-                _unitOfWork.SaveChanges();
+                items.Add(new CollectListItemViewModel
+                {
+                    Id = item.Id,
+                    Name = item.Name,
+                    UserId = userId,
+                    OwnerId = item.OwnerId.Value,
+                    RecipientId = item.RecipientId.Value,
+                    OwnerName = item.Owner.Name,
+                    RecipientName = item.Recipient.Name,
+                    Description = item.Description,
+                    Amount = item.Amount,
+                    IsConfirmed = item.IsConfirmed,
+                    DateOfInitiative = item.DateOfInitiative.Value,
+                    DateOfAdd = item.DateOfAdd.Value,
+                    YoureInCollection = item.Users.Any(cu => cu.UserId == userId)
+                });
             }
-            var collectUser = _unitOfWork.CollectUserRepository.Get().Where(x => x.CollectId == collect.Id);
-            _unitOfWork.CollectGiftRepository.DeleteRange(collectGift);
-            _unitOfWork.CollectUserRepository.DeleteRange(collectUser);
-            _unitOfWork.CollectRepository.Delete(collect.Id);
-
-            _unitOfWork.SaveChanges();
+            return items;
         }
-
-        public CollectViewModel GetCollectViewModel(int collectId, int userId)
-        {
-            var collect = GetCollect(collectId);
-
-            double NumberUsersInCollect = _unitOfWork.CollectUserRepository.Get().Count(c => c.CollectId == collectId);
-            double MyAmount = _unitOfWork.CollectRepository.Get().SingleOrDefault(c => c.Id == collectId).Amount;
-            double AmountPerPerson = MyAmount / NumberUsersInCollect;
-
-            CollectViewModel collectViewModel = new CollectViewModel();
-            collectViewModel.Id = collect.Id;
-            collectViewModel.UserId = userId;
-            collectViewModel.Name = collect.Name;
-            collectViewModel.OwnerId = collect.OwnerId.Value;
-            collectViewModel.RecipientId = collect.RecipientId.Value;
-            collectViewModel.OwnerName = collect.Owner.Name;
-            collectViewModel.RecipientName = collect.Recipient.Name;
-            collectViewModel.Description = collect.Description;
-            collectViewModel.Amount = collect.Amount;
-            collectViewModel.IsConfirmed = collect.IsConfirmed;
-            collectViewModel.DateOfInitiative = collect.DateOfInitiative.Value;
-            collectViewModel.DateOfAdd = collect.DateOfAdd.Value;
-            collectViewModel.RadioGiftItems = AllRadioGiftList(collectId, userId).OrderByDescending(i => i.Rating).ToList();
-            collectViewModel.Users = AllCollectUsersGaveMoney(collect.Id);
-            collectViewModel.PossibilityEditCollectGift = GetPossibilityEditCollectGift(collectId);
-            if(_unitOfWork.CollectGiftRatingRepository.Get().Any(c => c.CollectId == collectId && c.UserId == userId && c.TheBestGiftId != null))
-            {
-                int GiftId = _unitOfWork.CollectGiftRatingRepository.Get().FirstOrDefault(c => c.CollectId == collectId && c.UserId == userId).TheBestGiftId.Value;
-                collectViewModel.GiftName = _unitOfWork.CollectGiftRepository.Get().Single(i => i.Id == GiftId).Name;
-            }
-            else
-            {
-                collectViewModel.GiftName = "Null Gift Name";
-            }
-            collectViewModel.AmountPerPerson = AmountPerPerson;
-
-            return collectViewModel;
-        }
-
 
         public IEnumerable<CollectListItemViewModel> AllCollectList_v2(int userId)
         {
@@ -151,51 +102,44 @@ namespace BirthdayApp.AppService
             }
         }
 
-        public List<CollectListItemViewModel> AllCollectList(int userId)
+        //Details
+        public CollectViewModel GetCollectViewModel(int collectId, int userId)
         {
-            List<CollectListItemViewModel> items = new List<CollectListItemViewModel>();
+            var collect = GetCollect(collectId);
 
-            foreach(var item in _unitOfWork.CollectRepository.Get().Include(c=>c.Users))
+            double NumberUsersInCollect = _unitOfWork.CollectUserRepository.Get().Count(c => c.CollectId == collectId);
+            double MyAmount = _unitOfWork.CollectRepository.Get().SingleOrDefault(c => c.Id == collectId).Amount;
+            double AmountPerPerson = MyAmount / NumberUsersInCollect;
+
+            CollectViewModel collectViewModel = new CollectViewModel();
+            collectViewModel.Id = collect.Id;
+            collectViewModel.UserId = userId;
+            collectViewModel.Name = collect.Name;
+            collectViewModel.OwnerId = collect.OwnerId.Value;
+            collectViewModel.RecipientId = collect.RecipientId.Value;
+            collectViewModel.OwnerName = collect.Owner.Name;
+            collectViewModel.RecipientName = collect.Recipient.Name;
+            collectViewModel.Description = collect.Description;
+            collectViewModel.Amount = collect.Amount;
+            collectViewModel.IsConfirmed = collect.IsConfirmed;
+            collectViewModel.DateOfInitiative = collect.DateOfInitiative.Value;
+            collectViewModel.DateOfAdd = collect.DateOfAdd.Value;
+            collectViewModel.RadioGiftItems = AllRadioGiftList(collectId, userId).OrderByDescending(i => i.Rating).ToList();
+            collectViewModel.Users = AllCollectUsersGaveMoney(collect.Id);
+            collectViewModel.PossibilityEditCollectGift = GetPossibilityEditCollectGift(collectId);
+            if (_unitOfWork.CollectGiftRatingRepository.Get().Any(c => c.CollectId == collectId && c.UserId == userId && c.TheBestGiftId != null))
             {
-                items.Add(new CollectListItemViewModel
-                {
-                    Id = item.Id,
-                    Name = item.Name,
-                    UserId = userId,
-                    OwnerId = item.OwnerId.Value,
-                    RecipientId = item.RecipientId.Value,
-                    OwnerName = item.Owner.Name,
-                    RecipientName = item.Recipient.Name,
-                    Description = item.Description,
-                    Amount = item.Amount,
-                    IsConfirmed = item.IsConfirmed,
-                    DateOfInitiative = item.DateOfInitiative.Value,
-                    DateOfAdd = item.DateOfAdd.Value,
-                    YoureInCollection = item.Users.Any(cu => cu.UserId == userId)
-                });
+                int GiftId = _unitOfWork.CollectGiftRatingRepository.Get().FirstOrDefault(c => c.CollectId == collectId && c.UserId == userId).TheBestGiftId.Value;
+                collectViewModel.GiftName = _unitOfWork.CollectGiftRepository.Get().Single(i => i.Id == GiftId).Name;
             }
-            return items;
+            else
+            {
+                collectViewModel.GiftName = "Null Gift Name";
+            }
+            collectViewModel.AmountPerPerson = AmountPerPerson;
+
+            return collectViewModel;
         }
-
-        public List<User> AllMyUserList()
-        {
-            var items = _unitOfWork.MyUserRepository.Get().ToList();
-
-            return items;
-        }
-
-        public void CollectAdd(Collect collect)
-        {
-            _unitOfWork.CollectRepository.Add(collect);
-            _unitOfWork.SaveChanges();
-        }
-
-        public void CollectUserAdd(CollectUser collectuser)
-        {
-            _unitOfWork.CollectUserRepository.Add(collectuser);
-            _unitOfWork.SaveChanges();
-        }
-
 
         public List<RadioGiftItem> AllRadioGiftList(int collectId, int userId)
         {
@@ -204,7 +148,7 @@ namespace BirthdayApp.AppService
             foreach (var item in _unitOfWork.CollectGiftRepository.Get().Where(i => i.CollectId == collectId))
             {
                 bool isChecked = false;
-                if(_unitOfWork.CollectGiftRatingRepository.Get().Any(i => i.CollectId == collectId && i.UserId == userId && i.TheBestGiftId == item.Id))
+                if (_unitOfWork.CollectGiftRatingRepository.Get().Any(i => i.CollectId == collectId && i.UserId == userId && i.TheBestGiftId == item.Id))
                 {
                     isChecked = true;
                 }
@@ -260,7 +204,7 @@ namespace BirthdayApp.AppService
             }
 
             bool result = true;
-            if(GaveMoneyCounter > 0)
+            if (GaveMoneyCounter > 0)
             {
                 result = false;
             }
@@ -306,6 +250,77 @@ namespace BirthdayApp.AppService
             return result;
         }
 
+        //Confirm
+        public void CollectConfirmChange(int collectId, bool IsConfirm)
+        {
+            var collect = GetCollect(collectId);
+            collect.IsConfirmed = IsConfirm;
+            _unitOfWork.CollectRepository.Update(collect);
+            _unitOfWork.SaveChanges();
+        }
+
+        public void CollectAmountChange(int collectId, int Amount)
+        {
+            var collect = GetCollect(collectId);
+
+            collect.Amount = Amount;
+            _unitOfWork.CollectRepository.Update(collect);
+            _unitOfWork.SaveChanges();
+        }
+
+
+        //Edit2
+        public void CollectChange(Collect collect)
+        {
+            _unitOfWork.CollectRepository.Update(collect);
+            _unitOfWork.SaveChanges();
+        }
+
+        //Create
+        public List<User> AllMyUserList()
+        {
+            var items = _unitOfWork.MyUserRepository.Get().ToList();
+
+            return items;
+        }
+
+        public void CollectAdd(Collect collect)
+        {
+            _unitOfWork.CollectRepository.Add(collect);
+            _unitOfWork.SaveChanges();
+        }
+
+        public void CollectUserAdd(CollectUser collectuser)
+        {
+            _unitOfWork.CollectUserRepository.Add(collectuser);
+            _unitOfWork.SaveChanges();
+        }
+
+
+        //Delete
+        public void DeleteConfirmed(int id)
+        {
+            var collect = GetCollect(id);
+            var collectGift = _unitOfWork.CollectGiftRepository.Get().Where(x => x.CollectId == collect.Id);
+            foreach (var item in collectGift.ToList())
+            {
+                var collectGiftRating = _unitOfWork.CollectGiftRatingRepository.Get().Where(x => x.TheBestGiftId == item.Id);
+                _unitOfWork.CollectGiftRatingRepository.DeleteRange(collectGiftRating);
+                _unitOfWork.SaveChanges();
+            }
+            var collectUser = _unitOfWork.CollectUserRepository.Get().Where(x => x.CollectId == collect.Id);
+            _unitOfWork.CollectGiftRepository.DeleteRange(collectGift);
+            _unitOfWork.CollectUserRepository.DeleteRange(collectUser);
+            _unitOfWork.CollectRepository.Delete(collect.Id);
+
+            _unitOfWork.SaveChanges();
+        }
+
+        //
+        //CollectUsersListBox
+        //
+
+        //Index
         public List<SelectListItem> AllPersonsList(int RecipientId)
         {
             List<SelectListItem> items = new List<SelectListItem>();
@@ -409,7 +424,16 @@ namespace BirthdayApp.AppService
             return person;
         }
 
+        //
+        //CollectsGiftsController
+        //
 
+        //Index
+
+
+        //
+        //Disposed
+        //
         private bool disposed = false;
 
         protected virtual void Dispose(bool disposing)
