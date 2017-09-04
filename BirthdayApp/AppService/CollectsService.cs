@@ -8,6 +8,7 @@ using BirthdayApp.ViewModels;
 using System.Collections.Generic;
 using BirthdayApp.Repository;
 using BirthdayApp.Repository.Contracts;
+using System.Web.Mvc;
 
 namespace BirthdayApp.AppService
 {
@@ -304,6 +305,110 @@ namespace BirthdayApp.AppService
 
             return result;
         }
+
+        public List<SelectListItem> AllPersonsList(int RecipientId)
+        {
+            List<SelectListItem> items = new List<SelectListItem>();
+
+            foreach (var item in _unitOfWork.MyUserRepository.Get().ToList())
+            {
+                if (item.Id != RecipientId)
+                {
+                    items.Add(new SelectListItem
+                    {
+                        Text = item.Name,
+                        Value = item.Id.ToString()
+                        //Selected = item.CollectUsers.Any(collect => collect.CollectId == 1)
+                    });
+                }
+            }
+            return items;
+        }
+
+        public CollectUsersListBoxViewModel GetCollectUsersListBoxViewModel(int collectId)
+        {
+            var collect = GetCollect(collectId);
+            int RecipientId = _unitOfWork.MyUserRepository.Get().SingleOrDefault(c => c.Id == collect.RecipientId).Id;
+
+            CollectUsersListBoxViewModel person = new CollectUsersListBoxViewModel();
+            using (var collectService = new CollectsService())
+            {
+                person.UsersList = collectService.AllPersonsList(RecipientId);
+                person.CollectId = collect.Id;
+                person.CollectName = collect.Name;
+                person.RecipientName = _unitOfWork.MyUserRepository.Get().SingleOrDefault(c => c.Id == collect.RecipientId).Name;
+            }
+
+            foreach (var item in person.UsersList)
+            {
+                item.Selected = _unitOfWork.CollectUserRepository.Get().Any(c => c.CollectId == collect.Id && c.UserId.ToString() == item.Value);
+            }
+
+            return person;
+        }
+
+        public CollectUsersListBoxViewModel GetCollectUsersListBoxViewModelPost(int collectId, CollectUsersListBoxViewModel person)
+        {
+            Collect collect = GetCollect(collectId);
+
+            int RecipientId = _unitOfWork.MyUserRepository.Get().SingleOrDefault(c => c.Id == collect.RecipientId).Id;
+            using (var collectService = new CollectsService())
+            {
+                person.UsersList = collectService.AllPersonsList(RecipientId);
+                person.CollectId = collect.Id;
+                person.CollectName = collect.Name;
+                person.RecipientName = _unitOfWork.MyUserRepository.Get().SingleOrDefault(c => c.Id == collect.RecipientId).Name;
+            }
+            if (person.UsersListIds != null)
+            {
+                List<SelectListItem> selectedItems = person.UsersList.Where(p => person.UsersListIds.Contains(int.Parse(p.Value))).ToList();
+
+                //ViewBag.Message = "Wybrani użytkownicy:";
+                foreach (var selectedItem in selectedItems)
+                {
+                    selectedItem.Selected = true;
+                    //ViewBag.Message += "\\n" + selectedItem.Text;
+
+                    if (!_unitOfWork.CollectUserRepository.Get().Any(c => c.UserId.ToString() == selectedItem.Value && c.CollectId == collect.Id))
+                    {
+                        var newCollectionUsers = new CollectUser();
+                        newCollectionUsers.UserId = Int32.Parse(selectedItem.Value);
+                        newCollectionUsers.CollectId = collect.Id;
+                        _unitOfWork.CollectUserRepository.Add(newCollectionUsers);
+                        _unitOfWork.SaveChanges();
+                    }
+                }
+
+                foreach (var item in person.UsersList)
+                {
+                    if (!item.Selected)
+                    {
+                        if (_unitOfWork.CollectUserRepository.Get().Any(c => c.UserId.ToString() == item.Value && c.CollectId == collect.Id))
+                        {
+                            _unitOfWork.CollectUserRepository.Delete(_unitOfWork.CollectUserRepository.Get().SingleOrDefault(c => c.UserId.ToString() == item.Value && c.CollectId == collect.Id).Id);
+                            _unitOfWork.SaveChanges();
+                        }
+                    }
+                }
+            }
+            else
+            {
+                foreach (var item in person.UsersList)
+                {
+                    if (!item.Selected)
+                    {
+                        if (_unitOfWork.CollectUserRepository.Get().Any(c => c.UserId.ToString() == item.Value && c.CollectId == collect.Id))
+                        {
+                            _unitOfWork.CollectUserRepository.Delete(_unitOfWork.CollectUserRepository.Get().SingleOrDefault(c => c.UserId.ToString() == item.Value && c.CollectId == collect.Id).Id);
+                            _unitOfWork.SaveChanges();
+                        }
+                    }
+                }
+            }
+
+            return person;
+        }
+
 
         private bool disposed = false;
 
