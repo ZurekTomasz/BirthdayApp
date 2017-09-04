@@ -6,7 +6,7 @@
 
 <h2>@ViewBag.Title</h2>
 <p>
-    @Html.ActionLink("Utwórz nową zbiórkę", "Create2")
+    @Html.ActionLink("Utwórz nową zbiórkę", "Create")
 </p>
 
     <table class="table">
@@ -51,7 +51,7 @@
                 <td>
                     @if (item.OwnerId == item.UserId)
                     {
-                        @Html.ActionLink("Edytuj", "Edit2", new { id = item.Id })
+                        @Html.ActionLink("Edytuj", "Edit", new { id = item.Id })
                         @Html.Raw(" | ")
                         @Html.ActionLink("Usuń", "Delete", new { id = item.Id })
                         <br />

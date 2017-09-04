@@ -112,44 +112,6 @@ namespace BirthdayApp.Controllers
         {
             using (var collectService = new CollectsService())
             {
-                ViewBag.OwnerId = new SelectList(collectService.AllMyUserList(), "Id", "Name");
-                ViewBag.RecipientId = new SelectList(collectService.AllMyUserList(), "Id", "Name");
-                return View();
-            }
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,OwnerId,RecipientId,Name,Description,Amount,DateOfInitiative")] Collect collect)
-        {
-            if (ModelState.IsValid)
-            {
-                using (var collectService = new CollectsService())
-                {
-                    collectService.CollectAdd(collect);
-                    
-                    var newCollectionUsers = new CollectUser();
-                    newCollectionUsers.UserId = collect.OwnerId;
-                    newCollectionUsers.CollectId = collect.Id;
-                    collectService.CollectUserAdd(newCollectionUsers);
-
-                    return RedirectToAction("Index");
-                }
-            }
-
-            using (var collectService = new CollectsService())
-            {
-                ViewBag.OwnerId = new SelectList(collectService.AllMyUserList(), "Id", "Name", collect.OwnerId);
-                ViewBag.RecipientId = new SelectList(collectService.AllMyUserList(), "Id", "Name", collect.RecipientId);
-                return View(collect);
-            }
-            
-        }
-
-        public ActionResult Create2()
-        {
-            using (var collectService = new CollectsService())
-            {
                 int userId = GetUserId();
                 var modelUsersWithoutThisUser = collectService.AllMyUserList().Where(i => i.Id != userId);
                 ViewBag.RecipientId = new SelectList(modelUsersWithoutThisUser, "Id", "Name");
@@ -159,7 +121,7 @@ namespace BirthdayApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create2([Bind(Include = "Id,RecipientId,Name,Description,Amount,DateOfInitiative")] Collect collect)
+        public ActionResult Create([Bind(Include = "Id,RecipientId,Name,Description,Amount,DateOfInitiative")] Collect collect)
         {
             if (ModelState.IsValid)
             {

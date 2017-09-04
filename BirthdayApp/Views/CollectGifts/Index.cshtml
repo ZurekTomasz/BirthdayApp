@@ -7,10 +7,7 @@
 <h2>Index</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create") 
-</p>
-<p>
-    @Html.ActionLink("Create2 [for id=1]", "Create2", new { id = 1 })
+    @Html.ActionLink("Create New", "Create", new { id = ViewBag.ThisId } , null)
 </p>
 <table class="table">
     <tr>
@@ -46,3 +43,5 @@
 }
 
 </table>
+<hr />
+@Html.ActionLink("Wróć do szczegółów prezentu", "Details", "Collects", new { id = ViewBag.ThisId }, null)

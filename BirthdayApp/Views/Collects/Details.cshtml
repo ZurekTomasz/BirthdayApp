@@ -147,7 +147,7 @@
                                     }
 
                                 </ol>
-                                @Html.ActionLink("Dodaj własną propozycję prezentu", "Create2", "CollectGifts", new { id = Model.Id }, null)
+                                @Html.ActionLink("Dodaj własną propozycję prezentu", "Create", "CollectGifts", new { id = Model.Id }, null)
 
 
                             </td>
@@ -200,11 +200,11 @@
             {
                     <hr />
                     <p><b>Sekcja założyciela zbiórki:</b></p>
-                        @Html.ActionLink("Edytuj zbiórkę", "Edit2", new { id = Model.Id })
+                        @Html.ActionLink("Edytuj zbiórkę", "Edit", new { id = Model.Id })
                         <br />
                         @Html.ActionLink("Zarządzaj użytkownikami zbiórki", "Index", "CollectUsersListBox", new { id = Model.Id }, null)
                         <br />
-                        @Html.ActionLink("Zarządzaj prezentami", "IndexById", "CollectGifts", new { id = Model.Id }, null)
+                        @Html.ActionLink("Zarządzaj prezentami", "Index", "CollectGifts", new { id = Model.Id }, null)
                         <br />
                         @Html.ActionLink("Zarządzaj tym kto zapłacił", "Index", "CollectUsers", new { id = Model.Id }, null)
                         <br />
