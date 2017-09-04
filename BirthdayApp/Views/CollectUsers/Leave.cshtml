@@ -1,0 +1,70 @@
+﻿@model BirthdayApp.ViewModels.CollectViewModel
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<div>
+    <br />
+    <table class="table table-bordered">
+        <tr>
+            <td>
+                <b>Nazwa zbiórki:</b>
+            </td>
+            <td>
+                <b>Opis zbiórki:</b>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(model => model.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.Description)
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <b>Zbiórkę założył:</b>
+            </td>
+            <td>
+                <b>Zbieramy na prezent dla:</b>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(model => model.OwnerName)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.RecipientName)
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <b>Szacowana kwota prezentu to:</b>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(model => model.Amount)
+            </td>
+            <td></td>
+        </tr>
+    </table>
+    <br />
+    <h4><b>Czy napewno chcesz opuścić zbiórkę?</b></h4>
+    <br />
+
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Opuść zbiórkę" class="btn btn-default" /> |
+            @Html.ActionLink("Wróć do listy", "Index")
+        </div>
+    }
+</div>

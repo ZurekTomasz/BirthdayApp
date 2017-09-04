@@ -9,42 +9,17 @@ using System.Web.Mvc;
 using AppModels;
 using BirthdayApp.Models;
 using Microsoft.AspNet.Identity;
+using BirthdayApp.AppService;
 
 namespace BirthdayApp.Controllers
 {
-    public class CollectUsersController : Controller
+    public class CollectUsersController : CommonController
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        public string GetUserId()
+        public ActionResult Index(int id)
         {
-            string userId = User.Identity.GetUserId();
-            return userId;
-        }
-
-        public int GetModelUserId()
-        {
-            string userId = User.Identity.GetUserId();
-            int modelUserId = db.MyUsers.Single(i => i.EntityId == userId).Id;
-
-            return modelUserId;
-        }
-
-        // GET: CollectUsers
-        public ActionResult Index()
-        {
-            var collectionsUsers = db.CollectionsUsers.Include(c => c.Collect).Include(c => c.User);
-            return View(collectionsUsers.ToList());
-        }
-
-        public ActionResult IndexById(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            int userID = GetModelUserId();
+            int userID = GetUserId();
             if (!db.CollectionsUsers.Any(c => c.Collect.OwnerId == userID))
             {
                 return HttpNotFound();
@@ -62,19 +37,12 @@ namespace BirthdayApp.Controllers
             return View(collectionsUsers2.ToList());
         }
 
-        public ActionResult GaveMoneyAR(int? id)
+        public ActionResult GaveMoney(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            CollectUser collectUser = db.CollectionsUsers.Find(id);
-            if (collectUser == null)
-            {
-                return HttpNotFound();
-            }
 
-            int userID = GetModelUserId();
+            CollectUser collectUser = db.CollectionsUsers.Find(id);
+
+            int userID = GetUserId();
             if (!db.CollectionsUsers.Any(c => c.Collect.OwnerId == userID))
             {
                 return HttpNotFound();
@@ -93,71 +61,23 @@ namespace BirthdayApp.Controllers
             db.Entry(collectUser).State = EntityState.Modified;
             db.SaveChanges();
 
-            return RedirectToAction("IndexById", "CollectUsers", new { id = collectUser.Collect.Id });
+            return RedirectToAction("Index", "CollectUsers", new { id = collectUser.Collect.Id });
         }
 
-        // GET: CollectUsers/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Join(int id)
         {
-            if (id == null)
+            using (var collectService = new CollectsService())
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                var collectViewModel = collectService.GetCollectViewModel(id, GetUserId());
+                return View(collectViewModel);
             }
-            CollectUser collectUser = db.CollectionsUsers.Find(id);
-            if (collectUser == null)
-            {
-                return HttpNotFound();
-            }
-            return View(collectUser);
         }
 
-        // GET: CollectUsers/Create
-        public ActionResult Create()
-        {
-            ViewBag.CollectId = new SelectList(db.Collections, "Id", "Name");
-            ViewBag.UserId = new SelectList(db.MyUsers, "Id", "Name");
-            return View();
-        }
-
-        // POST: CollectUsers/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost, ActionName("Join")]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,UserId,CollectId,GaveMoney")] CollectUser collectUser)
+        public ActionResult JoinConfirmed(int id)
         {
-            if (ModelState.IsValid)
-            {
-                db.CollectionsUsers.Add(collectUser);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            ViewBag.CollectId = new SelectList(db.Collections, "Id", "Name", collectUser.CollectId);
-            ViewBag.UserId = new SelectList(db.MyUsers, "Id", "Name", collectUser.UserId);
-            return View(collectUser);
-        }
-
-        // GET: CollectUsers/Create
-        public ActionResult Create2(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Collect collect = db.Collections.Find(id);
-
-            if (collect == null)
-            {
-                return HttpNotFound();
-            }
-
-            return RedirectToAction("CreateFID", "CollectUsers", new { id = id });
-        }
-
-        public ActionResult CreateFID(int? id)
-        {
-            int userId = GetModelUserId();
+            int userId = GetUserId();
 
             if (ModelState.IsValid)
             {
@@ -176,101 +96,25 @@ namespace BirthdayApp.Controllers
 
             return HttpNotFound();
         }
-
-        // GET: CollectUsers/Edit/5
-        public ActionResult Edit(int? id)
+        
+        public ActionResult Leave(int id)
         {
-            if (id == null)
+            using (var collectService = new CollectsService())
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                var collectViewModel = collectService.GetCollectViewModel(id,GetUserId());
+                return View(collectViewModel);
             }
-            CollectUser collectUser = db.CollectionsUsers.Find(id);
-            if (collectUser == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.CollectId = new SelectList(db.Collections, "Id", "Name", collectUser.CollectId);
-            ViewBag.UserId = new SelectList(db.MyUsers, "Id", "Name", collectUser.UserId);
-            return View(collectUser);
         }
 
-        // POST: CollectUsers/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,UserId,CollectId,GaveMoney")] CollectUser collectUser)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(collectUser).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            ViewBag.CollectId = new SelectList(db.Collections, "Id", "Name", collectUser.CollectId);
-            ViewBag.UserId = new SelectList(db.MyUsers, "Id", "Name", collectUser.UserId);
-            return View(collectUser);
-        }
-
-        // GET: CollectUsers/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            CollectUser collectUser = db.CollectionsUsers.Find(id);
-            if (collectUser == null)
-            {
-                return HttpNotFound();
-            }
-            return View(collectUser);
-        }
-
-        // POST: CollectUsers/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost, ActionName("Leave")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            CollectUser collectUser = db.CollectionsUsers.Find(id);
-            db.CollectionsUsers.Remove(collectUser);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
+            
+            int userId = GetUserId();
+            int collectUsersID = db.CollectionsUsers.SingleOrDefault(i => i.CollectId == id && i.UserId == userId).Id;
 
-        // GET: CollectUsers/Delete/5
-        public ActionResult Delete2(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Collect collect = db.Collections.Find(id);
-
-            if (collect == null)
-            {
-                return HttpNotFound();
-            }
-
-            int userID = GetModelUserId();
-            int CollectUsersID = db.CollectionsUsers.SingleOrDefault(i => i.CollectId == id && i.UserId == userID).Id;
-
-            return RedirectToAction("DeleteFID", "CollectUsers", new { id = CollectUsersID });
-        }
-
-
-        // POST: CollectUsers/Delete/5
-        public ActionResult DeleteFID(int id)
-        {
-            //int userID = GetModelUserId();
-            //if (db.CollectionsGiftRatings.Any(i => i.UserId == userID && i.))
-            //{
-            //    //CollectGiftRating cgr = db.CollectionsGiftRatings.Find(db.CollectionsGiftRatings.SingleOrDefault(i => i.GiftId == wybranyid & i.UserId == ModelUserId).Id);
-            //    //cgr.TheBestRating = true;
-            //    db.SaveChanges();
-            //}
-
-            CollectUser collectUser = db.CollectionsUsers.Find(id);
+            CollectUser collectUser = db.CollectionsUsers.Find(collectUsersID);
             db.CollectionsUsers.Remove(collectUser);
             db.SaveChanges();
             return RedirectToAction("Index", "Collects");

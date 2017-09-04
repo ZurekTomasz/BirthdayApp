@@ -6,9 +6,7 @@
 
 <h2>Index</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+
 <table class="table">
     <tr>
         <th>
@@ -35,11 +33,21 @@
             @Html.DisplayFor(modelItem => item.GaveMoney)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+
+
+        @if (item.GaveMoney)
+        {
+            @Html.ActionLink("Anuluj", "GaveMoney", new { id = item.Id })
+        }
+        else
+        {
+            @Html.ActionLink("Potwierdź", "GaveMoney", new { id = item.Id })
+        }
         </td>
     </tr>
 }
 
 </table>
+
+<hr />
+@Html.ActionLink("Wróć do szczegółów prezentu", "Details", "Collects", new { id = ViewBag.ThisId }, null)

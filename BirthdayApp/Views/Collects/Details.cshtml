@@ -194,7 +194,7 @@
 
 
                 <br />
-                @Html.ActionLink("Opuść zbiórkę", "Delete2", "CollectUsers", new { id = Model.Id }, null)
+                @Html.ActionLink("Opuść zbiórkę", "Leave", "CollectUsers", new { id = Model.Id }, null)
 
                 @if (Model.OwnerId == Model.UserId)
             {
@@ -206,7 +206,7 @@
                         <br />
                         @Html.ActionLink("Zarządzaj prezentami", "IndexById", "CollectGifts", new { id = Model.Id }, null)
                         <br />
-                        @Html.ActionLink("Zarządzaj tym kto zapłacił", "IndexById", "CollectUsers", new { id = Model.Id }, null)
+                        @Html.ActionLink("Zarządzaj tym kto zapłacił", "Index", "CollectUsers", new { id = Model.Id }, null)
                         <br />
                     if (Model.PossibilityEditCollectGift)
                     {
