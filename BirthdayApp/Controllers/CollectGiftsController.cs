@@ -66,10 +66,11 @@ namespace BirthdayApp.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            CollectGift collectGift = db.CollectionsGifts.Find(id);
-            db.CollectionsGifts.Remove(collectGift);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            using (var collectService = new CollectsService())
+            {
+                collectService.CollectGiftDelete(id);
+                return RedirectToAction("Index");
+            }
         }
 
         protected override void Dispose(bool disposing)

@@ -449,6 +449,13 @@ namespace BirthdayApp.AppService
             _unitOfWork.SaveChanges();
         }
 
+        //Delete
+        public void CollectGiftDelete(int collectGiftId)
+        {
+            _unitOfWork.CollectGiftRepository.Delete(collectGiftId);
+            _unitOfWork.SaveChanges();
+        }
+
 
         //
         //Disposed
