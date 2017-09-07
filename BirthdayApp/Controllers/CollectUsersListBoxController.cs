@@ -12,10 +12,8 @@ using System.Web.Mvc;
 
 namespace BirthdayApp.Controllers
 {
-    public class CollectUsersListBoxController : Controller
+    public class CollectUsersListBoxController : CommonController
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
-
         public ActionResult Index(int id)
         {
             using (var collectService = new CollectsService())

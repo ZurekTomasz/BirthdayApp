@@ -15,8 +15,6 @@ namespace BirthdayApp.Controllers
 {
     public class CollectGiftsController : CommonController
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
-
         public ActionResult Index(int id)
         {
             using (var collectService = new CollectsService())
@@ -71,15 +69,6 @@ namespace BirthdayApp.Controllers
                 collectService.CollectGiftDelete(id);
                 return RedirectToAction("Index");
             }
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
         }
     }
 }

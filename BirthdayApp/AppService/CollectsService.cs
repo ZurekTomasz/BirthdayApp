@@ -453,9 +453,60 @@ namespace BirthdayApp.AppService
         //CollectsUsersController
         //
 
+        public CollectUser GetCollectUser(int collectuserId)
+        {
+            CollectUser collectuser = _unitOfWork.CollectUserRepository.GetById(collectuserId);
+            return collectuser;
+        }
+
         public void CollectUserAdd(CollectUser collectuser)
         {
             _unitOfWork.CollectUserRepository.Add(collectuser);
+            _unitOfWork.SaveChanges();
+        }
+
+        public List<CollectUser> GetCollectUserIndex(int collectuserId)
+        {
+            var collectionsUsers = _unitOfWork.CollectUserRepository.Get().Include(c => c.Collect).Include(c => c.User).Where(c => c.CollectId == collectuserId).ToList();
+            return collectionsUsers;
+        }
+
+        public void GaveMoneyChange(int collectuserId)
+        {
+            var collectUser = GetCollectUser(collectuserId);
+
+            if (collectUser.GaveMoney)
+            {
+                collectUser.GaveMoney = false;
+            }
+            else
+            {
+                collectUser.GaveMoney = true;
+            }
+
+            _unitOfWork.CollectUserRepository.Update(collectUser);
+            _unitOfWork.SaveChanges();
+        }
+
+        public void JoinConfirmed(int collectId, int userId)
+        {
+            if (!_unitOfWork.CollectUserRepository.Get().Any(i => i.CollectId == collectId && i.UserId == userId))
+            {
+                CollectUser collectUser = new CollectUser();
+                collectUser.UserId = userId;
+                collectUser.CollectId = collectId;
+                collectUser.GaveMoney = false;
+                _unitOfWork.CollectUserRepository.Add(collectUser);
+                _unitOfWork.SaveChanges();
+            }
+        }
+
+        public void LeaveConfirmed(int collectId, int userId)
+        {
+            int collectUsersID = _unitOfWork.CollectUserRepository.Get().SingleOrDefault(i => i.CollectId == collectId && i.UserId == userId).Id;
+
+            CollectUser collectUser = _unitOfWork.CollectUserRepository.GetById(collectUsersID);
+            _unitOfWork.CollectUserRepository.Delete(collectUser);
             _unitOfWork.SaveChanges();
         }
 
