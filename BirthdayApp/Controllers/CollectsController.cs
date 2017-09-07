@@ -179,7 +179,7 @@ namespace BirthdayApp.Controllers
         {
             using (var collectService = new CollectsService())
             {
-                collectService.DeleteConfirmed(id);
+                collectService.CollectDelete(id);
                 return RedirectToAction("Index");
             }
         }

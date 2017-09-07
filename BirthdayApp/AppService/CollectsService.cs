@@ -290,15 +290,8 @@ namespace BirthdayApp.AppService
             _unitOfWork.SaveChanges();
         }
 
-        public void CollectUserAdd(CollectUser collectuser)
-        {
-            _unitOfWork.CollectUserRepository.Add(collectuser);
-            _unitOfWork.SaveChanges();
-        }
-
-
         //Delete
-        public void DeleteConfirmed(int id)
+        public void CollectDelete(int id)
         {
             var collect = GetCollect(id);
             var collectGift = _unitOfWork.CollectGiftRepository.Get().Where(x => x.CollectId == collect.Id);
@@ -453,6 +446,16 @@ namespace BirthdayApp.AppService
         public void CollectGiftDelete(int collectGiftId)
         {
             _unitOfWork.CollectGiftRepository.Delete(collectGiftId);
+            _unitOfWork.SaveChanges();
+        }
+
+        //
+        //CollectsUsersController
+        //
+
+        public void CollectUserAdd(CollectUser collectuser)
+        {
+            _unitOfWork.CollectUserRepository.Add(collectuser);
             _unitOfWork.SaveChanges();
         }
 
