@@ -31,6 +31,14 @@ namespace BirthdayApp.AppService
             return false;
         }
 
+        public bool IsOwner(int userId)
+        {
+            if (_unitOfWork.CollectUserRepository.Get().Any(c => c.Collect.OwnerId == userId))
+                return true;
+
+            return false;
+        }
+
         //
         //CollectsController
         //
@@ -507,6 +515,34 @@ namespace BirthdayApp.AppService
 
             CollectUser collectUser = _unitOfWork.CollectUserRepository.GetById(collectUsersID);
             _unitOfWork.CollectUserRepository.Delete(collectUser);
+            _unitOfWork.SaveChanges();
+        }
+
+        //
+        //UsersController
+        //
+
+        public User GetUser(int userId)
+        {
+            User user = _unitOfWork.MyUserRepository.GetById(userId);
+            return user;
+        }
+
+        public void UserAdd(User user)
+        {
+            _unitOfWork.MyUserRepository.Add(user);
+            _unitOfWork.SaveChanges();
+        }
+
+        public List<User> GetUserIndex()
+        {
+            var users = _unitOfWork.MyUserRepository.Get().ToList();
+            return users;
+        }
+
+        public void UserUpdate(User user)
+        {
+            _unitOfWork.MyUserRepository.Update(user);
             _unitOfWork.SaveChanges();
         }
 
