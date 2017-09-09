@@ -36,5 +36,6 @@ namespace AppModels
         public DateTime? DateOfBirth { get; set; }
         [DataType(DataType.Date), DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime? DateOfAdd { get; set; }
+        public bool IsActive { get; set; }
     }
 }

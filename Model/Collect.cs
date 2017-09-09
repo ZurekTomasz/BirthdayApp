@@ -34,6 +34,7 @@ namespace AppModels
         public DateTime? DateOfInitiative { get; set; }
         [DataType(DataType.Date), DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime? DateOfAdd { get; set; }
+        public bool IsActive { get; set; }
 
         public virtual User Owner { get; set; }
         public virtual User Recipient { get; set; }
