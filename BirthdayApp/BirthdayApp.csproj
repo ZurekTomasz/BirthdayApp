@@ -191,6 +191,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppService\CollectsService.cs" />
+    <Compile Include="AppService\UsersService.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
@@ -664,7 +665,7 @@
     <Content Include="Views\Collects\Edit.cshtml" />
     <Content Include="Views\Home\ErrorPage.cshtml" />
     <Content Include="Views\Users\Create.cshtml" />
-    <Content Include="Views\Users\Delete.cshtml" />
+    <Content Include="Views\Users\UnActive.cshtml" />
     <Content Include="Views\Users\Details.cshtml" />
     <Content Include="Views\Users\Edit.cshtml" />
     <Content Include="Views\Users\Index.cshtml" />

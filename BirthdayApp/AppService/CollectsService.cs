@@ -519,35 +519,6 @@ namespace BirthdayApp.AppService
         }
 
         //
-        //UsersController
-        //
-
-        public User GetUser(int userId)
-        {
-            User user = _unitOfWork.MyUserRepository.GetById(userId);
-            return user;
-        }
-
-        public void UserAdd(User user)
-        {
-            _unitOfWork.MyUserRepository.Add(user);
-            _unitOfWork.SaveChanges();
-        }
-
-        public List<User> GetUserIndex()
-        {
-            var users = _unitOfWork.MyUserRepository.Get().ToList();
-            return users;
-        }
-
-        public void UserUpdate(User user)
-        {
-            _unitOfWork.MyUserRepository.Update(user);
-            _unitOfWork.SaveChanges();
-        }
-
-
-        //
         //Disposed
         //
         private bool disposed = false;

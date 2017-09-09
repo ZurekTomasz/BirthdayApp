@@ -16,18 +16,18 @@ namespace BirthdayApp.Controllers
     {
         public ActionResult Index()
         {
-            using (var collectService = new CollectsService())
+            using (var userService = new UsersService())
             {
-                var users = collectService.GetUserIndex();
+                var users = userService.GetUserIndex();
                 return View(users);
             }
         }
 
         public ActionResult Details(int id)
         {
-            using (var collectService = new CollectsService())
+            using (var userService = new UsersService())
             {
-                var user = collectService.GetUser(id);
+                var user = userService.GetUser(id);
                 return View(user);
             }
         }
@@ -43,9 +43,9 @@ namespace BirthdayApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                using (var collectService = new CollectsService())
+                using (var userService = new UsersService())
                 {
-                    collectService.UserAdd(user);
+                    userService.UserAdd(user);
                     return RedirectToAction("Index");
                 }
             }
@@ -55,9 +55,9 @@ namespace BirthdayApp.Controllers
 
         public ActionResult Edit(int id)
         {
-            using (var collectService = new CollectsService())
+            using (var userService = new UsersService())
             {
-                var user = collectService.GetUser(id);
+                var user = userService.GetUser(id);
                 return View(user);
             }
         }
@@ -68,40 +68,28 @@ namespace BirthdayApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                using (var collectService = new CollectsService())
+                using (var userService = new UsersService())
                 {
-                    collectService.UserUpdate(user);
+                    userService.UserUpdate(user);
                 }
                 return RedirectToAction("Index");
             }
             return View(user);
         }
 
-        //IsActive
-        //public ActionResult Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    User user = db.MyUsers.Find(id);
-        //    if (user == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(user);
-        //}
+        public ActionResult UnActive(int id)
+        {
 
-        //// POST: Users/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult DeleteConfirmed(int id)
-        //{
-        //    User user = db.MyUsers.Find(id);
-        //    db.MyUsers.Remove(user);
-        //    db.SaveChanges();
-        //    return RedirectToAction("Index");
-        //}
+            return View();
+        }
+
+        [HttpPost, ActionName("UnActive")]
+        [ValidateAntiForgeryToken]
+        public ActionResult UnActiveConfirmed(int id)
+        {
+
+            return RedirectToAction("Index");
+        }
 
     }
 }
