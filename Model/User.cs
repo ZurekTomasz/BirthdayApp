@@ -11,7 +11,10 @@ namespace AppModels
 {
     public class User
     {
-        public User() { }
+        public User()
+        {
+            this.IsActive = true;
+        }
 
         public User(string fName, string sName, string fEmail, string sRole, DateTime? bDate, string sEntityId)
         {
@@ -23,6 +26,7 @@ namespace AppModels
             this.Role = sRole;
             this.DateOfBirth = bDate;
             this.DateOfAdd = DateTime.Now;
+            this.IsActive = true;
         }
 
         public int Id { get; set; }
@@ -36,6 +40,7 @@ namespace AppModels
         public DateTime? DateOfBirth { get; set; }
         [DataType(DataType.Date), DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime? DateOfAdd { get; set; }
+
         public bool IsActive { get; set; }
     }
 }

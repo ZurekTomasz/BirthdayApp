@@ -54,7 +54,7 @@ namespace BirthdayApp.AppService
         {
             List<CollectListItemViewModel> items = new List<CollectListItemViewModel>();
 
-            foreach (var item in _unitOfWork.CollectRepository.Get().Include(c => c.Users))
+            foreach (var item in _unitOfWork.CollectRepository.Get().Include(c => c.Users).Where(i => i.IsActive == true))
             {
                 items.Add(new CollectListItemViewModel
                 {
@@ -88,7 +88,7 @@ namespace BirthdayApp.AppService
                 collectIds.Add(id);
             }
 
-            foreach (var item in _unitOfWork.CollectRepository.Get())
+            foreach (var item in _unitOfWork.CollectRepository.Get().Where(i => i.IsActive == true))
             {
                 CollectListItemViewModel items = new CollectListItemViewModel
                 {

@@ -79,16 +79,27 @@ namespace BirthdayApp.Controllers
 
         public ActionResult UnActive(int id)
         {
-
-            return View();
+            using (var userService = new UsersService())
+            {
+                var user = userService.GetUser(id);
+                return View(user);
+            }
         }
 
-        [HttpPost, ActionName("UnActive")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult UnActiveConfirmed(int id)
+        public ActionResult UnActive([Bind(Include = "Id,Name,Firstname,Surname,EntityId,Email,Role,DateOfBirth,DateOfAdd")] User user)
         {
-
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                using (var userService = new UsersService())
+                {
+                    user.IsActive = false;
+                    userService.UserUpdate(user);
+                }
+                return RedirectToAction("Index");
+            }
+            return View(user);
         }
 
     }

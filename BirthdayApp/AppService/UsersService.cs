@@ -30,7 +30,7 @@ namespace BirthdayApp.AppService
 
         public List<User> GetUserIndex()
         {
-            var users = _unitOfWork.MyUserRepository.Get().ToList();
+            var users = _unitOfWork.MyUserRepository.Get().Where(i => i.IsActive == true).ToList();
             return users;
         }
 

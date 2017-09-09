@@ -17,6 +17,7 @@ namespace AppModels
             this.Gifts = new HashSet<CollectGift>();
 
             this.DateOfAdd = DateTime.Now;
+            this.IsActive = true;
         }
 
         public int Id { get; set; }
