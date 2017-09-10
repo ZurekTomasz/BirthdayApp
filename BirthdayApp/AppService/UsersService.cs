@@ -45,12 +45,6 @@ namespace BirthdayApp.AppService
             return user;
         }
 
-        public void UserAdd(User user)
-        {
-            _unitOfWork.MyUserRepository.Add(user);
-            _unitOfWork.SaveChanges();
-        }
-
         public List<User> GetUserIndex()
         {
             var users = _unitOfWork.MyUserRepository.Get().Where(i => i.IsActive == true).ToList();

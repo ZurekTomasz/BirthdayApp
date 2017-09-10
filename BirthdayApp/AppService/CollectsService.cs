@@ -9,6 +9,10 @@ using System.Collections.Generic;
 using BirthdayApp.Repository;
 using BirthdayApp.Repository.Contracts;
 using System.Web.Mvc;
+using System.IO;
+using System.Net.Mail;
+using System.Net;
+using System.Web;
 
 namespace BirthdayApp.AppService
 {
@@ -253,8 +257,7 @@ namespace BirthdayApp.AppService
             _unitOfWork.SaveChanges();
         }
 
-
-        //Edit2
+        //Edit
         public void CollectChange(Collect collect)
         {
             _unitOfWork.CollectRepository.Update(collect);
@@ -282,6 +285,65 @@ namespace BirthdayApp.AppService
             collect.IsActive = false;
             _unitOfWork.CollectRepository.Update(collect);
             _unitOfWork.SaveChanges();
+        }
+
+        //Send Email
+        public string GetBaseUrl()
+        {
+            var request = HttpContext.Current.Request;
+            var appUrl = HttpRuntime.AppDomainAppVirtualPath;
+
+            if (appUrl != "/")
+                appUrl = "/" + appUrl;
+
+            var baseUrl = string.Format("{0}://{1}{2}", request.Url.Scheme, request.Url.Authority, appUrl);
+
+            return baseUrl;
+        }
+
+        public void SendEmails(List<User> users, Collect collect)
+        {
+            string ownerName = _unitOfWork.MyUserRepository.Get().SingleOrDefault(i => i.Id == collect.OwnerId).Name;
+            string recipientName = _unitOfWork.MyUserRepository.Get().SingleOrDefault(i => i.Id == collect.RecipientId).Name;
+            string activeLink = GetBaseUrl() + "CollectUsers/Join/" + collect.Id.ToString() + "/";
+
+            string subject = "Nowa zbiórka [BirthdayApp]";
+
+            string body = "[BirthdayApp]\n" + "Została założona nowa zbiórka!" +
+                "\n\nZałożyciel zbiórki: " + ownerName +
+                "\n\nNazwa zbiórki: " + collect.Name +
+                "\nOpis zbióki: " + collect.Description +
+                "\nZbieramy dla: " + recipientName +
+                "\n\nAby dołączyć do zbiórki to naciśnij na odnośnik: " + activeLink +
+                "\n\n### Wiadomość została wygenerowana automatycznie, prosimy nie odpowiadać na tą wiadomość ###";
+
+            string emailPassword = System.Configuration.ConfigurationManager.AppSettings["emailPassword"];
+
+            foreach (var user in users)
+            {
+                SendSingleEmail(user.Email, subject, body, "birthdayappx@gmail.com", emailPassword);
+            }
+        }
+
+        public void SendSingleEmail(string To, string Subject, string Body, string Email, string Password)
+        {
+            EmailViewModels email = new EmailViewModels(To, Subject, Body, Email, Password);
+            using (MailMessage mm = new MailMessage(email.Email, email.To))
+            {
+                mm.Subject = email.Subject;
+                mm.Body = email.Body;
+                mm.IsBodyHtml = false;
+                using (SmtpClient smtp = new SmtpClient())
+                {
+                    smtp.Host = "smtp.gmail.com";
+                    smtp.EnableSsl = true;
+                    NetworkCredential NetworkCred = new NetworkCredential(email.Email, email.Password);
+                    smtp.UseDefaultCredentials = true;
+                    smtp.Credentials = NetworkCred;
+                    smtp.Port = 587;
+                    smtp.Send(mm);
+                }
+            }
         }
 
         //
@@ -478,10 +540,9 @@ namespace BirthdayApp.AppService
 
         public void LeaveConfirmed(int collectId, int userId)
         {
-            int collectUsersID = _unitOfWork.CollectUserRepository.Get().SingleOrDefault(i => i.CollectId == collectId && i.UserId == userId).Id;
+            int collectUserID = _unitOfWork.CollectUserRepository.Get().SingleOrDefault(i => i.CollectId == collectId && i.UserId == userId).Id;
 
-            CollectUser collectUser = _unitOfWork.CollectUserRepository.GetById(collectUsersID);
-            _unitOfWork.CollectUserRepository.Delete(collectUser);
+            _unitOfWork.CollectUserRepository.Delete(collectUserID);
             _unitOfWork.SaveChanges();
         }
 

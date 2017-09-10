@@ -1,4 +1,7 @@
-﻿@model IEnumerable<BirthdayApp.ViewModels.CollectListItemViewModel>
+﻿@model PagedList.IPagedList<BirthdayApp.ViewModels.CollectListItemViewModel>
+@using PagedList.Mvc;
+
+@*@model IEnumerable<BirthdayApp.ViewModels.CollectListItemViewModel>*@
 
 @{
     ViewBag.Title = "Lista zbiórek";
@@ -76,6 +79,12 @@
         }
 
     </table>
+
+<br />
+    Strona @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+    @Html.PagedListPager(Model, page => Url.Action("Index",
+                    new { page }))
 
 
 

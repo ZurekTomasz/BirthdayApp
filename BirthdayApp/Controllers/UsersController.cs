@@ -33,27 +33,6 @@ namespace BirthdayApp.Controllers
             }
         }
 
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Firstname,Surname,EntityId,Email,Role,DateOfBirth,DateOfAdd")] User user)
-        {
-            if (ModelState.IsValid)
-            {
-                using (var userService = new UsersService())
-                {
-                    userService.UserAdd(user);
-                    return RedirectToAction("Index");
-                }
-            }
-
-            return View(user);
-        }
-
         public ActionResult Edit(int id)
         {
             using (var userService = new UsersService())

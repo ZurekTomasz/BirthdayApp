@@ -11,19 +11,24 @@ using BirthdayApp.Models;
 using BirthdayApp.AppService;
 using Microsoft.AspNet.Identity;
 using BirthdayApp.ViewModels;
-
+using System.Text;
+using PagedList;
 
 namespace BirthdayApp.Controllers
 {
     public class CollectsController : CommonController
     {
-        public ActionResult Index()
+        public ActionResult Index(int? page)
         {
             int userId = GetUserId();
             using (var collectService = new CollectsService())
             {
                 var collections = collectService.AllCollectList(userId).Where(i => i.RecipientId != userId).OrderByDescending(i => i.DateOfAdd).ToList();
-                return View(collections);
+
+                int pageSize = 5;
+                int pageNumber = (page ?? 1);
+                return View(collections.ToPagedList(pageNumber, pageSize));
+                //return View(collections);
             }
         }
 
@@ -138,7 +143,13 @@ namespace BirthdayApp.Controllers
                     newCollectionUsers.CollectId = collect.Id;
                     collectService.CollectUserAdd(newCollectionUsers);
 
-                    return RedirectToAction("Index", "CollectUsersListBox", new { id = collect.Id });
+                    //Send Email
+                    using (var userService = new UsersService())
+                    {
+                        collectService.SendEmails(userService.GetUserIndex().Where(i => i.Id != collect.RecipientId).ToList(), collect);
+                    }
+
+                    return RedirectToAction("Details", "Collects", new { id = collect.Id });
                 }
             }
 
