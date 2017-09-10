@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using AppModels;
 using BirthdayApp.Models;
 using BirthdayApp.AppService;
+using BirthdayApp.CustomFilters;
 
 namespace BirthdayApp.Controllers
 {
@@ -96,6 +97,5 @@ namespace BirthdayApp.Controllers
                 return RedirectToAction("Index");
             }
         }
-
     }
 }

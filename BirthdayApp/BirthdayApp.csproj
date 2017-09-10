@@ -206,6 +206,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\CollectUsersListBoxController.cs" />
+    <Compile Include="CustomFilters\CustomFilters.cs" />
     <Compile Include="DAL\MyDbInitializer.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -670,6 +671,7 @@
     <Content Include="Views\Users\Edit.cshtml" />
     <Content Include="Views\Users\Index.cshtml" />
     <Content Include="Views\CollectUsersListBox\Index.cshtml" />
+    <Content Include="Views\Users\OutPutTest.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

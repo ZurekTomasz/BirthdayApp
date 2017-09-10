@@ -65,11 +65,14 @@ namespace BirthdayApp.Controllers
             {
                 var collectViewModel = collectService.GetCollectViewModel(id, GetUserId());
 
-                if (!collectService.IsAdmin(GetUserId()))
+                using (var userService = new UsersService())
                 {
-                    if (!collectService.IsCollectionsUser(id, GetUserId()))
+                    if (!userService.IsAdmin(GetUserId()))
                     {
-                        return HttpNotFound();
+                        if (!collectService.IsCollectionsUser(id, GetUserId()))
+                        {
+                            return HttpNotFound();
+                        }
                     }
                 }
 

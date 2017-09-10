@@ -12,6 +12,29 @@ namespace BirthdayApp.AppService
     {
         IUnitOfWork _unitOfWork = new UnitOfWork();
 
+        public int GetMyUserId(string IdentityUserId)
+        {
+            int modelUserId = _unitOfWork.MyUserRepository.Get().Single(i => i.EntityId == IdentityUserId).Id;
+
+            return modelUserId;
+        }
+
+        public bool IsAdmin(int userId)
+        {
+            if ("Admin" == _unitOfWork.MyUserRepository.Get().SingleOrDefault(i => i.Id == userId).Role)
+                return true;
+
+            return false;
+        }
+
+        public bool IsOwner(int userId)
+        {
+            if (_unitOfWork.CollectUserRepository.Get().Any(c => c.Collect.OwnerId == userId))
+                return true;
+
+            return false;
+        }
+
         //
         //UsersController
         //
@@ -49,6 +72,12 @@ namespace BirthdayApp.AppService
             _unitOfWork.SaveChanges();
         }
 
+        public bool IsActive(int userId)
+        {
+            var user = GetUser(userId);
+
+            return user.IsActive;
+        }
 
         //
         //Disposed

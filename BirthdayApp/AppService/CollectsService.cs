@@ -16,29 +16,6 @@ namespace BirthdayApp.AppService
     {
         IUnitOfWork _unitOfWork = new UnitOfWork();
 
-        public int GetMyUserId(string IdentityUserId)
-        {
-            int modelUserId = _unitOfWork.MyUserRepository.Get().Single(i => i.EntityId == IdentityUserId).Id;
-
-            return modelUserId;
-        }
-
-        public bool IsAdmin(int userId)
-        {
-            if ("Admin" == _unitOfWork.MyUserRepository.Get().SingleOrDefault(i => i.Id == userId).Role)
-                return true;
-
-            return false;
-        }
-
-        public bool IsOwner(int userId)
-        {
-            if (_unitOfWork.CollectUserRepository.Get().Any(c => c.Collect.OwnerId == userId))
-                return true;
-
-            return false;
-        }
-
         //
         //CollectsController
         //
@@ -162,7 +139,7 @@ namespace BirthdayApp.AppService
                 }
 
                 int rating = 0;
-                foreach (var item2 in _unitOfWork.CollectUserRepository.Get().Where(i => i.CollectId == collectId).ToList())
+                foreach (var item2 in _unitOfWork.CollectUserRepository.Get().Where(i => i.CollectId == collectId && i.User.IsActive == true).ToList())
                 {
                     if (_unitOfWork.CollectGiftRatingRepository.Get().Any(i => i.CollectId == collectId && i.UserId == item2.UserId && i.TheBestGiftId == item.Id))
                     {

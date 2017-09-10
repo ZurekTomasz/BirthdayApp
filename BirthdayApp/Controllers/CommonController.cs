@@ -10,18 +10,20 @@ using AppModels;
 using BirthdayApp.Models;
 using Microsoft.AspNet.Identity;
 using BirthdayApp.AppService;
+using BirthdayApp.CustomFilters;
 
 namespace BirthdayApp.Controllers
 {
     [Authorize]
+    [CustAuthFilter]
     public class CommonController : Controller
     {
         protected int GetUserId()
         {
             string IdentityUserId = User.Identity.GetUserId();
-            using (var collectService = new CollectsService())
+            using (var userService = new UsersService())
             {
-                return collectService.GetMyUserId(IdentityUserId);
+                return userService.GetMyUserId(IdentityUserId);
             }
         }   
     }

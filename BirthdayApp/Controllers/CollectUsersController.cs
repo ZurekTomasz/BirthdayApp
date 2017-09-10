@@ -19,8 +19,11 @@ namespace BirthdayApp.Controllers
         {
             using (var collectService = new CollectsService())
             {
-                if(!collectService.IsOwner(GetUserId()))
-                    return HttpNotFound();
+                using (var userService = new UsersService())
+                {
+                    if (!userService.IsOwner(GetUserId()))
+                        return HttpNotFound();
+                }
 
                 ViewBag.ThisId = id;
                 var collectUsers = collectService.GetCollectUserIndex(id);
