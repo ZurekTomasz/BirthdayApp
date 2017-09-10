@@ -1,4 +1,7 @@
-﻿@model IEnumerable<AppModels.User>
+﻿@model PagedList.IPagedList<AppModels.User>
+@using PagedList.Mvc;
+
+@*@model IEnumerable<AppModels.User>*@
 
 @{
     ViewBag.Title = "Index";
@@ -9,28 +12,28 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Name)
+            Imię
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Firstname)
+            Nazwisko
         </th>
+        @if (ViewBag.IsAdmin)
+        {
+            <th>
+                Entity Id
+            </th>
+            <th>
+                Email
+            </th>
+            <th>
+                Rola
+            </th>
+            <th>
+                Data urodzenia
+            </th>
+        }
         <th>
-            @Html.DisplayNameFor(model => model.Surname)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.EntityId)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Email)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Role)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DateOfBirth)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.DateOfAdd)
+            Data rejestracji
         </th>
         <th></th>
     </tr>
@@ -38,35 +41,44 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
             @Html.DisplayFor(modelItem => item.Firstname)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Surname)
         </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.EntityId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Email)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Role)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DateOfBirth)
-        </td>
+        @if (ViewBag.IsAdmin)
+        {
+                <td>
+                    @Html.DisplayFor(modelItem => item.EntityId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Role)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateOfBirth)
+                </td>
+        }
         <td>
             @Html.DisplayFor(modelItem => item.DateOfAdd)
         </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "UnActive", new { id=item.Id })
-        </td>
+        @if (ViewBag.IsAdmin)
+        {
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                    @Html.ActionLink("Delete", "UnActive", new { id = item.Id })
+                </td>
+        }
     </tr>
 }
 
 </table>
+
+<br />
+    Strona @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+    @Html.PagedListPager(Model, page => Url.Action("Index",
+                    new { page }))

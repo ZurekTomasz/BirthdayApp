@@ -103,6 +103,14 @@ namespace BirthdayApp.Controllers
                     }
                     collectService.CollectAmountChange(id, model.Amount);
                     collectService.CollectConfirmChange(id, true);
+
+                    //Send Email
+                    using (var userService = new UsersService())
+                    {
+                        var collect = collectService.GetCollect(id);
+                        collectService.SendEmailsConfirm(userService.GetUserIndex().Where(i => i.Id != collect.RecipientId).ToList(), collect);
+                    }
+
                     return RedirectToAction("Details", "Collects", new { id = id });
                 }
                 catch (NullReferenceException)
@@ -146,7 +154,7 @@ namespace BirthdayApp.Controllers
                     //Send Email
                     using (var userService = new UsersService())
                     {
-                        collectService.SendEmails(userService.GetUserIndex().Where(i => i.Id != collect.RecipientId).ToList(), collect);
+                        collectService.SendEmailsCreate(userService.GetUserIndex().Where(i => i.Id != collect.RecipientId).ToList(), collect);
                     }
 
                     return RedirectToAction("Details", "Collects", new { id = collect.Id });
@@ -161,7 +169,7 @@ namespace BirthdayApp.Controllers
             }
         }
 
-        public ActionResult Edit2(int id)
+        public ActionResult Edit(int id)
         {
             using (var collectService = new CollectsService())
                 return View(collectService.GetCollect(id));
@@ -169,7 +177,7 @@ namespace BirthdayApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit2([Bind(Include = "Id,OwnerId,RecipientId,Name,Description,Amount,DateOfInitiative,IsActive")] Collect collect)
+        public ActionResult Edit([Bind(Include = "Id,OwnerId,RecipientId,Name,Description,Amount,DateOfInitiative,IsActive")] Collect collect)
         {
             if (ModelState.IsValid)
             {

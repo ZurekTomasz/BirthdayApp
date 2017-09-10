@@ -301,7 +301,7 @@ namespace BirthdayApp.AppService
             return baseUrl;
         }
 
-        public void SendEmails(List<User> users, Collect collect)
+        public void SendEmailsCreate(List<User> users, Collect collect)
         {
             string ownerName = _unitOfWork.MyUserRepository.Get().SingleOrDefault(i => i.Id == collect.OwnerId).Name;
             string recipientName = _unitOfWork.MyUserRepository.Get().SingleOrDefault(i => i.Id == collect.RecipientId).Name;
@@ -315,6 +315,30 @@ namespace BirthdayApp.AppService
                 "\nOpis zbióki: " + collect.Description +
                 "\nZbieramy dla: " + recipientName +
                 "\n\nAby dołączyć do zbiórki to naciśnij na odnośnik: " + activeLink +
+                "\n\n### Wiadomość została wygenerowana automatycznie, prosimy nie odpowiadać na tą wiadomość ###";
+
+            string emailPassword = System.Configuration.ConfigurationManager.AppSettings["emailPassword"];
+
+            foreach (var user in users)
+            {
+                SendSingleEmail(user.Email, subject, body, "birthdayappx@gmail.com", emailPassword);
+            }
+        }
+
+        public void SendEmailsConfirm(List<User> users, Collect collect)
+        {
+            string ownerName = _unitOfWork.MyUserRepository.Get().SingleOrDefault(i => i.Id == collect.OwnerId).Name;
+            string recipientName = _unitOfWork.MyUserRepository.Get().SingleOrDefault(i => i.Id == collect.RecipientId).Name;
+            string activeLink = GetBaseUrl() + "Collects/Details/" + collect.Id.ToString() + "/";
+
+            string subject = "Zbiórka została zatwierdzona [BirthdayApp]";
+
+            string body = "[BirthdayApp]\n" + "Zbiórka została zatwierdzona przez założyciela, prezent został wybrany!" +
+                "\n\nZałożyciel zbiórki: " + ownerName +
+                "\n\nNazwa zbiórki: " + collect.Name +
+                "\nOpis zbióki: " + collect.Description +
+                "\nZbieramy dla: " + recipientName +
+                "\n\nAby zobaczyć szczegóły to naciśnij na odnośnik: " + activeLink +
                 "\n\n### Wiadomość została wygenerowana automatycznie, prosimy nie odpowiadać na tą wiadomość ###";
 
             string emailPassword = System.Configuration.ConfigurationManager.AppSettings["emailPassword"];

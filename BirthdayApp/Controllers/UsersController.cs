@@ -10,17 +10,23 @@ using AppModels;
 using BirthdayApp.Models;
 using BirthdayApp.AppService;
 using BirthdayApp.CustomFilters;
+using PagedList;
 
 namespace BirthdayApp.Controllers
 {
     public class UsersController : CommonController
     {
-        public ActionResult Index()
+        public ActionResult Index(int? page)
         {
             using (var userService = new UsersService())
             {
+                ViewBag.IsAdmin = userService.IsAdmin(GetUserId());
                 var users = userService.GetUserIndex();
-                return View(users);
+
+                int pageSize = 5;
+                int pageNumber = (page ?? 1);
+                return View(users.ToPagedList(pageNumber, pageSize));
+                //return View(users);
             }
         }
 
