@@ -287,7 +287,7 @@ namespace BirthdayApp.AppService
         //Create
         public List<User> AllMyUserList()
         {
-            var items = _unitOfWork.MyUserRepository.Get().ToList();
+            var items = _unitOfWork.MyUserRepository.Get().Where(i => i.IsActive == true).ToList();
 
             return items;
         }
@@ -298,22 +298,12 @@ namespace BirthdayApp.AppService
             _unitOfWork.SaveChanges();
         }
 
-        //Delete
-        public void CollectDelete(int id)
+        public void CollectUnActive(int collectId)
         {
-            var collect = GetCollect(id);
-            var collectGift = _unitOfWork.CollectGiftRepository.Get().Where(x => x.CollectId == collect.Id);
-            foreach (var item in collectGift.ToList())
-            {
-                var collectGiftRating = _unitOfWork.CollectGiftRatingRepository.Get().Where(x => x.TheBestGiftId == item.Id);
-                _unitOfWork.CollectGiftRatingRepository.DeleteRange(collectGiftRating);
-                _unitOfWork.SaveChanges();
-            }
-            var collectUser = _unitOfWork.CollectUserRepository.Get().Where(x => x.CollectId == collect.Id);
-            _unitOfWork.CollectGiftRepository.DeleteRange(collectGift);
-            _unitOfWork.CollectUserRepository.DeleteRange(collectUser);
-            _unitOfWork.CollectRepository.Delete(collect.Id);
+            var collect = GetCollect(collectId);
 
+            collect.IsActive = false;
+            _unitOfWork.CollectRepository.Update(collect);
             _unitOfWork.SaveChanges();
         }
 
@@ -326,7 +316,7 @@ namespace BirthdayApp.AppService
         {
             List<SelectListItem> items = new List<SelectListItem>();
 
-            foreach (var item in _unitOfWork.MyUserRepository.Get().ToList())
+            foreach (var item in _unitOfWork.MyUserRepository.Get().Where(i => i.IsActive == true).ToList())
             {
                 if (item.Id != RecipientId)
                 {

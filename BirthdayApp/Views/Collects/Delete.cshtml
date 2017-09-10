@@ -11,6 +11,13 @@
     <h4>Collect</h4>
     <hr />
     <dl class="dl-horizontal">
+
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.OwnerId)
+        @Html.HiddenFor(model => model.RecipientId)
+        @Html.HiddenFor(model => model.DateOfInitiative)
+        @Html.HiddenFor(model => model.IsActive)
+
         @*<dt>
             @Html.DisplayNameFor(model => model.Owner.Name)
         </dt>

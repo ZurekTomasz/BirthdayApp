@@ -155,7 +155,7 @@ namespace BirthdayApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit2([Bind(Include = "Id,OwnerId,RecipientId,Name,Description,Amount,DateOfInitiative")] Collect collect)
+        public ActionResult Edit2([Bind(Include = "Id,OwnerId,RecipientId,Name,Description,Amount,DateOfInitiative,IsActive")] Collect collect)
         {
             if (ModelState.IsValid)
             {
@@ -179,7 +179,7 @@ namespace BirthdayApp.Controllers
         {
             using (var collectService = new CollectsService())
             {
-                collectService.CollectDelete(id);
+                collectService.CollectUnActive(id);
                 return RedirectToAction("Index");
             }
         }

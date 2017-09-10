@@ -40,6 +40,15 @@ namespace BirthdayApp.AppService
             _unitOfWork.SaveChanges();
         }
 
+        public void UserUnActive(int userId)
+        {
+            var user = GetUser(userId);
+
+            user.IsActive = false;
+            _unitOfWork.MyUserRepository.Update(user);
+            _unitOfWork.SaveChanges();
+        }
+
 
         //
         //Disposed
