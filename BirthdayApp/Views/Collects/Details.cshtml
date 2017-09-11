@@ -194,23 +194,33 @@
 
 
                 <br />
-                @Html.ActionLink("Opuść zbiórkę", "Leave", "CollectUsers", new { id = Model.Id }, null)
+                @*@Html.ActionLink("Opuść zbiórkę", "Leave", "CollectUsers", new { id = Model.Id }, null)*@
+
+            <input type="button" class="btn btn-danger" value="Opuść zbiórkę" onclick="location.href = '@Url.Action("Leave", "CollectUsers", new { id = Model.Id }, Request.Url.Scheme)';">
 
                 @if (Model.OwnerId == Model.UserId)
-            {
+                {
                     <hr />
                     <p><b>Sekcja założyciela zbiórki:</b></p>
                         @Html.ActionLink("Edytuj zbiórkę", "Edit", new { id = Model.Id })
                         <br />
-                        @Html.ActionLink("Zarządzaj użytkownikami zbiórki", "Index", "CollectUsersListBox", new { id = Model.Id }, null)
-                        <br />
+                        @*@Html.ActionLink("Zarządzaj użytkownikami zbiórki", "Index", "CollectUsersListBox", new { id = Model.Id }, null)
+                        <br />*@
+                    if (!Model.IsConfirmed)
+                    {
                         @Html.ActionLink("Zarządzaj prezentami", "Index", "CollectGifts", new { id = Model.Id }, null)
                         <br />
+                    }
+                    else
+                    { 
                         @Html.ActionLink("Zarządzaj tym kto zapłacił", "Index", "CollectUsers", new { id = Model.Id }, null)
+                        <br />
+                    }
                         <br />
                     if (Model.PossibilityEditCollectGift)
                     {
-                        @Html.ActionLink("Finalizacja zbiórki", "Confirm", "Collects", new { id = Model.Id }, null)
+                        @*@Html.ActionLink("Finalizacja zbiórki", "Confirm", "Collects", new { id = Model.Id }, null)*@
+                        <input type="button" class="btn btn-success" value="Finalizacja zbiórki" onclick="location.href = '@Url.Action("Confirm", "Collects", new { id = Model.Id }, Request.Url.Scheme)';">
                     }
                     else
                     {
@@ -226,9 +236,10 @@
 
 
 
-                <p>
+                @*<p>
                     @Html.ActionLink("Wróć do listy", "Index")
-                </p>
+                </p>*@
+        <input type="button" class="btn btn-primary" value="Wróć do listy" onclick="location.href = '@Url.Action("Index", Request.Url.Scheme)';">
 
             </div>
         </div>
