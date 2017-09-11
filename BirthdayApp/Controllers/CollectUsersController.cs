@@ -57,12 +57,13 @@ namespace BirthdayApp.Controllers
             using (var collectService = new CollectsService())
             {
                 int userId = GetUserId();
+                var collectUser = collectService.GetCollectUser(id);
 
                 if (ModelState.IsValid)
                 {
                     collectService.JoinConfirmed(id, GetUserId());
 
-                    return RedirectToAction("Index", "Collects");
+                    return RedirectToAction("Details", "Collects" , new { id = collectUser.CollectId });
                 }
             }
 

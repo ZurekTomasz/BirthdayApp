@@ -73,6 +73,23 @@ namespace BirthdayApp.AppService
             return user.IsActive;
         }
 
+        public void EmailDbChange(int userId, string option, bool value)
+        {
+            var user = GetUser(userId);
+
+            if (option == "Create")
+            {
+                user.IgnoreEmailCreate = value;
+            }
+            else
+            {
+                user.IgnoreEmailConfirm = value;
+            }
+
+            _unitOfWork.MyUserRepository.Update(user);
+            _unitOfWork.SaveChanges();
+        }
+
         //
         //Disposed
         //

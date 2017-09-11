@@ -8,6 +8,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using BirthdayApp.Models;
 using Microsoft.AspNet.Identity.EntityFramework;
+using BirthdayApp.AppService;
 
 namespace BirthdayApp.Controllers
 {
@@ -53,6 +54,15 @@ namespace BirthdayApp.Controllers
             }
         }
 
+        protected int GetUserId()
+        {
+            string IdentityUserId = User.Identity.GetUserId();
+            using (var userService = new UsersService())
+            {
+                return userService.GetMyUserId(IdentityUserId);
+            }
+        }
+
         //
         // GET: /Manage/Index
         public async Task<ActionResult> Index(ManageMessageId? message)
@@ -77,8 +87,6 @@ namespace BirthdayApp.Controllers
             };
 
             //NetTomassPL 
-            
-
             ViewBag.userId = userId;
 
             var context = new ApplicationDbContext();
@@ -90,7 +98,7 @@ namespace BirthdayApp.Controllers
 
             var thisUser = (from i in db.MyUsers
                             where i.EntityId == userId
-                            select i).ToList();
+                            select i).SingleOrDefault();
             ViewBag.thisUserContext = thisUser;
 
             return View(model);

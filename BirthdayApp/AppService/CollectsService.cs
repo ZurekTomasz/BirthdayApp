@@ -321,7 +321,11 @@ namespace BirthdayApp.AppService
 
             foreach (var user in users)
             {
-                SendSingleEmail(user.Email, subject, body, "birthdayappx@gmail.com", emailPassword);
+                if(!user.IgnoreEmailCreate)
+                {
+                    SendSingleEmail(user.Email, subject, body, "birthdayappx@gmail.com", emailPassword);
+                }
+                
             }
         }
 
@@ -345,7 +349,10 @@ namespace BirthdayApp.AppService
 
             foreach (var user in users)
             {
-                SendSingleEmail(user.Email, subject, body, "birthdayappx@gmail.com", emailPassword);
+                if (!user.IgnoreEmailConfirm)
+                {
+                    SendSingleEmail(user.Email, subject, body, "birthdayappx@gmail.com", emailPassword);
+                }
             }
         }
 

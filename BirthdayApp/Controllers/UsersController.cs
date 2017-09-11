@@ -82,5 +82,22 @@ namespace BirthdayApp.Controllers
                 return RedirectToAction("Index");
             }
         }
+
+        public ActionResult EmailDbChange(int userId, string option, int value)
+        {
+            using (var userService = new UsersService())
+            {
+                if (value == 0)
+                {
+                    userService.EmailDbChange(userId, option, true);
+                }
+                else
+                {
+                    userService.EmailDbChange(userId, option, false);
+                }
+
+                return RedirectToAction("Index", "Manage");
+            }
+        }
     }
 }
