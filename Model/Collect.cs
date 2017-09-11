@@ -37,6 +37,7 @@ namespace AppModels
         public DateTime? DateOfAdd { get; set; }
         public bool IsActive { get; set; }
 
+
         public virtual User Owner { get; set; }
         public virtual User Recipient { get; set; }
 

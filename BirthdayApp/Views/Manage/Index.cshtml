@@ -7,20 +7,36 @@
 
 <p class="text-success">@ViewBag.StatusMessage</p>
 <div>
-    <h4>Change your account settings</h4>
     <hr />
     <dl class="dl-horizontal">
-        <dt>EntityID:</dt>
+        <dt>Imię:</dt>
         <dd>
-            <span> @ViewBag.userId </span>
+            @foreach (var item in ViewBag.thisUserContext)
+            {
+                <span> @item.Firstname </span>
+            }
         </dd>
-        <dt>UserId:</dt>
+
+        <dt>Nazwisko:</dt>
+        <dd>
+            @foreach (var item in ViewBag.thisUserContext)
+            {
+                <span> @item.Surname </span>
+            }
+        </dd>
+
+        @*<dt>UserId:</dt>
         <dd>
             @foreach (var item in ViewBag.thisUserContext)
             {
                 <span> @item.Id </span>
             }
         </dd>
+
+        <dt>EntityID:</dt>
+        <dd>
+            <span> @ViewBag.userId </span>
+        </dd>*@
 
         <dt>Email:</dt>
         <dd>
@@ -44,7 +60,21 @@
             ]
         </dd>
 
-        <dt>Powiadomienia:</dt>
+        <dt>Powiadomienia przy nowej zbiórce:</dt>
+        <dd>
+            [
+            @if (Model.HasPassword)
+            {
+                @Html.ActionLink("Wyłącz powiadomienia e-mail", "ChangePassword")
+            }
+            else
+            {
+                @Html.ActionLink("Włącz powiadomienia e-mail", "SetPassword")
+            }
+            ]
+        </dd>
+
+        <dt>Powiadomienia przy zatwierdzeniu zbiórki:</dt>
         <dd>
             [
             @if (Model.HasPassword)

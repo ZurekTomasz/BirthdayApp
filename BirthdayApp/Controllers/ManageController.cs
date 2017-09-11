@@ -77,6 +77,8 @@ namespace BirthdayApp.Controllers
             };
 
             //NetTomassPL 
+            
+
             ViewBag.userId = userId;
 
             var context = new ApplicationDbContext();

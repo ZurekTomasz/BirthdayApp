@@ -18,6 +18,7 @@ namespace BirthdayApp.Controllers
     {
         public ActionResult Index()
         {
+
             return View();
         }
 
