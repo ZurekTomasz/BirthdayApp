@@ -37,7 +37,7 @@
             <span> @ViewBag.thisUserContext.Email </span>
         </dd>
 
-        <dt>Password:</dt>
+        <dt>Hasło:</dt>
         <dd>
             [
             @if (Model.HasPassword)
@@ -56,11 +56,11 @@
             [
             @if (!ViewBag.thisUserContext.IgnoreEmailCreate)
             {
-                @Html.ActionLink("Wyłącz powiadomienia e-mail", "EmailDbChange", "Users" , new { userId = ViewBag.thisUserContext.Id, option = "Create", value = 1 } , null)
+                @Html.ActionLink("Wyłącz powiadomienia e-mail", "EmailDbChange", "Users" , new { userId = ViewBag.thisUserContext.Id, option = "Create", value = 0 } , null)
             }
             else
             {
-                @Html.ActionLink("Włącz powiadomienia e-mail", "EmailDbChange", "Users", new { userId = ViewBag.thisUserContext.Id, option = "Create", value = 0 }, null)
+                @Html.ActionLink("Włącz powiadomienia e-mail", "EmailDbChange", "Users", new { userId = ViewBag.thisUserContext.Id, option = "Create", value = 1 }, null)
             }
             ]
         </dd>
@@ -70,11 +70,11 @@
             [
             @if (!ViewBag.thisUserContext.IgnoreEmailConfirm)
             {
-                @Html.ActionLink("Wyłącz powiadomienia e-mail", "EmailDbChange", "Users" , new { userId = ViewBag.thisUserContext.Id, option = "Confirm", value = 1 }, null)
+                @Html.ActionLink("Wyłącz powiadomienia e-mail", "EmailDbChange", "Users" , new { userId = ViewBag.thisUserContext.Id, option = "Confirm", value = 0 }, null)
             }
             else
             {
-                @Html.ActionLink("Włącz powiadomienia e-mail", "EmailDbChange", "Users", new { userId = ViewBag.thisUserContext.Id, option = "Confirm", value = 0 }, null)
+                @Html.ActionLink("Włącz powiadomienia e-mail", "EmailDbChange", "Users", new { userId = ViewBag.thisUserContext.Id, option = "Confirm", value = 1 }, null)
             }
             ]
         </dd>
