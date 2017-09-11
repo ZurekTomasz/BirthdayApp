@@ -15,6 +15,8 @@ namespace AppModels
         [ForeignKey("Collect")]
         public int? CollectId { get; set; }
         public bool GaveMoney { get; set; }
+        public bool EmailCreate { get; set; }
+        public bool EmailConfirm { get; set; }
 
         public virtual User User { get; set; }
         public virtual Collect Collect { get; set; }
