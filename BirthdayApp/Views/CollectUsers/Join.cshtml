@@ -50,6 +50,7 @@
         <tr>
             <td>
                 @Html.DisplayFor(model => model.Amount)
+                @Html.Raw(" PLN")
             </td>
             <td></td>
         </tr>
@@ -65,7 +66,7 @@
 
         <div class="form-actions no-color">
             <input type="submit" value="Dołącz do zbiórki" class="btn btn-default" /> |
-            @Html.ActionLink("Wróć do listy", "Index")
+            @Html.ActionLink("Wróć do listy", "Index", "Collects")
         </div>
     }
 </div>

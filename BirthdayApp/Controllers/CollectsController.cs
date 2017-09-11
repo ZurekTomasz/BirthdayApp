@@ -36,6 +36,7 @@ namespace BirthdayApp.Controllers
         {
             using (var collectService = new CollectsService())
             {
+                ViewBag.InCollect = collectService.IsCollectionsUser(id, GetUserId());
                 var collectViewModel = collectService.GetCollectViewModel(id, GetUserId());
                 return View(collectViewModel);
             }
@@ -46,6 +47,8 @@ namespace BirthdayApp.Controllers
         {
             using (var collectService = new CollectsService())
             {
+                ViewBag.InCollect = collectService.IsCollectionsUser(id, GetUserId());
+
                 if (ModelState.IsValid)
                     collectService.ChangeRadioButtonChoose(id, GetUserId(), model.Gift.Id);
 

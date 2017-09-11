@@ -107,14 +107,19 @@
                 </table>
             }
 
-            <hr />
-
-            @Html.ActionLink("Cofnij propozycję prezentu", "UndoConfirm", "Collects", new { id = Model.Id }, null)
+            
+            @if (Model.IsConfirmed)
+            {
+                <hr />
+            @*@Html.ActionLink("Cofnij propozycję prezentu", "UndoConfirm", "Collects", new { id = Model.Id }, null)*@
+                <input type="button" class="btn btn-danger" value="Cofnij propozycję prezentu" onclick="location.href = '@Url.Action("UndoConfirm", "Collects", new { id = Model.Id }, Request.Url.Scheme)';">
             <br />
-
+            }
         </div>
         <hr />
-        @Html.ActionLink("Wróć do szczegółów prezentu", "Details", "Collects", new { id = Model.Id }, null)
+        @*@Html.ActionLink("Wróć do szczegółów prezentu", "Details", "Collects", new { id = Model.Id }, null)*@
+
+        <input type="button" class="btn btn-primary" value="Wróć do szczegółów prezentu" onclick="location.href = '@Url.Action("Details", "Collects", new { id = Model.Id }, Request.Url.Scheme)';">
 
 
 </div>

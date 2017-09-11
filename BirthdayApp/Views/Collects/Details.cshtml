@@ -15,6 +15,12 @@
 
 
         <div>
+
+            @if(ViewBag.InCollect)
+            {
+
+            
+
             <hr />
 
             <div class="row">
@@ -43,11 +49,11 @@
                                 @Html.Raw(Model.GiftName)
                             </b>
                             <br />
-                            @Html.Raw("Kwota prezentu: ")
-                            @Html.Raw(Model.Amount + "PLN")
+                            @Html.Raw("Łączna kwota: ")
+                            @Html.Raw(Model.Amount + " PLN")
                             <br />
-                            @Html.Raw("Pojedyńcza kwota: ")
-                            @Html.Raw(Model.AmountPerPerson + "PLN")
+                            @Html.Raw("Kwota na jedną osobę: ")
+                            @Html.Raw(Model.AmountPerPerson + " PLN")
                         }
                         else
                         {
@@ -59,8 +65,10 @@
 
 
                 <br />
-
+            }
                 <hr />
+
+
             <p><b>Szczegóły zbiórki:</b></p>
                 <table class="table table-bordered">
                     <tr>
@@ -106,16 +114,18 @@
                     <tr>
                         <td>
                             @Html.DisplayFor(model => model.Amount)
+                            @Html.Raw(" PLN")
                         </td>
                         <td></td>
                     </tr>
                 </table>
 
-
+@if (ViewBag.InCollect)
+{
                 <hr />
 
-                @using (Html.BeginForm())
-            {
+                using (Html.BeginForm())
+                {
                     <p><b>Wybierz jeden z prezentów:</b></p>
 
                     <table class="table table-bordered">
@@ -198,7 +208,7 @@
 
             <input type="button" class="btn btn-danger" value="Opuść zbiórkę" onclick="location.href = '@Url.Action("Leave", "CollectUsers", new { id = Model.Id }, Request.Url.Scheme)';">
 
-                @if (Model.OwnerId == Model.UserId)
+                if (Model.OwnerId == Model.UserId)
                 {
                     <hr />
                     <p><b>Sekcja założyciela zbiórki:</b></p>
@@ -206,16 +216,16 @@
                         <br />
                         @*@Html.ActionLink("Zarządzaj użytkownikami zbiórki", "Index", "CollectUsersListBox", new { id = Model.Id }, null)
                         <br />*@
-                    if (!Model.IsConfirmed)
-                    {
+                if (!Model.IsConfirmed)
+                {
                         @Html.ActionLink("Zarządzaj prezentami", "Index", "CollectGifts", new { id = Model.Id }, null)
                         <br />
-                    }
-                    else
-                    { 
+                }
+                else
+                {
                         @Html.ActionLink("Zarządzaj tym kto zapłacił", "Index", "CollectUsers", new { id = Model.Id }, null)
                         <br />
-                    }
+                }
                         <br />
                     if (Model.PossibilityEditCollectGift)
                     {
@@ -229,6 +239,9 @@
                     <br />
                 }
 
+
+        }
+
                 <hr />
 
 
@@ -239,7 +252,7 @@
                 @*<p>
                     @Html.ActionLink("Wróć do listy", "Index")
                 </p>*@
-        <input type="button" class="btn btn-primary" value="Wróć do listy" onclick="location.href = '@Url.Action("Index", Request.Url.Scheme)';">
+        <input type="button" class="btn btn-primary" value="Wróć do listy" onclick="location.href = '@Url.Action("Index", "Collects", null, Request.Url.Scheme)';">
 
             </div>
         </div>

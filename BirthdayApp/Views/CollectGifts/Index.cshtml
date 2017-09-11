@@ -1,24 +1,24 @@
 ﻿@model IEnumerable<AppModels.CollectGift>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Zarządzanie prezentami w zbiórce";
 }
 
-<h2>Index</h2>
+<h2>@ViewBag.Title</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create", new { id = ViewBag.ThisId } , null)
+    @Html.ActionLink("Dodaj nowy prezent", "Create", new { id = ViewBag.collectId }, null)
 </p>
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Collect.Name)
+            Nazwa zbiórki
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.User.Name)
+            Prezent zaproponował
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Name)
+            Nazwa prezentu
         </th>
         <th></th>
     </tr>
