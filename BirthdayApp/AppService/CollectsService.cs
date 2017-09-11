@@ -301,11 +301,11 @@ namespace BirthdayApp.AppService
             return baseUrl;
         }
 
-        public void SendEmailsCreate(List<User> users, Collect collect, int collectUserId)
+        public void SendEmailsCreate(List<User> users, Collect collect)
         {
             string ownerName = _unitOfWork.MyUserRepository.Get().SingleOrDefault(i => i.Id == collect.OwnerId).Name;
             string recipientName = _unitOfWork.MyUserRepository.Get().SingleOrDefault(i => i.Id == collect.RecipientId).Name;
-            string activeLink = GetBaseUrl() + "CollectUsers/Join/" + collectUserId.ToString() + "/";
+            string activeLink = GetBaseUrl() + "CollectUsers/Join/" + collect.Id.ToString() + "/";
 
             string subject = "Nowa zbiórka [BirthdayApp]";
 
@@ -329,11 +329,11 @@ namespace BirthdayApp.AppService
             }
         }
 
-        public void SendEmailsConfirm(List<User> users, Collect collect, int collectUserId)
+        public void SendEmailsConfirm(List<User> users, Collect collect)
         {
             string ownerName = _unitOfWork.MyUserRepository.Get().SingleOrDefault(i => i.Id == collect.OwnerId).Name;
             string recipientName = _unitOfWork.MyUserRepository.Get().SingleOrDefault(i => i.Id == collect.RecipientId).Name;
-            string activeLink = GetBaseUrl() + "Collects/Details/" + collectUserId.ToString() + "/";
+            string activeLink = GetBaseUrl() + "Collects/Details/" + collect.Id.ToString() + "/";
 
             string subject = "Zbiórka została zatwierdzona [BirthdayApp]";
 

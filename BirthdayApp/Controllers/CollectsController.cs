@@ -108,8 +108,8 @@ namespace BirthdayApp.Controllers
                     using (var userService = new UsersService())
                     {
                         var collect = collectService.GetCollect(id);
-                        var collectUserId = collectService.GetCollectUserId(id, GetUserId());
-                        collectService.SendEmailsConfirm(userService.GetUserIndex().Where(i => i.Id != collect.RecipientId).ToList(), collect , collectUserId);
+
+                        collectService.SendEmailsConfirm(userService.GetUserIndex().Where(i => i.Id != collect.RecipientId).ToList(), collect);
                     }
 
                     return RedirectToAction("Details", "Collects", new { id = id });
@@ -155,7 +155,7 @@ namespace BirthdayApp.Controllers
                     //Send Email
                     using (var userService = new UsersService())
                     {
-                        collectService.SendEmailsCreate(userService.GetUserIndex().Where(i => i.Id != collect.RecipientId).ToList(), collect, newCollectionUsers.Id);
+                        collectService.SendEmailsCreate(userService.GetUserIndex().Where(i => i.Id != collect.RecipientId).ToList(), collect);
                     }
 
                     return RedirectToAction("Details", "Collects", new { id = collect.Id });

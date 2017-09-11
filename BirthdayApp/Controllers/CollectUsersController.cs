@@ -63,7 +63,7 @@ namespace BirthdayApp.Controllers
                 {
                     collectService.JoinConfirmed(id, GetUserId());
 
-                    return RedirectToAction("Details", "Collects" , new { id = collectUser.CollectId });
+                    return RedirectToAction("Details", "Collects" , new { id = id });
                 }
             }
 
