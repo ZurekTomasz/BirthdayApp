@@ -10,13 +10,13 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Collect.Name)
+            Nazwa zbiórki
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.User.Name)
+            Nazwa użytkownika
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.GaveMoney)
+            Czy dał pieniądze
         </th>
         <th></th>
     </tr>
@@ -37,11 +37,11 @@
 
         @if (item.GaveMoney)
         {
-            @Html.ActionLink("Anuluj", "GaveMoney", new { id = item.Id })
+            @Html.ActionLink("Anuluj", "GaveMoney", "CollectUsers", new { id = item.Id }, null)
         }
         else
         {
-            @Html.ActionLink("Potwierdź", "GaveMoney", new { id = item.Id })
+            @Html.ActionLink("Potwierdź", "GaveMoney", "CollectUsers", new { id = item.Id }, null)
         }
         </td>
     </tr>

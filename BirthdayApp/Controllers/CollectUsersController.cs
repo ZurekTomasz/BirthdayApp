@@ -37,7 +37,10 @@ namespace BirthdayApp.Controllers
             using (var collectService = new CollectsService())
             {
                 collectService.GaveMoneyChange(id);
-                return RedirectToAction("Index", "CollectUsers", new { id = id });
+
+                int collectId = collectService.GetCollectId(id);
+
+                return RedirectToAction("Index", new { id = collectId });
             }
         }
 

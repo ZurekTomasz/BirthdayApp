@@ -232,6 +232,11 @@ namespace BirthdayApp.AppService
             return false;
         }
 
+        public int GetCollectId(int collectUserId)
+        {
+            return _unitOfWork.CollectUserRepository.Get().SingleOrDefault(i => i.Id == collectUserId).CollectId.Value;
+        }
+
         public int CounterCollectionsGifts(int collectId)
         {
             int result = _unitOfWork.CollectGiftRepository.Get().Count(i => i.CollectId == collectId);
