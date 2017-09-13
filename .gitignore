@@ -241,4 +241,3 @@ ModelManifest.xml
 # FAKE - F# Make
 .fake/
 
-BirthdayApp/Web.config

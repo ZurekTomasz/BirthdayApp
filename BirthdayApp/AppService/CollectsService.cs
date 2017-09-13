@@ -363,23 +363,31 @@ namespace BirthdayApp.AppService
 
         public void SendSingleEmail(string To, string Subject, string Body, string Email, string Password)
         {
-            EmailViewModels email = new EmailViewModels(To, Subject, Body, Email, Password);
-            using (MailMessage mm = new MailMessage(email.Email, email.To))
+            try
             {
-                mm.Subject = email.Subject;
-                mm.Body = email.Body;
-                mm.IsBodyHtml = false;
-                using (SmtpClient smtp = new SmtpClient())
+                EmailViewModels email = new EmailViewModels(To, Subject, Body, Email, Password);
+                using (MailMessage mm = new MailMessage(email.Email, email.To))
                 {
-                    smtp.Host = "smtp.gmail.com";
-                    smtp.EnableSsl = true;
-                    NetworkCredential NetworkCred = new NetworkCredential(email.Email, email.Password);
-                    smtp.UseDefaultCredentials = true;
-                    smtp.Credentials = NetworkCred;
-                    smtp.Port = 587;
-                    smtp.Send(mm);
+                    mm.Subject = email.Subject;
+                    mm.Body = email.Body;
+                    mm.IsBodyHtml = false;
+                    using (SmtpClient smtp = new SmtpClient())
+                    {
+                        smtp.Host = "smtp.gmail.com";
+                        smtp.EnableSsl = true;
+                        NetworkCredential NetworkCred = new NetworkCredential(email.Email, email.Password);
+                        smtp.UseDefaultCredentials = true;
+                        smtp.Credentials = NetworkCred;
+                        smtp.Port = 587;
+                        smtp.Send(mm);
+                    }
                 }
             }
+            catch
+            {
+
+            }
+            
         }
 
         //
