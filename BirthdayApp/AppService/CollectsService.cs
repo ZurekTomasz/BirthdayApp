@@ -306,6 +306,16 @@ namespace BirthdayApp.AppService
             return baseUrl;
         }
 
+        public string GetEmailLogin()
+        {
+            return  System.Configuration.ConfigurationManager.AppSettings["emailLogin"];
+        }
+
+        public string GetEmailPassword()
+        {
+            return System.Configuration.ConfigurationManager.AppSettings["emailPassword"];
+        }
+
         public void SendEmailsCreate(List<User> users, Collect collect)
         {
             string ownerName = _unitOfWork.MyUserRepository.Get().SingleOrDefault(i => i.Id == collect.OwnerId).Name;
@@ -322,13 +332,11 @@ namespace BirthdayApp.AppService
                 "\n\nAby dołączyć do zbiórki to naciśnij na odnośnik: " + activeLink +
                 "\n\n### Wiadomość została wygenerowana automatycznie, prosimy nie odpowiadać na tą wiadomość ###";
 
-            string emailPassword = System.Configuration.ConfigurationManager.AppSettings["emailPassword"];
-
             foreach (var user in users)
             {
                 if(!user.IgnoreEmailCreate)
                 {
-                    SendSingleEmail(user.Email, subject, body, "birthdayappx@gmail.com", emailPassword);
+                    SendSingleEmail(user.Email, subject, body, GetEmailLogin(), GetEmailPassword());
                 }
                 
             }
@@ -350,13 +358,11 @@ namespace BirthdayApp.AppService
                 "\n\nAby zobaczyć szczegóły to naciśnij na odnośnik: " + activeLink +
                 "\n\n### Wiadomość została wygenerowana automatycznie, prosimy nie odpowiadać na tą wiadomość ###";
 
-            string emailPassword = System.Configuration.ConfigurationManager.AppSettings["emailPassword"];
-
             foreach (var user in users)
             {
                 if (!user.IgnoreEmailConfirm)
                 {
-                    SendSingleEmail(user.Email, subject, body, "birthdayappx@gmail.com", emailPassword);
+                    SendSingleEmail(user.Email, subject, body, GetEmailLogin(), GetEmailPassword());
                 }
             }
         }
