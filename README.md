@@ -8,6 +8,7 @@ The application was created to facilitate the creation and management of collect
 The user interface is in Polish.
 
 Before compile run this in the Package Manager Console:
+
 Update-Package Microsoft.CodeDom.Providers.DotNetCompilerPlatform -r
 
 ## Screens
