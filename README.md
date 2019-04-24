@@ -7,6 +7,9 @@ The application was created to facilitate the creation and management of collect
 
 The user interface is in Polish.
 
+Before compile run this in the Package Manager Console:
+Update-Package Microsoft.CodeDom.Providers.DotNetCompilerPlatform -r
+
 ## Screens
 ![alt text](https://raw.githubusercontent.com/ZurekTomasz/BirthdayApp/master/Screens/s1.png) <br />
 ![alt text](https://raw.githubusercontent.com/ZurekTomasz/BirthdayApp/master/Screens/s2.png) <br />
